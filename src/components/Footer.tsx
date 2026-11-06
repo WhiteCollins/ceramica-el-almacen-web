@@ -203,7 +203,7 @@ export function Footer() {
         </div>
       </div>
 
-      {/* Botón flotante de conserjería WhatsApp */}
+      {/* Botón flotante de WhatsApp */}
       <a
         href={buildWhatsAppUrl(
           "Hola Cerámica El Almacén, me gustaría recibir asesoría para mi proyecto."
@@ -211,12 +211,16 @@ export function Footer() {
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Contactar por WhatsApp con un asesor"
-        className="fixed bottom-4 right-4 z-30 min-h-[48px] min-w-[48px] inline-flex items-center justify-center gap-2 bg-[#128C7E] hover:bg-[#0e6f64] text-white px-4 py-3 rounded-full shadow-lg transition-transform hover:scale-[1.03]"
+        className="fixed bottom-5 right-5 z-30 h-14 w-14 inline-flex items-center justify-center bg-[#25D366] hover:bg-[#1ebe5d] text-white rounded-full shadow-[0_8px_24px_rgba(37,211,102,0.4)] transition-transform hover:scale-105"
       >
-        <Icon name="chat" className="text-[20px]" />
-        <span className="hidden sm:inline font-label-md text-label-md uppercase tracking-wider">
-          Asesoría WhatsApp
-        </span>
+        <svg
+          aria-hidden="true"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          className="w-7 h-7"
+        >
+          <path d="M12.031 2c-5.516 0-9.999 4.486-9.999 10.002 0 1.766.461 3.49 1.337 5.01L2 22l5.122-1.343a9.957 9.957 0 0 0 4.906 1.292h.004c5.515 0 9.998-4.486 9.998-10.001 0-2.672-1.04-5.184-2.928-7.074A9.936 9.936 0 0 0 12.031 2Zm5.847 14.303c-.246.693-1.434 1.326-1.996 1.411-.513.077-1.163.11-1.878-.118-.434-.138-.99-.322-1.703-.63-2.996-1.293-4.953-4.31-5.103-4.51-.15-.2-1.219-1.622-1.219-3.095 0-1.473.771-2.197 1.045-2.497.274-.3.598-.375.798-.375.199 0 .399.002.573.01.184.009.43-.07.673.514.249.599.847 2.072.922 2.222.075.15.125.324.025.524-.1.2-.15.325-.299.499-.15.175-.314.391-.449.525-.15.15-.306.312-.131.612.174.3.775 1.278 1.664 2.071 1.143 1.02 2.107 1.336 2.406 1.486.3.15.474.125.649-.075.174-.2.748-.874.947-1.174.2-.3.399-.25.673-.15.274.1 1.745.824 2.044.973.3.15.499.225.573.35.075.125.075.724-.171 1.417Z" />
+        </svg>
       </a>
     </footer>
   );

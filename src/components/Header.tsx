@@ -12,9 +12,9 @@ import { SITE_INFO, buildWhatsAppUrl } from "@/data/site";
 
 const NAV_ITEMS = [
   { href: "/", label: "Inicio" },
-  { href: "/catalogo", label: "Catálogo & Colecciones" },
-  { href: "/showroom", label: "Showroom & Proyectos" },
-  { href: "/contacto", label: "Contacto & Cotización" },
+  { href: "/catalogo", label: "Catálogo" },
+  { href: "/showroom", label: "Proyectos" },
+  { href: "/contacto", label: "Contacto" },
 ] as const;
 
 export function Header() {
@@ -110,26 +110,6 @@ export function Header() {
               >
                 <Icon name="search" className="text-[22px]" />
               </button>
-
-              <a
-                href={SITE_INFO.phoneHref}
-                className="hidden xl:inline-flex items-center gap-space-xs min-h-[44px] px-2 font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors"
-              >
-                <Icon name="call" className="text-[16px] text-primary" />
-                <span>{SITE_INFO.phoneDisplay}</span>
-              </a>
-
-              <a
-                href={buildWhatsAppUrl(
-                  "Hola, deseo cotizar materiales para mi proyecto con Cerámica El Almacén."
-                )}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hidden sm:inline-flex items-center gap-space-xs min-h-[44px] bg-primary hover:bg-primary-container text-on-primary px-space-md py-2.5 rounded transition-colors font-label-md text-label-md uppercase tracking-wider shadow-sm"
-              >
-                <Icon name="chat" className="text-[16px]" />
-                <span>Cotizar por WhatsApp</span>
-              </a>
 
               <button
                 type="button"
