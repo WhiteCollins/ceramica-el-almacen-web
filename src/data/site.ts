@@ -241,30 +241,81 @@ export const SHOWROOM_PROJECTS = [
   {
     id: "villa-marina-juan-dolio",
     location: "Juan Dolio",
-    category: "Residencial",
+    fullLocation: "Juan Dolio • Costa Caribe",
+    category: "Residencial de Lujo",
     title: "Villa Brisa Marina",
+    area: "420 m² suministrados",
+    year: "2025",
     summary:
       "Porcelanato Statuario Imperial 60×120 cm, tina exenta Sottovento blanco mate y grifería PVD oro cepillado.",
+    fullDescription: [
+      "Villa Brisa Marina fue concebida para integrar las áreas sociales interiores con las terrazas frente al mar mediante un pavimento continuo de baja absorción y junta rectificada milimétrica.",
+      "Nuestro equipo técnico suministró 420 m² del mismo lote y calibre de Porcelanato Statuario Imperial 60×120 cm para el nivel social, mientras que en la suite principal se instaló la tina exenta Sottovento blanco mate acompañada de grifería IMEX en acabado PVD oro cepillado resistente al salitre costero.",
+    ],
+    highlights: [
+      "Reserva de lote único garantizada para 420 m² sin variación de tono ni calibre.",
+      "Acabados metálicos en tratamiento PVD anticorrosión aptos para ambientes frente al mar.",
+      "Despacho programado por etapas directamente a pie de obra en Juan Dolio.",
+    ],
+    productIds: [
+      "porcelanato-statuario-imperial",
+      "tina-sottovento-blanco-mate",
+      "griferia-monomando-gourmet-oro",
+    ],
     image: "/images/hero/tina-sottovento-hero.jpg",
     alt: "Baño principal de Villa Brisa Marina con tina exenta Sottovento blanco mate y grifería dorada",
   },
   {
     id: "residencia-estancia-romana",
     location: "La Romana",
+    fullLocation: "La Romana • Región Este",
     category: "Arquitectura Interior",
     title: "Residencia Los Almendros",
+    area: "310 m² suministrados",
+    year: "2025",
     summary:
       "Listón cerámico Roble Escandinavo 20×120 cm y baños equipados con lavamanos estriados Oval Fluted.",
+    fullDescription: [
+      "En Residencia Los Almendros se buscaba la calidez visual de la madera natural sin los problemas de dilatación o mantenimiento causados por la humedad tropical del Caribe.",
+      "Se especificaron 310 m² de porcelanato español rectificado Roble Escandinavo 20×120 cm con textura sincronizada 3D Touch y clasificación antideslizante C2, complementado en los baños sociales y secundarios con lavamanos de apoyo Oval Fluted negro mate y columnas de ducha termostáticas.",
+    ],
+    highlights: [
+      "Superficie porcelánica antideslizante e inmune a la humedad en áreas interiores y terrazas techadas.",
+      "Instalación trabada al 20% con junta de 2 mm y mortero polimérico flexible.",
+      "Equipamiento sanitario completo con grifería termostática de seguridad a 38 °C.",
+    ],
+    productIds: [
+      "porcelanato-roble-escandinavo-mate",
+      "lavamanos-oval-fluted-ranurado",
+      "columna-ducha-termostatica-suecia",
+    ],
     image: "/images/products/porcelanato-roble-escandinavo.jpg",
     alt: "Sala abierta con piso de porcelanato tipo madera Roble Escandinavo 20x120 cm",
   },
   {
     id: "atelier-gastronomico-spm",
     location: "San Pedro de Macorís",
-    category: "Comercial",
+    fullLocation: "San Pedro de Macorís • Centro Histórico",
+    category: "Comercial & Hospitalidad",
     title: "Bistró & Café del Puerto",
+    area: "145 m² suministrados",
+    year: "2025",
     summary:
       "Revestimiento artesanal vidriado Colors of Life 15×15 cm en tonos terracota y grifería gourmet PVD.",
+    fullDescription: [
+      "Para el proyecto gastronómico Bistró & Café del Puerto, el estudio de diseño requería una barra protagonista con carácter artesanal mediterráneo y máxima higiene operativa frente a manchas y vapor.",
+      "Se revistió el frente de barra y salpicadero principal con la colección cerámica esmaltada a 1,200 °C Colors of Life en formato 15×15 cm, integrando grifería monomando gourmet de alto tráfico y bachas esculturales Mineral Stone en los baños de comensales.",
+    ],
+    highlights: [
+      "Esmalte vitrificado impermeable a grasas, ácidos cítricos y limpieza intensiva diaria.",
+      "Combinación de cajas alternadas en obra para resaltar el matiz artesanal V3.",
+      "Entrega inmediata desde nuestro almacén local en San Pedro de Macorís.",
+    ],
+    productIds: [
+      "mural-artesanal-colors-of-life",
+      "griferia-monomando-gourmet-oro",
+      "bacha-escultural-mineral-stone",
+    ],
     image: "/images/hero/editorial-color-backsplash.jpg",
     alt: "Salpicadero artesanal con baldosas vidriadas en tonos terracota y detalles en latón cepillado",
   },

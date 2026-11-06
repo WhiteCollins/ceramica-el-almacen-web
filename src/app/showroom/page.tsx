@@ -39,9 +39,10 @@ export default function ShowroomPage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 lg:gap-gutter">
             {SHOWROOM_PROJECTS.map((project, index) => (
-              <article
+              <Link
                 key={project.id}
-                className="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-atelier transition-shadow border border-surface-container-high flex flex-col group"
+                href={`/showroom/${project.id}`}
+                className="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-atelier transition-all border border-surface-container-high flex flex-col group"
               >
                 <div className="relative aspect-[16/10] bg-surface-container overflow-hidden">
                   <Image
@@ -59,7 +60,7 @@ export default function ShowroomPage() {
                     <span className="font-label-caps text-label-caps text-primary uppercase">
                       {project.location} • {project.category}
                     </span>
-                    <h2 className="font-headline-md text-headline-md text-on-surface font-semibold">
+                    <h2 className="font-headline-md text-headline-md text-on-surface font-semibold group-hover:text-primary transition-colors">
                       {project.title}
                     </h2>
                     <p className="font-body-sm sm:text-body-md text-on-surface-variant leading-relaxed">
@@ -67,19 +68,15 @@ export default function ShowroomPage() {
                     </p>
                   </div>
 
-                  <a
-                    href={buildWhatsAppUrl(
-                      `Hola, me inspiró el proyecto "${project.title}" (${project.location}) y deseo cotizar esos acabados.`
-                    )}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full min-h-[44px] inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary-container text-on-primary py-2.5 rounded-lg font-label-md text-label-md uppercase tracking-wider transition-colors"
-                  >
-                    <Icon name="chat" className="text-[16px]" />
-                    <span>Cotizar Este Look</span>
-                  </a>
+                  <span className="inline-flex items-center justify-between gap-1 min-h-[36px] pt-3 border-t border-surface-container text-primary font-label-md text-label-md font-semibold">
+                    <span>Ver Proyecto Completo</span>
+                    <Icon
+                      name="east"
+                      className="text-[16px] shrink-0 transition-transform group-hover:translate-x-1"
+                    />
+                  </span>
                 </div>
-              </article>
+              </Link>
             ))}
           </div>
         </div>
