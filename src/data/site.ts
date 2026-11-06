@@ -96,44 +96,32 @@ export const ADVISORS: Advisor[] = [
 export const MAIN_CATEGORIES = [
   {
     slug: "porcelanato",
-    badge: "España & Italia",
-    eyebrow: "Superficies & Muros",
     title: "Porcelanatos & Revestimientos",
-    description:
-      "Gran formato 120×240 cm y 60×120 cm, acabados pulidos Calacatta, cemento arquitectónico, microcemento y maderas cerámicas rectificadas.",
+    subtitle: "Gran formato 60×120 y 20×120 cm",
     cta: "Explorar Superficies",
     image: "/images/categories/porcelanatos-calacatta.jpg",
     alt: "Sala contemporánea con piso de porcelanato español tipo mármol Calacatta pulido de gran formato",
   },
   {
     slug: "griferia",
-    badge: "Colección Mex & Imex",
-    eyebrow: "Sistemas Hidráulicos",
     title: "Grifería de Vanguardia",
-    description:
-      "Monomandos de cocina extensibles, columnas de ducha termostáticas con efecto lluvia y acabados en PVD dorado cepillado y negro mate.",
+    subtitle: "Monomandos PVD y duchas termostáticas",
     cta: "Ver Griferías",
     image: "/images/categories/griferia-vanguardia.jpg",
     alt: "Exhibidor de griferías modernas en dorado cepillado, negro mate y gunmetal en el showroom",
   },
   {
     slug: "sanitarios",
-    badge: "Solid Surface & Cerámica",
-    eyebrow: "Confort & Relajación",
     title: "Bañeras & Sanitarios",
-    description:
-      "Tina Sottovento 170×75 cm blanco mate, inodoros one-piece rimless con ahorro de agua y piezas monolíticas de alta pureza.",
+    subtitle: "Tinas exentas Sottovento e inodoros",
     cta: "Ver Sanitarios",
     image: "/images/categories/baneras-sanitarios.jpg",
     alt: "Tina exenta arquitectónica modelo Sottovento blanco mate frente a revestimiento cálido tipo madera",
   },
   {
     slug: "lavamanos",
-    badge: "Diseños Corona & Atelier",
-    eyebrow: "Mobiliario & Cuencos",
     title: "Muebles & Lavamanos",
-    description:
-      "Lavamanos de apoyo texturizados, cuencos estriados, encimeras en piedra sinterizada y vanities hidrófugos de alta resistencia caribeña.",
+    subtitle: "Cuencos estriados y bachas de apoyo",
     cta: "Ver Lavamanos",
     image: "/images/categories/muebles-lavamanos.jpg",
     alt: "Colección de lavamanos de apoyo artesanales en cerámica estriada, terrazo y piedra mineral sobre madera",
@@ -141,11 +129,51 @@ export const MAIN_CATEGORIES = [
 ] as const;
 
 export const COLOR_SWATCHES = [
-  { name: "Esmeralda", size: "10×10 cm", hex: "#1e4a38" },
-  { name: "Cobalto", size: "10×10 cm", hex: "#1f3a60" },
-  { name: "Vino Tinto", size: "10×10 cm", hex: "#8b1e1e" },
-  { name: "Mostaza", size: "10×10 cm", hex: "#d97706" },
-  { name: "Terracota", size: "10×10 cm", hex: "#c2410c" },
+  {
+    id: "esmeralda",
+    name: "Esmeralda",
+    shortName: "Esmeralda",
+    size: "10×10 & 15×15 cm",
+    hex: "#1e4a38",
+    image: "/images/colors/esmeralda.jpg",
+    caption: "Tono Esmeralda • Esmalte Vitrificado & Bordes Rústicos",
+  },
+  {
+    id: "cobalto",
+    name: "Cobalto",
+    shortName: "Cobalto",
+    size: "10×10 & 15×15 cm",
+    hex: "#1f3a60",
+    image: "/images/colors/cobalto.jpg",
+    caption: "Tono Azul Cobalto • Esmalte Vitrificado & Bordes Rústicos",
+  },
+  {
+    id: "vino",
+    name: "Vino Tinto",
+    shortName: "Vino",
+    size: "10×10 & 15×15 cm",
+    hex: "#8b1e1e",
+    image: "/images/colors/vino.jpg",
+    caption: "Tono Vino Tinto • Esmalte Vitrificado & Bordes Rústicos",
+  },
+  {
+    id: "mostaza",
+    name: "Mostaza",
+    shortName: "Mostaza",
+    size: "10×10 & 15×15 cm",
+    hex: "#d97706",
+    image: "/images/colors/mostaza.jpg",
+    caption: "Tono Mostaza • Esmalte Vitrificado & Bordes Rústicos",
+  },
+  {
+    id: "terracota",
+    name: "Terracota",
+    shortName: "Terracota",
+    size: "10×10 & 15×15 cm",
+    hex: "#c2410c",
+    image: "/images/colors/terracota.jpg",
+    caption: "Tono Terracota • Esmalte Vitrificado & Bordes Rústicos",
+  },
 ] as const;
 
 export const TESTIMONIALS = [
