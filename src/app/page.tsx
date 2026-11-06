@@ -14,7 +14,7 @@ export default function HomePage() {
       {/* SECCIÓN 2: CATEGORÍAS PRINCIPALES (CARDS SIMPLIFICADAS Y LIMPIAS) */}
       <section className="w-full bg-surface-container-low py-9 lg:py-14">
         <div className="max-w-7xl mx-auto px-margin-mobile lg:px-margin-desktop">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-2 mb-6 lg:mb-8">
+          <div className="scroll-reveal flex flex-col md:flex-row md:items-end justify-between gap-2 mb-6 lg:mb-8">
             <div>
               <span className="font-label-caps text-label-caps text-primary uppercase">
                 Curaduría de Acabados
@@ -34,7 +34,7 @@ export default function HomePage() {
               <Link
                 key={cat.slug}
                 href={`/catalogo?categoria=${cat.slug}`}
-                className="group bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-atelier transition-all duration-300 flex flex-col border border-surface-container-high"
+                className="scroll-reveal group bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-atelier transition-all duration-300 flex flex-col border border-surface-container-high"
               >
                 <div className="relative overflow-hidden aspect-[4/3] bg-surface-container">
                   <Image

@@ -556,7 +556,7 @@ export function CatalogExplorer() {
               {filteredProducts.map((product, index) => (
                 <article
                   key={product.id}
-                  className="group flex flex-col bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-atelier border border-surface-container-highest transition-all duration-300"
+                  className="scroll-reveal group flex flex-col bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-atelier border border-surface-container-highest transition-all duration-300"
                 >
                   <Link
                     href={`/catalogo/${product.id}`}

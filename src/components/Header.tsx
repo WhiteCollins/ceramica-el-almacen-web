@@ -52,18 +52,6 @@ export function Header() {
 
   return (
     <>
-      {/* Barra Superior Institucional en flujo normal: desaparece suavemente al bajar */}
-      <div className="bg-surface-container-high text-on-surface-variant text-center py-1.5 px-margin-mobile lg:px-margin-desktop font-label-caps text-label-caps uppercase flex items-center justify-center gap-2 border-b border-surface-container-highest">
-        <Icon name="storefront" className="text-[15px] text-primary shrink-0" />
-        <span className="sm:hidden truncate">
-          San Pedro de Macorís • Lun–Sáb • {SITE_INFO.phoneDisplay}
-        </span>
-        <span className="hidden sm:inline truncate">
-          Importadores directos en San Pedro de Macorís • Atención de Lunes a
-          Sábado • Tel: {SITE_INFO.phoneDisplay}
-        </span>
-      </div>
-
       {/* Header Sticky Compacto (64px en móvil, 80px en escritorio) */}
       <header className="site-sticky-header w-full">
         <div className="site-sticky-bar bg-surface/95 backdrop-blur-md shadow-[0_1px_6px_rgba(0,0,0,0.04)] border-b border-surface-container-high">

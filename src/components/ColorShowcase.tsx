@@ -15,7 +15,7 @@ export function ColorShowcase() {
   return (
     <section className="w-full bg-surface-container-highest py-9 lg:py-14">
       <div className="max-w-7xl mx-auto px-margin-mobile lg:px-margin-desktop">
-        <div className="bg-surface-container-lowest rounded-xl shadow-md overflow-hidden grid grid-cols-1 lg:grid-cols-12">
+        <div className="scroll-reveal bg-surface-container-lowest rounded-xl shadow-md overflow-hidden grid grid-cols-1 lg:grid-cols-12">
           {/* Columna de Selección de Color */}
           <div className="lg:col-span-7 p-5 sm:p-8 lg:p-10 flex flex-col justify-between gap-5">
             <div className="space-y-2">

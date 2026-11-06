@@ -42,7 +42,7 @@ export default function ShowroomPage() {
               <Link
                 key={project.id}
                 href={`/showroom/${project.id}`}
-                className="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-atelier transition-all border border-surface-container-high flex flex-col group"
+                className="scroll-reveal bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-atelier transition-all border border-surface-container-high flex flex-col group"
               >
                 <div className="relative aspect-[16/10] bg-surface-container overflow-hidden">
                   <Image
@@ -87,14 +87,14 @@ export default function ShowroomPage() {
         id="calculadora"
         className="w-full bg-surface-container-low py-9 lg:py-14 scroll-mt-20"
       >
-        <div className="max-w-7xl mx-auto px-margin-mobile lg:px-margin-desktop">
+        <div className="scroll-reveal max-w-7xl mx-auto px-margin-mobile lg:px-margin-desktop">
           <TileCalculator />
         </div>
       </section>
 
       {/* SECCIÓN 3: MESA DE ARQUITECTURA & VISITA GUIADA */}
       <section className="w-full bg-surface py-9 lg:py-14">
-        <div className="max-w-7xl mx-auto px-margin-mobile lg:px-margin-desktop">
+        <div className="scroll-reveal max-w-7xl mx-auto px-margin-mobile lg:px-margin-desktop">
           <div className="bg-primary text-on-primary rounded-xl p-6 sm:p-8 lg:p-10 shadow-md grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
             <div className="lg:col-span-8 space-y-2">
               <span className="font-label-caps text-label-caps text-on-primary-container uppercase">

@@ -91,7 +91,7 @@ export default function ContactoPage() {
               {ADVISORS.map((advisor, idx) => (
                 <article
                   key={advisor.id}
-                  className="bg-surface-container-lowest rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden border border-surface-container"
+                  className="scroll-reveal bg-surface-container-lowest rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden border border-surface-container"
                 >
                   <div className="flex items-start gap-4">
                     <div className="relative shrink-0">

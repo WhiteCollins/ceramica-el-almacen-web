@@ -175,3 +175,40 @@ details > summary::-webkit-details-marker {
 .atelier-input:user-valid {
   border-color: #8b716e;
 }
+
+/* Scroll-driven reveal animations (compositor-only transform + opacity) */
+@media (prefers-reduced-motion: no-preference) {
+  @supports ((animation-timeline: view()) and (animation-range: entry)) {
+    @keyframes atelier-scroll-entry {
+      from {
+        opacity: 0;
+        transform: translateY(36px) scale(0.96);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .scroll-reveal {
+      animation: atelier-scroll-entry auto ease-out backwards;
+      animation-timeline: view(block);
+      animation-range: entry 0% cover 28%;
+    }
+  }
+
+  @supports not ((animation-timeline: view()) and (animation-range: entry)) {
+    .scroll-reveal {
+      opacity: 0;
+      transform: translateY(28px) scale(0.97);
+      transition:
+        opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .scroll-reveal.is-revealed {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+}

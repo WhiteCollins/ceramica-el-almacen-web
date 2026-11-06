@@ -7,7 +7,7 @@ import { SITE_INFO, buildWhatsAppUrl } from "@/data/site";
 export function Footer() {
   return (
     <footer className="w-full bg-surface-container-low text-on-surface shadow-[0_-1px_8px_rgba(0,0,0,0.03)] border-t border-surface-container-highest">
-      <div className="max-w-7xl mx-auto px-margin-mobile lg:px-margin-desktop py-10 lg:py-14">
+      <div className="scroll-reveal max-w-7xl mx-auto px-margin-mobile lg:px-margin-desktop py-10 lg:py-14">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-gutter-lg">
           {/* Columna 1: Marca */}
           <div className="flex flex-col gap-space-sm">
