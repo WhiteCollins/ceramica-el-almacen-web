@@ -618,23 +618,13 @@ export function CatalogExplorer() {
                         />
                         <span>{product.highlightText}</span>
                       </div>
-                      <div className="grid grid-cols-2 gap-2 mt-1">
-                        <Link
-                          href={`/catalogo/${product.id}`}
-                          className="min-h-[44px] bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md py-2.5 px-2 rounded inline-flex items-center justify-center transition-colors"
-                        >
-                          Ver Detalles
-                        </Link>
-                        <a
-                          href={buildWhatsAppUrl(product.whatsappText)}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="min-h-[44px] bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md py-2.5 px-2 rounded flex items-center justify-center gap-1 transition-colors"
-                        >
-                          <Icon name="chat" className="text-[16px]" />
-                          <span>Cotizar</span>
-                        </a>
-                      </div>
+                      <Link
+                        href={`/catalogo/${product.id}`}
+                        className="mt-1 w-full min-h-[44px] bg-surface-container hover:bg-primary hover:text-on-primary text-on-surface font-label-md text-label-md py-2.5 px-3 rounded inline-flex items-center justify-center gap-1.5 transition-colors font-semibold"
+                      >
+                        <span>Ver Detalles</span>
+                        <Icon name="arrow_forward" className="text-[16px]" />
+                      </Link>
                     </div>
                   </div>
                 </article>

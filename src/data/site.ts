@@ -240,49 +240,31 @@ export const FAQS = [
 export const SHOWROOM_PROJECTS = [
   {
     id: "villa-marina-juan-dolio",
-    location: "Juan Dolio • Costa Caribe",
-    category: "Residencial de Lujo",
+    location: "Juan Dolio",
+    category: "Residencial",
     title: "Villa Brisa Marina",
-    area: "420 m² suministrados",
     summary:
-      "Integración continua de porcelanato español Statuario Imperial 60×120 cm en áreas sociales y suite principal con tina exenta Sottovento blanco mate y grifería PVD oro cepillado.",
-    materials: [
-      "Porcelanato Statuario Imperial 60×120",
-      "Tina Sottovento 170×75 cm",
-      "Grifería IMEX Oro Cepillado",
-    ],
+      "Porcelanato Statuario Imperial 60×120 cm, tina exenta Sottovento blanco mate y grifería PVD oro cepillado.",
     image: "/images/hero/tina-sottovento-hero.jpg",
     alt: "Baño principal de Villa Brisa Marina con tina exenta Sottovento blanco mate y grifería dorada",
   },
   {
     id: "residencia-estancia-romana",
-    location: "La Romana • Región Este",
+    location: "La Romana",
     category: "Arquitectura Interior",
     title: "Residencia Los Almendros",
-    area: "310 m² suministrados",
     summary:
-      "Pisos continuos en listón cerámico Roble Escandinavo 20×120 cm resistentes a la humedad tropical, combinados con baños de visitas equipados con lavamanos estriados Oval Fluted.",
-    materials: [
-      "Porcelanato Roble Escandinavo 20×120",
-      "Lavamanos Oval Fluted Negro Mate",
-      "Columna Ducha Termostática Suecia",
-    ],
+      "Listón cerámico Roble Escandinavo 20×120 cm y baños equipados con lavamanos estriados Oval Fluted.",
     image: "/images/products/porcelanato-roble-escandinavo.jpg",
     alt: "Sala abierta con piso de porcelanato tipo madera Roble Escandinavo 20x120 cm",
   },
   {
     id: "atelier-gastronomico-spm",
     location: "San Pedro de Macorís",
-    category: "Comercial & Hospitalidad",
+    category: "Comercial",
     title: "Bistró & Café del Puerto",
-    area: "145 m² suministrados",
     summary:
-      "Barra principal y frente de cocina revestidos con cerámica vidriada artesanal Colors of Life en tonos terracota y ámbar, acompañada de grifería gourmet de alto tráfico.",
-    materials: [
-      "Mural Artesanal Colors of Life 15×15",
-      "Grifería Monomando Gourmet PVD",
-      "Bacha Escultural Mineral Stone",
-    ],
+      "Revestimiento artesanal vidriado Colors of Life 15×15 cm en tonos terracota y grifería gourmet PVD.",
     image: "/images/hero/editorial-color-backsplash.jpg",
     alt: "Salpicadero artesanal con baldosas vidriadas en tonos terracota y detalles en latón cepillado",
   },

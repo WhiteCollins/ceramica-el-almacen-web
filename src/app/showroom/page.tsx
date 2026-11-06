@@ -41,7 +41,7 @@ export default function ShowroomPage() {
             {SHOWROOM_PROJECTS.map((project, index) => (
               <article
                 key={project.id}
-                className="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-atelier transition-shadow border border-surface-container flex flex-col group"
+                className="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-atelier transition-shadow border border-surface-container-high flex flex-col group"
               >
                 <div className="relative aspect-[16/10] bg-surface-container overflow-hidden">
                   <Image
@@ -52,63 +52,32 @@ export default function ShowroomPage() {
                     sizes="(max-width: 1024px) 100vw, 33vw"
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
                   />
-                  <div className="absolute top-3 left-3 bg-inverse-surface/85 backdrop-blur-sm text-inverse-on-surface px-2.5 py-1 rounded font-label-caps text-label-caps uppercase">
-                    {project.category}
-                  </div>
-                  <div className="absolute bottom-3 right-3 bg-surface/95 backdrop-blur-sm text-primary px-2.5 py-1 rounded font-label-md text-label-md font-semibold">
-                    {project.area}
-                  </div>
                 </div>
 
-                <div className="p-5 sm:p-6 flex flex-col justify-between flex-1 gap-4">
-                  <div className="space-y-1.5">
-                    <span className="font-label-caps text-label-caps text-secondary uppercase flex items-center gap-1">
-                      <Icon
-                        name="location_on"
-                        className="text-[15px] text-primary"
-                      />
-                      {project.location}
+                <div className="p-5 flex flex-col justify-between flex-1 gap-4">
+                  <div className="space-y-1">
+                    <span className="font-label-caps text-label-caps text-primary uppercase">
+                      {project.location} • {project.category}
                     </span>
                     <h2 className="font-headline-md text-headline-md text-on-surface font-semibold">
                       {project.title}
                     </h2>
-                    <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                    <p className="font-body-sm sm:text-body-md text-on-surface-variant leading-relaxed">
                       {project.summary}
                     </p>
                   </div>
 
-                  <div className="space-y-3 pt-3 border-t border-surface-container">
-                    <div className="space-y-1.5">
-                      <span className="font-label-caps text-label-caps text-secondary uppercase block">
-                        Materiales Especificados
-                      </span>
-                      <div className="flex flex-wrap gap-2">
-                        {project.materials.map((mat) => (
-                          <Link
-                            key={mat}
-                            href={`/catalogo?q=${encodeURIComponent(
-                              mat.split(" ")[0]
-                            )}`}
-                            className="inline-flex items-center min-h-[44px] px-3 py-2 bg-surface-container hover:bg-surface-container-highest text-on-surface rounded font-label-md text-label-md transition-colors"
-                          >
-                            {mat}
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-
-                    <a
-                      href={buildWhatsAppUrl(
-                        `Hola, me inspiró el proyecto "${project.title}" (${project.location}) y deseo cotizar esos acabados.`
-                      )}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-full min-h-[44px] inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary-container text-on-primary py-2.5 rounded font-label-md text-label-md uppercase tracking-wider transition-colors"
-                    >
-                      <Icon name="chat" className="text-[16px]" />
-                      <span>Cotizar Este Look</span>
-                    </a>
-                  </div>
+                  <a
+                    href={buildWhatsAppUrl(
+                      `Hola, me inspiró el proyecto "${project.title}" (${project.location}) y deseo cotizar esos acabados.`
+                    )}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full min-h-[44px] inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary-container text-on-primary py-2.5 rounded-lg font-label-md text-label-md uppercase tracking-wider transition-colors"
+                  >
+                    <Icon name="chat" className="text-[16px]" />
+                    <span>Cotizar Este Look</span>
+                  </a>
                 </div>
               </article>
             ))}
