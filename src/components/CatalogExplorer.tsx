@@ -2,6 +2,7 @@
 
 import React, { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Icon } from "@/components/Icon";
 import { ModalDialog } from "@/components/ModalDialog";
@@ -557,7 +558,10 @@ export function CatalogExplorer() {
                   key={product.id}
                   className="group flex flex-col bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-atelier border border-surface-container-highest transition-all duration-300"
                 >
-                  <div className="relative w-full aspect-[4/5] bg-surface-container overflow-hidden">
+                  <Link
+                    href={`/catalogo/${product.id}`}
+                    className="relative w-full aspect-[4/5] bg-surface-container overflow-hidden block"
+                  >
                     <Image
                       src={product.image}
                       alt={product.imageAlt}
@@ -583,10 +587,13 @@ export function CatalogExplorer() {
                     <div className="absolute bottom-3 right-3 bg-surface-container-lowest/95 backdrop-blur-sm px-2.5 py-1 rounded text-primary font-label-md text-label-md font-semibold shadow-sm">
                       {product.stockBadge}
                     </div>
-                  </div>
+                  </Link>
 
                   <div className="p-4 sm:p-space-md flex flex-col flex-1 justify-between gap-4">
-                    <div className="flex flex-col gap-1.5">
+                    <Link
+                      href={`/catalogo/${product.id}`}
+                      className="flex flex-col gap-1.5"
+                    >
                       <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-0.5 font-label-caps text-label-caps uppercase">
                         <span className="text-secondary">
                           {product.originBadge}
@@ -601,7 +608,7 @@ export function CatalogExplorer() {
                       <p className="font-body-sm text-body-sm text-secondary line-clamp-2">
                         {product.description}
                       </p>
-                    </div>
+                    </Link>
 
                     <div className="flex flex-col gap-2 pt-3 border-t border-surface-container">
                       <div className="flex items-center gap-1.5 text-body-sm text-on-surface">
@@ -612,13 +619,12 @@ export function CatalogExplorer() {
                         <span>{product.highlightText}</span>
                       </div>
                       <div className="grid grid-cols-2 gap-2 mt-1">
-                        <button
-                          type="button"
-                          onClick={() => setSelectedProduct(product)}
-                          className="min-h-[44px] bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md py-2.5 px-2 rounded text-center transition-colors"
+                        <Link
+                          href={`/catalogo/${product.id}`}
+                          className="min-h-[44px] bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md py-2.5 px-2 rounded inline-flex items-center justify-center transition-colors"
                         >
-                          Ficha Técnica
-                        </button>
+                          Ver Detalles
+                        </Link>
                         <a
                           href={buildWhatsAppUrl(product.whatsappText)}
                           target="_blank"

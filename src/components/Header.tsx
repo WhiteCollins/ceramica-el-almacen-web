@@ -67,17 +67,19 @@ export function Header() {
       {/* Header Sticky Compacto (64px en móvil, 80px en escritorio) */}
       <header className="site-sticky-header w-full">
         <div className="site-sticky-bar bg-surface/95 backdrop-blur-md shadow-[0_1px_6px_rgba(0,0,0,0.04)] border-b border-surface-container-high">
-          <div className="h-16 lg:h-20 w-full px-margin-mobile lg:px-margin-desktop max-w-7xl mx-auto flex items-center justify-between gap-2 sm:gap-gutter">
-            <Link
-              href="/"
-              className="inline-flex items-center min-h-[44px] py-1 rounded"
-            >
-              <BrandLogo />
-            </Link>
+          <div className="h-16 lg:h-20 w-full px-margin-mobile lg:px-margin-desktop max-w-7xl mx-auto flex items-center justify-between lg:grid lg:grid-cols-[1fr_auto_1fr] gap-2 sm:gap-gutter">
+            <div className="flex items-center justify-start">
+              <Link
+                href="/"
+                className="inline-flex items-center min-h-[44px] py-1 rounded"
+              >
+                <BrandLogo />
+              </Link>
+            </div>
 
             <nav
               aria-label="Principal"
-              className="hidden lg:flex items-center gap-gutter"
+              className="hidden lg:flex items-center justify-center gap-8 xl:gap-10"
             >
               {NAV_ITEMS.map((item) => {
                 const isActive =
@@ -101,7 +103,7 @@ export function Header() {
               })}
             </nav>
 
-            <div className="flex items-center gap-1 sm:gap-space-sm">
+            <div className="flex items-center justify-end gap-1 sm:gap-space-sm">
               <button
                 type="button"
                 onClick={() => setSearchOpen(true)}
@@ -199,7 +201,7 @@ export function Header() {
                 {quickResults.map((product) => (
                   <li key={product.id}>
                     <Link
-                      href={`/catalogo?q=${encodeURIComponent(product.name)}`}
+                      href={`/catalogo/${product.id}`}
                       onClick={() => setSearchOpen(false)}
                       className="flex items-center gap-space-md min-h-[56px] py-2.5 px-2 hover:bg-surface-container-low rounded transition-colors"
                     >
