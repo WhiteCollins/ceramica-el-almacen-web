@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 105 84" fill="none" role="img" aria-label="Cerámica El Almacén Logo">
+  <g fill="#8B1E1E">
+    <!-- Left 'C' chevron (3 ceramic tiles) -->
+    <polygon points="34.5,10.5 49.5,25.5 34.5,40.5 19.5,25.5" />
+    <polygon points="18,27 33,42 18,57 3,42" />
+    <polygon points="34.5,43.5 49.5,58.5 34.5,73.5 19.5,58.5" />
+    <!-- Right 'A' chevron (3 ceramic tiles) -->
+    <polygon points="54,27 69,42 54,57 39,42" />
+    <polygon points="70.5,10.5 85.5,25.5 70.5,40.5 55.5,25.5" />
+    <polygon points="87,27 102,42 87,57 72,42" />
+  </g>
+</svg>

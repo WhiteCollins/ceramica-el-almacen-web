@@ -1,0 +1,177 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    background-color: #faf9f6;
+    color: #1a1c1a;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    line-height: 1.5;
+    text-align: start;
+    overflow-wrap: break-word;
+    background-color: #faf9f6;
+    color: #1a1c1a;
+  }
+
+  /* Balanced wrapping on short headings; pretty wrapping on paragraphs */
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Visible high-contrast focus ring on keyboard navigation */
+  :where(a:any-link, button, summary):focus-visible {
+    outline: 2px solid #6a020a;
+    outline-offset: 2px;
+  }
+}
+
+/* State-aware sticky header via CSS Scroll State Queries (Progressive Enhancement) */
+.site-sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  container-type: scroll-state;
+  container-name: site-header;
+}
+
+.site-sticky-bar {
+  transition: box-shadow 0.25s ease, background-color 0.25s ease;
+}
+
+@container site-header scroll-state(stuck: top) {
+  .site-sticky-bar {
+    box-shadow: 0 6px 18px rgba(26, 28, 26, 0.08);
+    background-color: rgba(250, 249, 246, 0.98);
+  }
+}
+
+/* Clean horizontal swipe containers without blocking vertical page scroll */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Material Symbols Outlined configuration */
+.material-symbols-outlined {
+  font-family: "Material Symbols Outlined";
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+}
+
+/* Native modal <dialog> scroll containment & backdrop (Modern Web Guidance) */
+dialog:not([open]) {
+  display: none;
+}
+
+dialog:modal {
+  overscroll-behavior: contain;
+}
+
+dialog::backdrop {
+  overflow: hidden;
+  overscroll-behavior: contain;
+  background-color: rgba(26, 28, 26, 0.58);
+  backdrop-filter: blur(4px);
+}
+
+/* Top-layer slide-over drawer transitions (@starting-style + allow-discrete + overlay) */
+dialog.dialog-drawer {
+  opacity: 0;
+  transform: translateX(100%);
+  transition-property: opacity, transform, display, overlay;
+  transition-duration: 0.25s;
+  transition-timing-function: ease-out;
+  transition-behavior: allow-discrete;
+}
+
+dialog.dialog-drawer[open]:where(:not([data-closing])) {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+@starting-style {
+  dialog.dialog-drawer[open]:where(:not([data-closing])) {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+dialog.dialog-drawer::backdrop {
+  background-color: rgba(26, 28, 26, 0);
+  transition-property: background-color, display, overlay;
+  transition-duration: 0.25s;
+  transition-timing-function: ease-out;
+  transition-behavior: allow-discrete;
+}
+
+dialog.dialog-drawer[open]:where(:not([data-closing]))::backdrop {
+  background-color: rgba(26, 28, 26, 0.58);
+}
+
+@starting-style {
+  dialog.dialog-drawer[open]:where(:not([data-closing]))::backdrop {
+    background-color: rgba(26, 28, 26, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  dialog.dialog-drawer {
+    transform: none;
+    transition-duration: 0.1s;
+  }
+
+  @starting-style {
+    dialog.dialog-drawer[open]:where(:not([data-closing])) {
+      transform: none;
+    }
+  }
+}
+
+/* Native <details> summary marker reset (paired with explicit chevron icon) */
+details > summary {
+  list-style: none;
+}
+details > summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Validate input only AFTER user interaction (:user-invalid) */
+.atelier-input:user-invalid,
+.atelier-input.user-invalid-fallback {
+  border-color: #ba1a1a;
+  background-color: #fff5f4;
+}
+
+.atelier-input:user-invalid ~ .field-error,
+.atelier-input.user-invalid-fallback ~ .field-error {
+  display: flex;
+}
+
+.atelier-input:user-valid {
+  border-color: #8b716e;
+}
