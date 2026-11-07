@@ -19,6 +19,7 @@ const SLIDES = SPACES.map((space) => ({
   ctaLabel: `Ver ${space.label.toLowerCase()}`,
   image: space.image,
   alt: space.imageAlt,
+  imagePosition: space.imagePosition,
 }));
 
 /**
@@ -101,6 +102,11 @@ export function HeroBanner() {
                 loading={idx === 0 ? "eager" : "lazy"}
                 sizes="100vw"
                 className="object-cover"
+                style={
+                  slide.imagePosition
+                    ? { objectPosition: slide.imagePosition }
+                    : undefined
+                }
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/35 to-black/5" />
 

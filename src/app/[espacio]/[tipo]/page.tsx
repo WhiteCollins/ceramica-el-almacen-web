@@ -68,6 +68,7 @@ export default async function TypePage({ params }: TypePageProps) {
         description={type.description}
         image={type.image}
         imageAlt={type.imageAlt}
+        imagePosition={type.imagePosition}
       />
 
       <div className="max-w-7xl w-full mx-auto px-margin-mobile lg:px-margin-desktop py-8 lg:py-12 flex flex-col gap-14 lg:gap-20">

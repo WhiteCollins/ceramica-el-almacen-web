@@ -9,6 +9,8 @@ interface CoverBannerProps {
   description?: string;
   image: string;
   imageAlt: string;
+  /** Encuadre de la foto (object-position), ej. "50% 70%". */
+  imagePosition?: string;
   children?: React.ReactNode;
 }
 
@@ -22,6 +24,7 @@ export function CoverBanner({
   description,
   image,
   imageAlt,
+  imagePosition,
   children,
 }: CoverBannerProps) {
   return (
@@ -34,6 +37,7 @@ export function CoverBanner({
         fetchPriority="high"
         sizes="100vw"
         className="object-cover"
+        style={imagePosition ? { objectPosition: imagePosition } : undefined}
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-black/5" />
       <div className="absolute inset-x-0 bottom-0 pb-8 sm:pb-12">

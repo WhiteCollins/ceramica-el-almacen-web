@@ -62,6 +62,7 @@ export default async function SpacePage({ params }: SpacePageProps) {
         description={space.description}
         image={space.image}
         imageAlt={space.imageAlt}
+        imagePosition={space.imagePosition}
       />
 
       <div className="max-w-7xl w-full mx-auto px-margin-mobile lg:px-margin-desktop py-8 lg:py-12 flex flex-col gap-14 lg:gap-20">
@@ -87,11 +88,16 @@ export default async function SpacePage({ params }: SpacePageProps) {
                 >
                   <span className="relative block aspect-[16/10] overflow-hidden rounded-lg bg-surface-container-low">
                     <Image
-                      src={type.image}
+                      src={type.cardImage ?? type.image}
                       alt=""
                       fill
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                      style={
+                        !type.cardImage && type.imagePosition
+                          ? { objectPosition: type.imagePosition }
+                          : undefined
+                      }
                     />
                   </span>
                   <span className="flex items-baseline justify-between gap-3">

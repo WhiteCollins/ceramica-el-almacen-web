@@ -17,6 +17,13 @@ export interface SpaceType {
   description: string;
   image: string;
   imageAlt: string;
+  /**
+   * Encuadre CSS (object-position) del banner, ej. "50% 70%". En escritorio
+   * solo influye el valor vertical; en móvil, el horizontal.
+   */
+  imagePosition?: string;
+  /** Foto distinta para la tarjeta del tipo en la página del espacio. */
+  cardImage?: string;
   productIds: string[];
 }
 
@@ -27,6 +34,8 @@ export interface Space {
   description: string;
   image: string;
   imageAlt: string;
+  /** Encuadre CSS (object-position) del banner, ej. "50% 70%". */
+  imagePosition?: string;
   types: SpaceType[];
 }
 
@@ -37,9 +46,10 @@ export const SPACES: Space[] = [
     title: "Pisos de porcelanato",
     description:
       "Porcelanatos rectificados de gran formato con aspecto de mármol y de madera, de baja absorción para interiores y terrazas techadas.",
-    image: "/images/categories/porcelanatos-calacatta.jpg",
+    image: "/images/banners/espacio-pisos.webp",
     imageAlt:
-      "Sala con piso de porcelanato tipo mármol Calacatta pulido de gran formato",
+      "Sala abierta con piso de porcelanato tipo mármol blanco pulido de gran formato y puertas de vidrio hacia una terraza con palmas",
+    imagePosition: "55% 60%",
     types: [
       {
         slug: "tipo-marmol",
@@ -47,8 +57,10 @@ export const SPACES: Space[] = [
         title: "Porcelanato tipo mármol",
         description:
           "Vetas de mármol en porcelanato pulido 60 × 120 cm: el aspecto de la piedra natural sin su mantenimiento.",
-        image: "/images/products/porcelanato-statuario.jpg",
-        imageAlt: "Porcelanato Statuario Imperial pulido con vetas grises",
+        image: "/images/banners/tipo-pisos-tipo-marmol.webp",
+        imageAlt:
+          "Piso de porcelanato tipo mármol blanco pulido con vetas grises en una sala amplia",
+        imagePosition: "60% 55%",
         productIds: ["porcelanato-statuario-imperial"],
       },
       {
@@ -57,8 +69,10 @@ export const SPACES: Space[] = [
         title: "Porcelanato tipo madera",
         description:
           "Listones cerámicos 20 × 120 cm con textura de madera natural, sin dilatación por humedad ni necesidad de pulido.",
-        image: "/images/products/porcelanato-roble-escandinavo.jpg",
-        imageAlt: "Sala con piso de porcelanato tipo madera Roble Escandinavo",
+        image: "/images/banners/tipo-pisos-tipo-madera.webp",
+        imageAlt:
+          "Sala y comedor con piso de porcelanato tipo madera de roble en listones largos y salida a una terraza tropical",
+        imagePosition: "62% 50%",
         productIds: ["porcelanato-roble-escandinavo-mate"],
       },
     ],
@@ -69,9 +83,10 @@ export const SPACES: Space[] = [
     title: "Revestimientos de pared",
     description:
       "Revestimientos artesanales esmaltados y porcelanato de gran formato para muros de baños, cocinas y áreas sociales.",
-    image: "/images/hero/gama-esmaltada-hero.jpg",
+    image: "/images/banners/espacio-paredes.webp",
     imageAlt:
-      "Baldosas esmaltadas artesanales en verde esmeralda, azul cobalto, mostaza y vino",
+      "Cocina con pared de azulejos artesanales esmaltados en verde esmeralda, repisa de roble y fregadero blanco",
+    imagePosition: "60% 40%",
     types: [
       {
         slug: "artesanales",
@@ -79,9 +94,10 @@ export const SPACES: Space[] = [
         title: "Revestimientos artesanales",
         description:
           "Baldosas 15 × 15 cm esmaltadas a mano en tonos intensos, con la variación de color propia de la pieza artesanal.",
-        image: "/images/hero/gama-esmaltada-hero.jpg",
+        image: "/images/banners/tipo-paredes-artesanales.webp",
         imageAlt:
-          "Composición de baldosas esmaltadas artesanales en tonos intensos",
+          "Muro de azulejos artesanales esmaltados en azul cobalto, verde, mostaza y vino con una banca de madera",
+        imagePosition: "61% 50%",
         productIds: ["mural-artesanal-colors-of-life"],
       },
       {
@@ -90,9 +106,10 @@ export const SPACES: Space[] = [
         title: "Muros de gran formato",
         description:
           "Porcelanato 60 × 120 cm para revestir muros con juntas mínimas y continuidad visual con el piso.",
-        image: "/images/categories/porcelanatos-calacatta.jpg",
+        image: "/images/banners/tipo-paredes-gran-formato.webp",
         imageAlt:
-          "Muro y piso revestidos con porcelanato tipo mármol de gran formato",
+          "Baño con muro de porcelanato tipo mármol blanco de gran formato, franja de piezas decorativas en relieve, mueble de madera flotante y espejo redondo con luz",
+        imagePosition: "45% 45%",
         productIds: ["porcelanato-statuario-imperial"],
       },
     ],
@@ -103,9 +120,10 @@ export const SPACES: Space[] = [
     title: "Baños",
     description:
       "Tinas exentas, inodoros, lavamanos de apoyo y duchas termostáticas en exhibición a escala real en el showroom.",
-    image: "/images/hero/tina-sottovento-hero.jpg",
+    image: "/images/banners/espacio-banos.webp",
     imageAlt:
-      "Baño con tina exenta Sottovento blanco mate y grifería de piso dorada",
+      "Baño con tina exenta blanca, grifería de piso dorada y muros de porcelanato tipo travertino de gran formato",
+    imagePosition: "60% 65%",
     types: [
       {
         slug: "sanitarios-y-tinas",
@@ -113,9 +131,10 @@ export const SPACES: Space[] = [
         title: "Sanitarios y tinas",
         description:
           "Tinas exentas de resina mineral e inodoros one-piece de bajo consumo para baños principales y de visitas.",
-        image: "/images/categories/baneras-sanitarios.jpg",
+        image: "/images/banners/banos-tina-piedra.webp",
         imageAlt:
-          "Tina exenta blanca frente a un revestimiento cálido tipo madera",
+          "Tina exenta blanca sobre una base de piedra, con grifería de piso dorada y muro de porcelanato tipo mármol",
+        imagePosition: "50% 70%",
         productIds: [
           "tina-sottovento-blanco-mate",
           "inodoro-one-piece-tornado-flush",
@@ -127,9 +146,11 @@ export const SPACES: Space[] = [
         title: "Lavamanos y bachas",
         description:
           "Lavamanos de apoyo en cerámica estriada y bachas esculturales de piedra para muebles de baño.",
-        image: "/images/categories/muebles-lavamanos.jpg",
+        image: "/images/banners/banos-lavamanos-doble.webp",
         imageAlt:
-          "Lavamanos de apoyo de cerámica estriada, terrazo y piedra sobre madera",
+          "Mueble de madera flotante con dos lavamanos de apoyo, grifería dorada empotrada y espejos redondos con luz",
+        imagePosition: "55% 45%",
+        cardImage: "/images/banners/banos-mueble-lavamanos.webp",
         productIds: [
           "lavamanos-oval-fluted-ranurado",
           "bacha-escultural-mineral-stone",
@@ -141,8 +162,10 @@ export const SPACES: Space[] = [
         title: "Duchas",
         description:
           "Columnas de ducha termostáticas con temperatura estable y altura regulable.",
-        image: "/images/products/columna-ducha-termostatica.jpg",
-        imageAlt: "Columna de ducha termostática negra mate en baño de piedra",
+        image: "/images/banners/tipo-banos-duchas.webp",
+        imageAlt:
+          "Ducha de obra con columna termostática negra mate, mampara de vidrio y muros de porcelanato tipo pizarra gris oscuro",
+        imagePosition: "72% 50%",
         productIds: ["columna-ducha-termostatica-suecia"],
       },
     ],
@@ -153,9 +176,10 @@ export const SPACES: Space[] = [
     title: "Cocinas",
     description:
       "Grifería monomando con caño extraíble y revestimientos esmaltados para salpicaderos y barras.",
-    image: "/images/hero/griferia-oro-hero.jpg",
+    image: "/images/banners/espacio-cocinas.webp",
     imageAlt:
-      "Grifería de cocina en oro cepillado con rociador extraíble sobre fregadero negro",
+      "Grifería de cocina en oro cepillado con caño extraíble sobre fregadero negro y salpicadero de azulejo terracota",
+    imagePosition: "50% 45%",
     types: [
       {
         slug: "griferia",
@@ -163,8 +187,10 @@ export const SPACES: Space[] = [
         title: "Grifería de cocina",
         description:
           "Monomandos de latón macizo con caño extraíble y acabado PVD resistente a la corrosión.",
-        image: "/images/hero/griferia-oro-hero.jpg",
-        imageAlt: "Grifería monomando oro cepillado con caño extraíble",
+        image: "/images/banners/tipo-cocinas-griferia.webp",
+        imageAlt:
+          "Grifería monomando en oro cepillado con caño extraíble sobre fregadero negro y encimera blanca",
+        imagePosition: "68% 50%",
         productIds: ["griferia-monomando-gourmet-oro"],
       },
       {
