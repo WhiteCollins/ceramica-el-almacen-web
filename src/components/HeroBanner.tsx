@@ -59,6 +59,8 @@ const BANNER_SLIDES: BannerSlide[] = [
   },
 ];
 
+const SLIDE_INTERVAL_MS = 6500;
+
 export function HeroBanner() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
@@ -84,23 +86,29 @@ export function HeroBanner() {
     }
   }, []);
 
-  // Auto-advance every 2.5s unless paused or hovered/focused
+  // Avance automático cada 6,5 s salvo pausa explícita, hover o foco
   useEffect(() => {
     if (isPaused || hoverOrFocus) return;
-    const timer = window.setInterval(nextSlide, 2500);
+    const timer = window.setInterval(nextSlide, SLIDE_INTERVAL_MS);
     return () => window.clearInterval(timer);
   }, [isPaused, hoverOrFocus, nextSlide]);
 
   return (
     <section
       aria-roledescription="carousel"
-      aria-label="Colecciones destacadas de Cerámica El Almacén"
+      aria-labelledby="hero-titulo"
       onMouseEnter={() => setHoverOrFocus(true)}
       onMouseLeave={() => setHoverOrFocus(false)}
       onFocusCapture={() => setHoverOrFocus(true)}
       onBlurCapture={() => setHoverOrFocus(false)}
       className="relative w-full overflow-hidden bg-inverse-surface h-[380px] sm:h-[480px] lg:h-[580px]"
     >
+      {/* Único H1 de la portada; los títulos de cada diapositiva son h2 */}
+      <h1 id="hero-titulo" className="sr-only">
+        Cerámica El Almacén: porcelanatos, griferías y baños en San Pedro de
+        Macorís
+      </h1>
+
       {/* Pista animada en el compositor mediante transform translateX */}
       <div
         className="flex h-full w-full transition-transform duration-500 ease-out motion-reduce:transition-none"
@@ -132,15 +140,15 @@ export function HeroBanner() {
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/10" />
 
               {/* Contenido superpuesto de la diapositiva */}
-              <div className="absolute inset-x-0 bottom-0 pb-14 pt-6">
-                <div className="max-w-7xl mx-auto px-14 sm:px-20 lg:px-24 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+              <div className="absolute inset-x-0 bottom-0 pb-[72px] sm:pb-14 pt-6">
+                <div className="max-w-7xl mx-auto px-5 sm:px-20 lg:px-24 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
                   <div className="max-w-2xl space-y-1.5 sm:space-y-2 text-white">
                     <span className="inline-flex items-center px-3 py-1 rounded bg-primary text-on-primary font-label-caps text-label-caps uppercase tracking-wider">
                       {slide.badge}
                     </span>
-                    <h1 className="font-display-hero text-headline-xl-mobile sm:text-display-hero font-normal tracking-tight text-white">
+                    <h2 className="font-display-hero text-headline-xl-mobile sm:text-display-hero font-normal tracking-tight text-white">
                       {slide.title}
-                    </h1>
+                    </h2>
                     <p className="font-body-md sm:text-body-lg text-white/90">
                       {slide.subtitle}
                     </p>
@@ -161,12 +169,13 @@ export function HeroBanner() {
         })}
       </div>
 
+      {/* Flechas: abajo en móvil (no tapan el título), centradas desde sm */}
       {/* Botón Anterior (Izquierda) */}
       <button
         type="button"
         onClick={prevSlide}
         aria-label="Imagen anterior"
-        className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-20 min-h-[48px] min-w-[48px] inline-flex items-center justify-center rounded-full bg-black/55 hover:bg-black/80 text-white backdrop-blur-sm transition-colors shadow-md"
+        className="absolute left-3 sm:left-6 bottom-2 sm:bottom-auto sm:top-1/2 sm:-translate-y-1/2 z-20 min-h-[48px] min-w-[48px] inline-flex items-center justify-center rounded-full bg-black/55 hover:bg-black/80 text-white backdrop-blur-sm transition-colors shadow-md"
       >
         <Icon name="chevron_left" className="text-[26px]" />
       </button>
@@ -176,7 +185,7 @@ export function HeroBanner() {
         type="button"
         onClick={nextSlide}
         aria-label="Siguiente imagen"
-        className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-20 min-h-[48px] min-w-[48px] inline-flex items-center justify-center rounded-full bg-black/55 hover:bg-black/80 text-white backdrop-blur-sm transition-colors shadow-md"
+        className="absolute right-3 sm:right-6 bottom-2 sm:bottom-auto sm:top-1/2 sm:-translate-y-1/2 z-20 min-h-[48px] min-w-[48px] inline-flex items-center justify-center rounded-full bg-black/55 hover:bg-black/80 text-white backdrop-blur-sm transition-colors shadow-md"
       >
         <Icon name="chevron_right" className="text-[26px]" />
       </button>
@@ -210,6 +219,21 @@ export function HeroBanner() {
             );
           })}
         </div>
+
+        {/* Pausa explícita (WCAG 2.2.2): funciona también en táctil */}
+        <button
+          type="button"
+          onClick={() => setIsPaused((p) => !p)}
+          aria-label={
+            isPaused ? "Reanudar el carrusel" : "Pausar el carrusel"
+          }
+          className="min-h-[44px] min-w-[44px] inline-flex items-center justify-center rounded-full text-white/90 hover:text-white"
+        >
+          <Icon
+            name={isPaused ? "play_arrow" : "pause"}
+            className="text-[22px]"
+          />
+        </button>
       </div>
     </section>
   );

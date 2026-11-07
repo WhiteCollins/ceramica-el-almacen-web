@@ -4,6 +4,11 @@ import Link from "next/link";
 import { CatalogExplorer } from "@/components/CatalogExplorer";
 import { Icon } from "@/components/Icon";
 
+// Render por petición: así CatalogExplorer (que lee los filtros de la URL con
+// useSearchParams) se pinta completo en el servidor y el HTML ya incluye el H1
+// y las fichas. En modo estático Next solo enviaría el esqueleto de carga.
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Catálogo & Colecciones",
   description:

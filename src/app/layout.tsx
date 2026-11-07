@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Noto_Serif, Plus_Jakarta_Sans } from "next/font/google";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { ICON_FONT_URL } from "@/components/Icon";
 import { ScrollRevealObserver } from "@/components/ScrollRevealObserver";
 import { SITE_INFO } from "@/data/site";
 import "./globals.css";
@@ -112,10 +113,7 @@ export default function RootLayout({
           href="https://fonts.gstatic.com"
           crossOrigin="anonymous"
         />
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap"
-        />
+        <link rel="stylesheet" href={ICON_FONT_URL} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

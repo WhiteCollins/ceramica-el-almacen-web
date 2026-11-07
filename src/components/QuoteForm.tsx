@@ -42,7 +42,6 @@ export function QuoteForm() {
   const emailId = useId();
   const sqmId = useId();
   const detailsId = useId();
-  const fileId = useId();
 
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
@@ -53,7 +52,6 @@ export function QuoteForm() {
     "Porcelanatos",
   ]);
   const [details, setDetails] = useState("");
-  const [attachedFileName, setAttachedFileName] = useState<string>("");
   const [submitted, setSubmitted] = useState(false);
 
   const toggleLine = (label: string) => {
@@ -75,19 +73,21 @@ export function QuoteForm() {
       selectedLines.length > 0
         ? `• Productos de interés: ${selectedLines.join(", ")}`
         : null,
-      attachedFileName ? `• Planos / archivo: ${attachedFileName}` : null,
       details.trim() ? `• Mensaje: ${details.trim()}` : null,
     ].filter(Boolean);
 
     return lines.join("\n");
   };
 
+  const whatsappQuoteHref = buildWhatsAppUrl(buildSummaryText());
+
+  // El sitio no tiene backend de correo: la solicitud se entrega abriendo
+  // WhatsApp con el mensaje ya redactado, dentro del mismo gesto del usuario.
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    window.open(whatsappQuoteHref, "_blank", "noopener,noreferrer");
     setSubmitted(true);
   };
-
-  const whatsappQuoteHref = buildWhatsAppUrl(buildSummaryText());
   const mailQuoteHref = `mailto:${SITE_INFO.email}?subject=${encodeURIComponent(
     `Solicitud de cotización (${projectType}) - ${fullName}`
   )}&body=${encodeURIComponent(buildSummaryText())}`;
@@ -279,67 +279,51 @@ export function QuoteForm() {
         />
       </div>
 
-      {/* Fila 6: Adjuntar planos (opcional) */}
+      {/* Fila 6: Envío (los planos se mandan en el mismo chat de WhatsApp) */}
       <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
-        <label
-          htmlFor={fileId}
-          className="cursor-pointer min-h-[44px] inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-outline bg-white hover:bg-surface-container-low text-sm font-medium text-on-surface transition-colors focus-within:outline focus-within:outline-2 focus-within:outline-primary"
-        >
-          <span>
-            {attachedFileName
-              ? `Archivo: ${attachedFileName}`
-              : "Adjuntar planos (opcional)"}
-          </span>
-          <input
-            id={fileId}
-            name="blueprint"
-            type="file"
-            accept=".pdf,.jpg,.jpeg,.png,.dwg,.xlsx"
-            onChange={(e) => {
-              const f = e.target.files?.[0];
-              setAttachedFileName(f ? f.name : "");
-            }}
-            className="sr-only"
-          />
-        </label>
+        <p className="text-sm text-secondary max-w-sm">
+          ¿Tienes planos? Adjúntalos en el chat de WhatsApp que se abrirá con
+          tu solicitud.
+        </p>
 
         <button
           type="submit"
-          className="w-full sm:w-auto min-h-[44px] inline-flex items-center justify-center bg-primary hover:bg-primary-container text-white px-6 py-2.5 rounded-lg text-sm font-semibold transition-colors"
+          className="w-full sm:w-auto min-h-[44px] inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary-container text-white px-6 py-2.5 rounded-lg text-sm font-semibold transition-colors"
         >
-          Enviar solicitud
+          <Icon name="chat" className="text-[16px]" />
+          <span>Enviar por WhatsApp</span>
         </button>
       </div>
 
-      {/* Confirmación sobria sin colores extra */}
-      {submitted ? (
-        <div
-          aria-live="polite"
-          className="p-5 bg-surface-container-low rounded-lg space-y-4"
-        >
-          <p className="text-sm text-on-surface">
-            Solicitud lista. Elige por dónde prefieres enviarla a nuestras
-            asesoras:
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3">
-            <a
-              href={whatsappQuoteHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 min-h-[44px] inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary-container text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition-colors"
-            >
-              <Icon name="chat" className="text-[16px]" />
-              <span>Enviar por WhatsApp</span>
-            </a>
-            <a
-              href={mailQuoteHref}
-              className="flex-1 min-h-[44px] inline-flex items-center justify-center border border-outline bg-white hover:bg-surface text-on-surface px-5 py-2.5 rounded-lg text-sm font-medium transition-colors"
-            >
-              <span>Enviar por correo</span>
-            </a>
+      {/* Confirmación sobria sin colores extra (región viva siempre montada) */}
+      <div aria-live="polite">
+        {submitted ? (
+          <div className="p-5 bg-surface-container-low rounded-lg space-y-4">
+            <p className="text-sm text-on-surface">
+              Abrimos WhatsApp con tu solicitud redactada. Pulsa{" "}
+              <strong>Enviar</strong> en el chat para que llegue a nuestras
+              asesoras. ¿No se abrió?
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <a
+                href={whatsappQuoteHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 min-h-[44px] inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary-container text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition-colors"
+              >
+                <Icon name="chat" className="text-[16px]" />
+                <span>Abrir WhatsApp de nuevo</span>
+              </a>
+              <a
+                href={mailQuoteHref}
+                className="flex-1 min-h-[44px] inline-flex items-center justify-center border border-outline bg-white hover:bg-surface text-on-surface px-5 py-2.5 rounded-lg text-sm font-medium transition-colors"
+              >
+                <span>Enviar por correo</span>
+              </a>
+            </div>
           </div>
-        </div>
-      ) : null}
+        ) : null}
+      </div>
     </form>
   );
 }
