@@ -31,6 +31,7 @@ export const ICON_NAMES = [
   "local_parking",
   "local_shipping",
   "location_on",
+  "mail",
   "menu",
   "nature",
   "palette",

@@ -19,6 +19,11 @@ const PRODUCT_INTERESTS = [
   "Lavamanos",
 ] as const;
 
+const PRIMARY_LINK =
+  "flex-1 min-h-[44px] inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary-container text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition-colors";
+const SECONDARY_LINK =
+  "flex-1 min-h-[44px] inline-flex items-center justify-center gap-2 border border-outline bg-white hover:bg-surface text-on-surface px-5 py-2.5 rounded-lg text-sm font-medium transition-colors";
+
 function syncAriaInvalid(el: EventTarget | null) {
   if (
     el instanceof HTMLInputElement ||
@@ -53,6 +58,8 @@ export function QuoteForm() {
   ]);
   const [details, setDetails] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  // Canal elegido al enviar: cambia el mensaje de confirmación.
+  const [channel, setChannel] = useState<"whatsapp" | "email">("whatsapp");
 
   const toggleLine = (label: string) => {
     setSelectedLines((prev) =>
@@ -81,16 +88,28 @@ export function QuoteForm() {
 
   const whatsappQuoteHref = buildWhatsAppUrl(buildSummaryText());
 
-  // El sitio no tiene backend de correo: la solicitud se entrega abriendo
-  // WhatsApp con el mensaje ya redactado, dentro del mismo gesto del usuario.
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    window.open(whatsappQuoteHref, "_blank", "noopener,noreferrer");
-    setSubmitted(true);
-  };
   const mailQuoteHref = `mailto:${SITE_INFO.email}?subject=${encodeURIComponent(
     `Solicitud de cotización (${projectType}) - ${fullName}`
   )}&body=${encodeURIComponent(buildSummaryText())}`;
+
+  // El sitio no tiene backend de correo: la solicitud se entrega abriendo
+  // WhatsApp o el programa de correo con el mensaje ya redactado, dentro del
+  // mismo gesto del usuario. El botón pulsado decide el canal; con Enter se
+  // usa el primero (WhatsApp).
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const submitter = (e.nativeEvent as SubmitEvent).submitter as
+      | HTMLButtonElement
+      | null;
+    const via = submitter?.value === "email" ? "email" : "whatsapp";
+    if (via === "email") {
+      window.location.href = mailQuoteHref;
+    } else {
+      window.open(whatsappQuoteHref, "_blank", "noopener,noreferrer");
+    }
+    setChannel(via);
+    setSubmitted(true);
+  };
 
   return (
     <form
@@ -279,46 +298,77 @@ export function QuoteForm() {
         />
       </div>
 
-      {/* Fila 6: Envío (los planos se mandan en el mismo chat de WhatsApp) */}
-      <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
-        <p className="text-sm text-secondary max-w-sm">
-          ¿Tienes planos? Adjúntalos en el chat de WhatsApp que se abrirá con
-          tu solicitud.
+      {/* Fila 6: Envío por WhatsApp o por correo (los planos se adjuntan allí) */}
+      <div className="flex flex-col gap-3 pt-1">
+        <p className="text-sm text-secondary">
+          ¿Tienes planos? Adjúntalos en el chat o en el correo que se abrirá
+          con tu solicitud.
         </p>
 
-        <button
-          type="submit"
-          className="w-full sm:w-auto min-h-[44px] inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary-container text-white px-6 py-2.5 rounded-lg text-sm font-semibold transition-colors"
-        >
-          <Icon name="chat" className="text-[16px]" />
-          <span>Enviar por WhatsApp</span>
-        </button>
+        <div className="flex flex-col sm:flex-row sm:justify-end gap-3">
+          <button
+            type="submit"
+            name="via"
+            value="whatsapp"
+            className="w-full sm:w-auto min-h-[44px] inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary-container text-white px-6 py-2.5 rounded-lg text-sm font-semibold transition-colors"
+          >
+            <Icon name="chat" className="text-[16px]" />
+            <span>Enviar por WhatsApp</span>
+          </button>
+          <button
+            type="submit"
+            name="via"
+            value="email"
+            className="w-full sm:w-auto min-h-[44px] inline-flex items-center justify-center gap-2 border border-outline bg-white hover:bg-surface-container-low text-on-surface px-6 py-2.5 rounded-lg text-sm font-semibold transition-colors"
+          >
+            <Icon name="mail" className="text-[16px] text-primary" />
+            <span>Enviar por correo</span>
+          </button>
+        </div>
       </div>
 
       {/* Confirmación sobria sin colores extra (región viva siempre montada) */}
       <div aria-live="polite">
         {submitted ? (
           <div className="p-5 bg-surface-container-low rounded-lg space-y-4">
-            <p className="text-sm text-on-surface">
-              Abrimos WhatsApp con tu solicitud redactada. Pulsa{" "}
-              <strong>Enviar</strong> en el chat para que llegue a nuestras
-              asesoras. ¿No se abrió?
-            </p>
+            {channel === "whatsapp" ? (
+              <p className="text-sm text-on-surface">
+                Abrimos WhatsApp con tu solicitud redactada. Pulsa{" "}
+                <strong>Enviar</strong> en el chat para que llegue a nuestras
+                asesoras. ¿No se abrió?
+              </p>
+            ) : (
+              <p className="text-sm text-on-surface">
+                Abrimos tu programa de correo con la solicitud redactada. Pulsa{" "}
+                <strong>Enviar</strong> para que llegue a nuestras asesoras. Si
+                no se abrió, escríbenos a{" "}
+                <strong className="select-all">{SITE_INFO.email}</strong>.
+              </p>
+            )}
             <div className="flex flex-col sm:flex-row gap-3">
               <a
                 href={whatsappQuoteHref}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 min-h-[44px] inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary-container text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition-colors"
+                className={channel === "whatsapp" ? PRIMARY_LINK : SECONDARY_LINK}
               >
                 <Icon name="chat" className="text-[16px]" />
-                <span>Abrir WhatsApp de nuevo</span>
+                <span>
+                  {channel === "whatsapp"
+                    ? "Abrir WhatsApp de nuevo"
+                    : "Enviar por WhatsApp"}
+                </span>
               </a>
               <a
                 href={mailQuoteHref}
-                className="flex-1 min-h-[44px] inline-flex items-center justify-center border border-outline bg-white hover:bg-surface text-on-surface px-5 py-2.5 rounded-lg text-sm font-medium transition-colors"
+                className={channel === "email" ? PRIMARY_LINK : SECONDARY_LINK}
               >
-                <span>Enviar por correo</span>
+                <Icon name="mail" className="text-[16px]" />
+                <span>
+                  {channel === "email"
+                    ? "Abrir el correo de nuevo"
+                    : "Enviar por correo"}
+                </span>
               </a>
             </div>
           </div>

@@ -199,9 +199,10 @@ export const SPACES: Space[] = [
         title: "Salpicaderos",
         description:
           "Revestimientos esmaltados impermeables a grasas y vapor para el frente de la cocina y la barra.",
-        image: "/images/hero/editorial-color-backsplash.jpg",
+        image: "/images/banners/tipo-cocinas-salpicaderos.webp",
         imageAlt:
-          "Salpicadero de cocina con baldosas esmaltadas en tonos terracota",
+          "Cocina con salpicadero de azulejos esmaltados artesanales en tonos terracota, ollas de cobre, encimera de madera y fregadero blanco",
+        imagePosition: "60% 50%",
         productIds: ["mural-artesanal-colors-of-life"],
       },
     ],
