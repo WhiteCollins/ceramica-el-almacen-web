@@ -1,130 +1,231 @@
-"use client";
-
-import React, { useState } from "react";
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { SHOWROOM_PROJECTS } from "@/data/site";
+import { Icon } from "@/components/Icon";
+import { CATALOG_PRODUCTS } from "@/data/catalog";
+import { VISIBLE_PROJECTS, type ShowroomProject } from "@/data/site";
 
-type FilterOption = "Todos" | "Residencial" | "Comercial";
+function productsFor(project: ShowroomProject) {
+  return project.productIds
+    .map((id) => CATALOG_PRODUCTS.find((p) => p.id === id))
+    .filter((p): p is (typeof CATALOG_PRODUCTS)[number] => Boolean(p));
+}
 
-const FILTERS: FilterOption[] = ["Todos", "Residencial", "Comercial"];
+function DraftBadge() {
+  return (
+    <span className="absolute top-3 left-3 z-10 rounded bg-white/95 px-2.5 py-1 text-xs font-semibold text-on-surface shadow-sm">
+      Ejemplo
+    </span>
+  );
+}
 
-export function ProjectsGrid() {
-  const [activeFilter, setActiveFilter] = useState<FilterOption>("Todos");
+/** Metadatos en una línea: ubicación, tipo y año. */
+function ProjectMeta({ project }: { project: ShowroomProject }) {
+  return (
+    <p className="text-sm text-secondary">
+      {project.location}
+      <span aria-hidden="true"> · </span>
+      {project.category}
+      <span aria-hidden="true"> · </span>
+      {project.year}
+    </p>
+  );
+}
 
-  const filtered =
-    activeFilter === "Todos"
-      ? SHOWROOM_PROJECTS
-      : SHOWROOM_PROJECTS.filter((p) => p.filterType === activeFilter);
+/** Proyecto destacado: foto grande y ficha con los productos usados. */
+function FeaturedProject({ project }: { project: ShowroomProject }) {
+  const products = productsFor(project);
+  const href = `/showroom/${project.id}`;
 
-  const renderProjectItem = (
-    project: (typeof SHOWROOM_PROJECTS)[number],
-    featured: boolean
-  ) => (
-    <article
-      key={project.id}
-      className="scroll-reveal flex flex-col gap-3.5 group"
-    >
-      {/* Foto clicable con zoom suave */}
+  return (
+    <article className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-12 items-center">
       <Link
-        href={`/showroom/${project.id}`}
-        className={`relative block w-full overflow-hidden rounded-lg bg-surface-container-low ${
-          featured ? "aspect-[4/3]" : "aspect-[16/9]"
-        }`}
+        href={href}
+        className="group relative block lg:col-span-7 aspect-[4/3] overflow-hidden rounded-lg bg-surface-container-low"
       >
+        {project.draft ? <DraftBadge /> : null}
         <Image
           src={project.image}
           alt={project.alt}
           fill
-          priority={featured}
-          sizes={
-            featured
-              ? "(max-width: 1024px) 100vw, 58vw"
-              : "(max-width: 1024px) 100vw, 42vw"
-          }
-          className="object-cover transition-transform duration-700 group-hover:scale-105"
+          priority
+          sizes="(max-width: 1024px) 100vw, 58vw"
+          className="scroll-reveal object-cover transition-transform duration-700 group-hover:scale-[1.03]"
         />
       </Link>
 
-      {/* Texto debajo de la imagen sin caja */}
-      <div className="space-y-2">
-        <Link href={`/showroom/${project.id}`} className="block space-y-0.5">
-          <p className="text-xs text-secondary">
-            {project.location} · {project.category}
-          </p>
-          <h2 className="font-serif text-lg text-on-surface group-hover:text-primary transition-colors">
-            {project.title}
-          </h2>
-        </Link>
-
-        {/* Chips de materiales que enlazan directo al catálogo */}
-        <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
-          <span className="text-xs text-secondary mr-1">Materiales:</span>
-          {project.materials.map((mat) => (
-            <Link
-              key={mat.label}
-              href={mat.href}
-              className="inline-flex items-center px-3 py-1 rounded-full border border-outline bg-white hover:border-primary hover:text-primary text-xs font-medium text-on-surface transition-colors"
-            >
-              {mat.label}
+      <div className="lg:col-span-5 flex flex-col gap-5">
+        <div className="space-y-2">
+          <ProjectMeta project={project} />
+          <h2 className="font-serif text-3xl text-on-surface">
+            <Link href={href} className="hover:text-primary transition-colors">
+              {project.title}
             </Link>
-          ))}
+          </h2>
+          <p className="text-base text-secondary">{project.summary}</p>
         </div>
+
+        <p className="text-base font-semibold text-on-surface">
+          {project.area}
+        </p>
+
+        {products.length > 0 ? (
+          <div className="space-y-2.5 border-t border-outline pt-5">
+            <h3 className="text-sm font-semibold text-on-surface">
+              Productos usados
+            </h3>
+            <ul role="list" className="flex flex-col gap-2">
+              {products.map((product) => (
+                <li key={product.id}>
+                  <Link
+                    href={`/catalogo/${product.id}`}
+                    className="group/prod flex items-center gap-3 min-h-[44px] rounded-lg"
+                  >
+                    <span className="relative h-12 w-12 shrink-0 overflow-hidden rounded-md bg-surface-container-low">
+                      <Image
+                        src={product.image}
+                        alt=""
+                        fill
+                        sizes="48px"
+                        className="object-cover"
+                      />
+                    </span>
+                    <span className="text-sm text-on-surface group-hover/prod:text-primary group-hover/prod:underline">
+                      {product.name}
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+
+        <Link
+          href={href}
+          className="w-fit min-h-[44px] inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-container transition-colors"
+        >
+          <span>Ver proyecto</span>
+          <Icon name="arrow_forward" className="text-[18px]" />
+        </Link>
       </div>
     </article>
   );
+}
+
+/** Tarjeta de proyecto: misma proporción de foto y mismo orden de datos. */
+function ProjectCard({ project }: { project: ShowroomProject }) {
+  const products = productsFor(project);
+  const href = `/showroom/${project.id}`;
 
   return (
-    <div className="space-y-8 lg:space-y-10">
-      {/* Encabezado + Filtros */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <h1 className="font-serif text-2xl text-on-surface">Proyectos</h1>
+    <article className="flex flex-col gap-4">
+      <Link
+        href={href}
+        className="group relative block aspect-[4/3] overflow-hidden rounded-lg bg-surface-container-low"
+      >
+        {project.draft ? <DraftBadge /> : null}
+        <Image
+          src={project.image}
+          alt={project.alt}
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          className="scroll-reveal object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+        />
+      </Link>
 
-        <div
-          role="group"
-          aria-label="Filtrar proyectos por tipo"
-          className="flex flex-wrap items-center gap-2"
-        >
-          {FILTERS.map((filter) => {
-            const isSelected = activeFilter === filter;
-            return (
-              <button
-                key={filter}
-                type="button"
-                aria-pressed={isSelected}
-                onClick={() => setActiveFilter(filter)}
-                className={
-                  isSelected
-                    ? "min-h-[40px] px-4 py-1.5 rounded-full bg-primary text-white text-sm font-medium transition-colors"
-                    : "min-h-[40px] px-4 py-1.5 rounded-full border border-outline bg-white hover:bg-surface-container-low text-on-surface text-sm font-medium transition-colors"
-                }
-              >
-                {filter}
-              </button>
-            );
-          })}
-        </div>
+      <div className="flex flex-col gap-2">
+        <ProjectMeta project={project} />
+        <h2 className="font-serif text-xl text-on-surface">
+          <Link href={href} className="hover:text-primary transition-colors">
+            {project.title}
+          </Link>
+        </h2>
+        <p className="text-sm text-secondary line-clamp-2">{project.summary}</p>
       </div>
 
-      {/* Cuadrícula Bento (cuando están los 3) o 2 columnas al filtrar */}
-      {activeFilter === "Todos" && filtered.length === 3 ? (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
-          {/* Izquierda: Proyecto destacado (foto grande) */}
-          <div className="lg:col-span-7">
-            {renderProjectItem(filtered[0], true)}
-          </div>
+      <div className="mt-auto flex items-center justify-between gap-3 border-t border-outline pt-3">
+        <span className="text-sm font-semibold text-on-surface">
+          {project.area}
+        </span>
+        {products.length > 0 ? (
+          <ul role="list" aria-label="Productos usados" className="flex -space-x-2">
+            {products.map((product) => (
+              <li key={product.id}>
+                <Link
+                  href={`/catalogo/${product.id}`}
+                  title={product.name}
+                  className="relative block h-11 w-11 overflow-hidden rounded-full border-2 border-surface bg-surface-container-low hover:z-10 hover:scale-110 transition-transform"
+                >
+                  <Image
+                    src={product.image}
+                    alt={product.name}
+                    fill
+                    sizes="44px"
+                    className="object-cover"
+                  />
+                </Link>
+              </li>
+            ))}
+          </ul>
+        ) : null}
+      </div>
+    </article>
+  );
+}
 
-          {/* Derecha: Proyecto 2 y Proyecto 3 apilados */}
-          <div className="lg:col-span-5 flex flex-col gap-8 lg:gap-10">
-            {renderProjectItem(filtered[1], false)}
-            {renderProjectItem(filtered[2], false)}
-          </div>
+/** Ocupa el hueco de la última fila para que la cuadrícula no quede coja. */
+function NextProjectCard() {
+  return (
+    <Link
+      href="/contacto"
+      className="group flex flex-col justify-center gap-3 rounded-lg border border-dashed border-outline p-8 min-h-[280px] hover:border-primary hover:bg-surface-container-low transition-colors"
+    >
+      <h2 className="font-serif text-xl text-on-surface">
+        Tu obra puede ser la próxima
+      </h2>
+      <p className="text-sm text-secondary max-w-xs">
+        Cubicamos tus planos, reservamos un solo lote y despachamos a pie de
+        obra en todo el país.
+      </p>
+      <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary group-hover:underline">
+        <span>Cotizar mi proyecto</span>
+        <Icon name="arrow_forward" className="text-[18px]" />
+      </span>
+    </Link>
+  );
+}
+
+export function ProjectsGrid() {
+  const [featured, ...rest] = VISIBLE_PROJECTS;
+  const regions = new Set(VISIBLE_PROJECTS.map((p) => p.location)).size;
+  const columns = rest.length >= 3 ? 3 : 2;
+  const leavesGap = rest.length > 0 && rest.length % columns !== 0;
+
+  return (
+    <div className="flex flex-col gap-12 lg:gap-16">
+      <header className="max-w-2xl space-y-3">
+        <h1 className="font-serif text-4xl text-on-surface">Proyectos</h1>
+        <p className="text-base text-secondary">
+          Obras residenciales y comerciales que equipamos desde nuestro
+          almacén en San Pedro de Macorís: {VISIBLE_PROJECTS.length} proyectos
+          en {regions} localidades de la República Dominicana.
+        </p>
+      </header>
+
+      {featured ? <FeaturedProject project={featured} /> : null}
+
+      {rest.length > 0 ? (
+        <div
+          className={`grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-12 ${
+            columns === 3 ? "lg:grid-cols-3" : ""
+          }`}
+        >
+          {rest.map((project) => (
+            <ProjectCard key={project.id} project={project} />
+          ))}
+          {leavesGap ? <NextProjectCard /> : null}
         </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10 items-start">
-          {filtered.map((proj, idx) => renderProjectItem(proj, idx === 0))}
-        </div>
-      )}
+      ) : null}
     </div>
   );
 }

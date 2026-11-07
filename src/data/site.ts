@@ -237,7 +237,39 @@ export const FAQS = [
   },
 ] as const;
 
-export const SHOWROOM_PROJECTS = [
+export interface ShowroomProject {
+  id: string;
+  location: string;
+  fullLocation: string;
+  category: "Residencial" | "Comercial";
+  filterType: "Residencial" | "Comercial";
+  title: string;
+  area: string;
+  year: string;
+  summary: string;
+  fullDescription: string[];
+  highlights: string[];
+  materials: { label: string; href: string }[];
+  productIds: string[];
+  image: string;
+  alt: string;
+  /**
+   * Proyecto de EJEMPLO (datos e imagen ilustrativos, no es una obra real).
+   * Se muestra en desarrollo con la etiqueta "Ejemplo" y se oculta en la build
+   * de producción. Reemplázalo por una obra real y quita `draft` para publicarlo.
+   */
+  draft?: boolean;
+}
+
+/**
+ * Muestra los proyectos de ejemplo. Siempre en `next dev`; en producción solo
+ * si se compila con NEXT_PUBLIC_SHOW_DRAFTS=1 (útil para revisar el diseño).
+ */
+export const SHOW_DRAFT_PROJECTS =
+  process.env.NODE_ENV !== "production" ||
+  process.env.NEXT_PUBLIC_SHOW_DRAFTS === "1";
+
+export const SHOWROOM_PROJECTS: ShowroomProject[] = [
   {
     id: "villa-marina-juan-dolio",
     location: "Juan Dolio",
@@ -364,7 +396,149 @@ export const SHOWROOM_PROJECTS = [
     image: "/images/hero/editorial-color-backsplash.jpg",
     alt: "Salpicadero artesanal con baldosas vidriadas en tonos terracota y detalles en latón cepillado",
   },
-] as const;
+  // ─────────────────────────────────────────────────────────────────────
+  // PROYECTOS DE EJEMPLO (draft: true). Datos ilustrativos y fotos de
+  // Unsplash (licencia Unsplash), NO son obras de Cerámica El Almacén.
+  // Se ocultan en producción. Sustitúyelos por obras reales y quita `draft`.
+  // Fotos: Aalo Lens (unsplash.com/photos/Z30QQmCIppU),
+  //        Rodrigo Rodrigues (unsplash.com/photos/-mvRveIArOo),
+  //        Josh Hild (unsplash.com/photos/UxeaC7_AnYo).
+  // ─────────────────────────────────────────────────────────────────────
+  {
+    id: "ejemplo-apartamento-bavaro",
+    draft: true,
+    location: "Bávaro",
+    fullLocation: "Bávaro · Punta Cana",
+    category: "Residencial",
+    filterType: "Residencial",
+    title: "Apartamento Mirador Bávaro",
+    area: "180 m² suministrados",
+    year: "2026",
+    summary:
+      "Porcelanato tipo madera Roble Escandinavo 20×120 cm en áreas sociales, con baños equipados con inodoro Tornado Flush y ducha termostática.",
+    fullDescription: [
+      "Apartamento en piso alto con salida a terraza, donde se buscaba un piso cálido tipo madera que soportara la arena y la humedad de la costa sin mantenimiento.",
+      "Se suministró porcelanato Roble Escandinavo 20×120 cm en sala, comedor y habitaciones, instalado a junta trabada, y se equiparon los dos baños con inodoros one-piece Tornado Flush y columnas de ducha termostáticas.",
+    ],
+    highlights: [
+      "Piso continuo tipo madera sin dilatación ni mantenimiento en clima costero.",
+      "Un solo lote de producción para toda la superficie, sin variación de tono.",
+      "Entrega coordinada con la administración del edificio en Bávaro.",
+    ],
+    materials: [
+      {
+        label: "Roble Escandinavo 20×120",
+        href: "/catalogo/porcelanato-roble-escandinavo-mate",
+      },
+      {
+        label: "Inodoro Tornado Flush",
+        href: "/catalogo/inodoro-one-piece-tornado-flush",
+      },
+      {
+        label: "Ducha Termostática",
+        href: "/catalogo/columna-ducha-termostatica-suecia",
+      },
+    ],
+    productIds: [
+      "porcelanato-roble-escandinavo-mate",
+      "inodoro-one-piece-tornado-flush",
+      "columna-ducha-termostatica-suecia",
+    ],
+    image: "/images/projects/ejemplo-apartamento-vista-mar.jpg",
+    alt: "Sala de apartamento con piso tipo madera claro, panel de mármol oscuro y ventanal con vista al mar",
+  },
+  {
+    id: "ejemplo-hotel-bayahibe",
+    draft: true,
+    location: "Bayahíbe",
+    fullLocation: "Bayahíbe · La Altagracia",
+    category: "Comercial",
+    filterType: "Comercial",
+    title: "Hotel Boutique Arrecife",
+    area: "12 baños equipados",
+    year: "2026",
+    summary:
+      "Bachas de piedra Mineral Stone, columnas de ducha termostáticas e inodoros one-piece para las habitaciones de un hotel boutique.",
+    fullDescription: [
+      "Hotel boutique de doce habitaciones que quería baños con materiales naturales y luz cálida, sin renunciar a piezas resistentes al uso diario de huéspedes.",
+      "Cada baño se equipó con una bacha escultural Mineral Stone de acabado martillado, columna de ducha termostática y un inodoro one-piece Tornado Flush de bajo consumo.",
+    ],
+    highlights: [
+      "Mismo equipamiento en las doce habitaciones, entregado en una sola fase.",
+      "Duchas termostáticas que mantienen la temperatura estable para los huéspedes.",
+      "Inodoros de doble descarga para reducir el consumo de agua del hotel.",
+    ],
+    materials: [
+      {
+        label: "Bacha Mineral Stone",
+        href: "/catalogo/bacha-escultural-mineral-stone",
+      },
+      {
+        label: "Ducha Termostática",
+        href: "/catalogo/columna-ducha-termostatica-suecia",
+      },
+      {
+        label: "Inodoro Tornado Flush",
+        href: "/catalogo/inodoro-one-piece-tornado-flush",
+      },
+    ],
+    productIds: [
+      "bacha-escultural-mineral-stone",
+      "columna-ducha-termostatica-suecia",
+      "inodoro-one-piece-tornado-flush",
+    ],
+    image: "/images/projects/ejemplo-hotel-bano-piedra.jpg",
+    alt: "Baño de hotel con lavabo de piedra tipo travertino, lámpara colgante de fibra y pared de listones de madera",
+  },
+  {
+    id: "ejemplo-lobby-santo-domingo",
+    draft: true,
+    location: "Santo Domingo",
+    fullLocation: "Santo Domingo · Distrito Nacional",
+    category: "Comercial",
+    filterType: "Comercial",
+    title: "Lobby Torre Corporativa Piantini",
+    area: "650 m² suministrados",
+    year: "2026",
+    summary:
+      "Porcelanato pulido tipo mármol en gran formato para el lobby y baños comunes con lavamanos Oval Fluted y grifería gourmet.",
+    fullDescription: [
+      "Remodelación del lobby de una torre de oficinas con alto tránsito, donde se necesitaba el aspecto del mármol con la resistencia y el bajo mantenimiento del porcelanato.",
+      "Se suministraron 650 m² de porcelanato Statuario Imperial pulido 60×120 cm para el lobby y pasillos, y se renovaron los baños comunes con lavamanos Oval Fluted y grifería monomando en acabado PVD.",
+    ],
+    highlights: [
+      "Gran formato rectificado con junta mínima para un piso visualmente continuo.",
+      "Absorción de agua menor a 0,1 %, apta para limpieza intensiva diaria.",
+      "Despacho nocturno por fases para no interrumpir la operación de la torre.",
+    ],
+    materials: [
+      {
+        label: "Statuario 60×120",
+        href: "/catalogo/porcelanato-statuario-imperial",
+      },
+      {
+        label: "Lavamanos Oval Fluted",
+        href: "/catalogo/lavamanos-oval-fluted-ranurado",
+      },
+      {
+        label: "Grifería Gourmet PVD",
+        href: "/catalogo/griferia-monomando-gourmet-oro",
+      },
+    ],
+    productIds: [
+      "porcelanato-statuario-imperial",
+      "lavamanos-oval-fluted-ranurado",
+      "griferia-monomando-gourmet-oro",
+    ],
+    image: "/images/projects/ejemplo-lobby-marmol.jpg",
+    alt: "Lobby de doble altura con piso pulido tipo mármol gris, paneles de madera y sillones rojos",
+  },
+];
+
+/** Proyectos que se publican (sin borradores en producción). */
+export const VISIBLE_PROJECTS = SHOWROOM_PROJECTS.filter(
+  (project) => SHOW_DRAFT_PROJECTS || !project.draft
+);
 
 export const SHOWROOM_ZONES = [
   {

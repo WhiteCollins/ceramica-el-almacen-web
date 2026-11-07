@@ -22,4 +22,5 @@ Abre `http://localhost:3000` en tu navegador.
 
 - `src/data/catalog.ts` — Agrega, edita o actualiza productos, códigos SKU, medidas, origen y especificaciones técnicas.
 - `src/data/site.ts` — Actualiza teléfonos, WhatsApp (`+1 809-246-2221`), horarios, datos de asesoras, proyectos destacados y preguntas frecuentes.
+- `src/data/site.ts` → `SHOWROOM_PROJECTS` — Obras de la página **Proyectos**. El primer proyecto sin `draft` se muestra como destacado. Los proyectos con `draft: true` son **ejemplos** (datos y fotos de Unsplash ilustrativos): se ven en `npm run dev` con la etiqueta "Ejemplo" y **no se publican** en `npm run build`. Para revisarlos en una build de producción: `NEXT_PUBLIC_SHOW_DRAFTS=1 npm run build`. Reemplázalos por obras reales y quita `draft` para publicarlos.
 - `stitch/` — Respaldo íntegro de las 8 pantallas exportadas desde Google Stitch (`screens/*.png`, `screens/*.html`, `DESIGN.md`, `project.json` y `assets/` en alta resolución).
