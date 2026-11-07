@@ -58,7 +58,7 @@ export function Footer() {
             >
               <li>
                 <Link
-                  href="/catalogo?categoria=porcelanato"
+                  href="/pisos"
                   className="inline-flex items-center min-h-[44px] py-2 w-full hover:text-primary transition-colors"
                 >
                   Porcelanatos Españoles &amp; Italianos
@@ -66,7 +66,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/catalogo?categoria=revestimiento"
+                  href="/paredes"
                   className="inline-flex items-center min-h-[44px] py-2 w-full hover:text-primary transition-colors"
                 >
                   Cerámicas de Revestimiento
@@ -74,15 +74,15 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/catalogo?categoria=griferia"
+                  href="/cocinas/griferia"
                   className="inline-flex items-center min-h-[44px] py-2 w-full hover:text-primary transition-colors"
                 >
-                  Griferías de Cocina y Baño
+                  Grifería de Cocina
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/catalogo?categoria=sanitarios"
+                  href="/banos/sanitarios-y-tinas"
                   className="inline-flex items-center min-h-[44px] py-2 w-full hover:text-primary transition-colors"
                 >
                   Sanitarios y Tinas Arquitectónicas
@@ -90,7 +90,7 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/catalogo?categoria=lavamanos"
+                  href="/banos/lavamanos"
                   className="inline-flex items-center min-h-[44px] py-2 w-full hover:text-primary transition-colors"
                 >
                   Muebles de Baño y Lavamanos

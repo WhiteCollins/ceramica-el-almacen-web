@@ -9,13 +9,31 @@ import { Icon } from "@/components/Icon";
 import { ModalDialog } from "@/components/ModalDialog";
 import { CATALOG_PRODUCTS } from "@/data/catalog";
 import { SITE_INFO, buildWhatsAppUrl } from "@/data/site";
+import { SPACES } from "@/data/spaces";
 
-const NAV_ITEMS = [
-  { href: "/", label: "Inicio" },
+interface NavItem {
+  href: string;
+  label: string;
+  children?: { href: string; label: string }[];
+}
+
+// Menú por espacios (Pisos, Paredes, Baños, Cocinas) y después el resto.
+// El logo lleva a Inicio en escritorio; en el menú móvil se lista aparte.
+const NAV_ITEMS: NavItem[] = [
+  ...SPACES.map((space) => ({
+    href: `/${space.slug}`,
+    label: space.label,
+    children: space.types.map((type) => ({
+      href: `/${space.slug}/${type.slug}`,
+      label: type.label,
+    })),
+  })),
   { href: "/catalogo", label: "Catálogo" },
   { href: "/showroom", label: "Proyectos" },
   { href: "/contacto", label: "Contacto" },
-] as const;
+];
+
+const MOBILE_NAV_ITEMS: NavItem[] = [{ href: "/", label: "Inicio" }, ...NAV_ITEMS];
 
 export function Header() {
   const pathname = usePathname();
@@ -67,18 +85,19 @@ export function Header() {
 
             <nav
               aria-label="Principal"
-              className="hidden lg:flex items-center justify-center gap-8 xl:gap-10"
+              className="hidden lg:flex items-center justify-center gap-5 xl:gap-8"
             >
               {NAV_ITEMS.map((item) => {
+                // Resalta la sección (ej. /banos/duchas activa "Baños"),
+                // pero aria-current="page" solo en la página exacta.
                 const isActive =
-                  item.href === "/"
-                    ? pathname === "/"
-                    : pathname.startsWith(item.href);
+                  pathname === item.href ||
+                  pathname.startsWith(`${item.href}/`);
                 return (
                   <Link
                     key={item.href}
                     href={item.href}
-                    aria-current={isActive ? "page" : undefined}
+                    aria-current={pathname === item.href ? "page" : undefined}
                     className={
                       isActive
                         ? "inline-flex items-center min-h-[44px] px-1 transition-colors text-primary font-label-lg text-label-lg font-semibold border-b-2 border-primary"
@@ -245,25 +264,50 @@ export function Header() {
           </div>
 
           <nav aria-label="Móvil" className="flex flex-col gap-1">
-            {NAV_ITEMS.map((item) => {
+            {MOBILE_NAV_ITEMS.map((item) => {
               const isActive =
                 item.href === "/"
                   ? pathname === "/"
-                  : pathname.startsWith(item.href);
+                  : pathname === item.href;
               return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={
-                    isActive
-                      ? "min-h-[48px] px-space-md py-3 rounded bg-primary text-on-primary font-label-lg text-label-lg font-semibold flex items-center justify-between"
-                      : "min-h-[48px] px-space-md py-3 rounded text-on-surface hover:bg-surface-container font-label-lg text-label-lg flex items-center justify-between"
-                  }
-                >
-                  <span>{item.label}</span>
-                  <Icon name="chevron_right" className="text-[18px]" />
-                </Link>
+                <div key={item.href} className="flex flex-col">
+                  <Link
+                    href={item.href}
+                    aria-current={isActive ? "page" : undefined}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={
+                      isActive
+                        ? "min-h-[48px] px-space-md py-3 rounded bg-primary text-on-primary font-label-lg text-label-lg font-semibold flex items-center justify-between"
+                        : "min-h-[48px] px-space-md py-3 rounded text-on-surface hover:bg-surface-container font-label-lg text-label-lg flex items-center justify-between"
+                    }
+                  >
+                    <span>{item.label}</span>
+                    <Icon name="chevron_right" className="text-[18px]" />
+                  </Link>
+                  {item.children ? (
+                    <ul role="list" className="flex flex-wrap gap-x-1 gap-y-0 pl-space-md pb-1">
+                      {item.children.map((child) => {
+                        const childActive = pathname === child.href;
+                        return (
+                          <li key={child.href}>
+                            <Link
+                              href={child.href}
+                              aria-current={childActive ? "page" : undefined}
+                              onClick={() => setMobileMenuOpen(false)}
+                              className={
+                                childActive
+                                  ? "inline-flex items-center min-h-[44px] px-2 text-sm font-semibold text-primary"
+                                  : "inline-flex items-center min-h-[44px] px-2 text-sm text-secondary hover:text-on-surface"
+                              }
+                            >
+                              {child.label}
+                            </Link>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  ) : null}
+                </div>
               );
             })}
           </nav>

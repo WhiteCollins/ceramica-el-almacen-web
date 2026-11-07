@@ -113,7 +113,7 @@ function FeaturedProject({ project }: { project: ShowroomProject }) {
 }
 
 /** Tarjeta de proyecto: misma proporción de foto y mismo orden de datos. */
-function ProjectCard({ project }: { project: ShowroomProject }) {
+export function ProjectCard({ project }: { project: ShowroomProject }) {
   const products = productsFor(project);
   const href = `/showroom/${project.id}`;
 

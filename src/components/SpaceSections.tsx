@@ -1,0 +1,95 @@
+import React from "react";
+import Link from "next/link";
+import { Icon } from "@/components/Icon";
+import { ProductSwatchCard } from "@/components/ProductSwatchCard";
+import { ProjectCard } from "@/components/ProjectsGrid";
+import type { CatalogProduct } from "@/data/catalog";
+import { VISIBLE_PROJECTS } from "@/data/site";
+
+export function Breadcrumbs({
+  items,
+}: {
+  items: { label: string; href?: string }[];
+}) {
+  return (
+    <nav aria-label="Ruta de navegación" className="text-sm text-secondary">
+      <ol className="flex flex-wrap items-center gap-1">
+        {items.map((item, idx) => (
+          <li key={item.label} className="inline-flex items-center gap-1">
+            {idx > 0 ? (
+              <Icon name="chevron_right" className="text-[16px]" />
+            ) : null}
+            {item.href ? (
+              <Link
+                href={item.href}
+                className="inline-flex items-center min-h-[44px] hover:text-primary transition-colors"
+              >
+                {item.label}
+              </Link>
+            ) : (
+              <span aria-current="page" className="text-on-surface font-medium">
+                {item.label}
+              </span>
+            )}
+          </li>
+        ))}
+      </ol>
+    </nav>
+  );
+}
+
+/** Cuadrícula de muestrario: 2 columnas en móvil, 3 en tableta, 4 en escritorio. */
+export function SwatchGrid({ products }: { products: CatalogProduct[] }) {
+  return (
+    <ul
+      role="list"
+      className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-8 sm:gap-x-6"
+    >
+      {products.map((product, idx) => (
+        <li key={product.id}>
+          <ProductSwatchCard product={product} priority={idx < 4} />
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+export function pieceCount(n: number) {
+  return n === 1 ? "1 pieza" : `${n} piezas`;
+}
+
+/** Obras publicadas que usaron alguno de estos productos. */
+export function RelatedProjects({
+  products,
+  title = "En obra",
+}: {
+  products: CatalogProduct[];
+  title?: string;
+}) {
+  const ids = new Set(products.map((p) => p.id));
+  const projects = VISIBLE_PROJECTS.filter((project) =>
+    project.productIds.some((id) => ids.has(id))
+  ).slice(0, 3);
+
+  if (projects.length === 0) return null;
+
+  return (
+    <section className="flex flex-col gap-8">
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <h2 className="font-serif text-3xl text-on-surface">{title}</h2>
+        <Link
+          href="/showroom"
+          className="inline-flex items-center gap-1.5 min-h-[44px] text-sm font-semibold text-primary hover:underline"
+        >
+          <span>Ver todos los proyectos</span>
+          <Icon name="arrow_forward" className="text-[18px]" />
+        </Link>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
+        {projects.map((project) => (
+          <ProjectCard key={project.id} project={project} />
+        ))}
+      </div>
+    </section>
+  );
+}

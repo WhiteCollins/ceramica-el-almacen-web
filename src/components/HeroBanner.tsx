@@ -1,239 +1,60 @@
-"use client";
-
-import React, { useCallback, useEffect, useState } from "react";
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Icon } from "@/components/Icon";
+import { buildWhatsAppUrl } from "@/data/site";
 
-interface BannerSlide {
-  id: string;
-  badge: string;
-  title: string;
-  subtitle: string;
-  href: string;
-  ctaLabel: string;
-  image: string;
-  alt: string;
-}
-
-const BANNER_SLIDES: BannerSlide[] = [
-  {
-    id: "sottovento",
-    badge: "Colección Wellness • Italia",
-    title: "Tina Exenta Sottovento Blanco Mate",
-    subtitle: "Monolito acrílico sanitario 170 × 75 cm en exhibición 1:1",
-    href: "/catalogo?categoria=sanitarios",
-    ctaLabel: "Ver Sanitarios y Tinas",
-    image: "/images/hero/tina-sottovento-hero.jpg",
-    alt: "Baño contemporáneo con tina exenta Sottovento blanco mate y grifería de piso dorada frente a revestimiento travertino",
-  },
-  {
-    id: "porcelanatos",
-    badge: "Importación Directa • Castellón, España",
-    title: "Porcelanatos Rectificados de Gran Formato",
-    subtitle: "Mármol Calacatta 60 × 120 cm y maderas cerámicas 20 × 120 cm",
-    href: "/catalogo?categoria=porcelanato",
-    ctaLabel: "Ver Porcelanatos",
-    image: "/images/categories/porcelanatos-calacatta.jpg",
-    alt: "Sala contemporánea con piso de porcelanato español tipo mármol Calacatta pulido de gran formato",
-  },
-  {
-    id: "griferia-pvd",
-    badge: "Ingeniería Hidráulica • IMEX España",
-    title: "Grifería en PVD Oro Cepillado & Negro Mate",
-    subtitle: "Monomandos gourmet extraíbles y columnas de ducha termostáticas",
-    href: "/catalogo?categoria=griferia",
-    ctaLabel: "Ver Griferías",
-    image: "/images/hero/griferia-oro-hero.jpg",
-    alt: "Detalle de grifería gourmet en oro cepillado PVD con rociador extraíble sobre fregadero negro mate",
-  },
-  {
-    id: "esmaltados",
-    badge: "Tendencia Mediterránea • 15 × 15 cm",
-    title: "Revestimientos Artesanales Esmaltados",
-    subtitle: "Tonos esmeralda, cobalto, terracota y mostaza de alto brillo",
-    href: "/catalogo?categoria=revestimiento",
-    ctaLabel: "Ver Revestimientos",
-    image: "/images/hero/gama-esmaltada-hero.jpg",
-    alt: "Composición cenital de baldosas cerámicas esmaltadas artesanales en verde esmeralda, azul cobalto, mostaza y vino tinto",
-  },
-];
-
-const SLIDE_INTERVAL_MS = 6500;
-
+/**
+ * Banner fijo de la portada (sustituye al carrusel): una sola imagen, el
+ * mensaje de la tienda como H1 y dos acciones.
+ */
 export function HeroBanner() {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-  const [hoverOrFocus, setHoverOrFocus] = useState(false);
-
-  const slideCount = BANNER_SLIDES.length;
-
-  const nextSlide = useCallback(() => {
-    setActiveIndex((prev) => (prev + 1) % slideCount);
-  }, [slideCount]);
-
-  const prevSlide = useCallback(() => {
-    setActiveIndex((prev) => (prev - 1 + slideCount) % slideCount);
-  }, [slideCount]);
-
-  // Respect prefers-reduced-motion on initial mount
-  useEffect(() => {
-    if (
-      typeof window !== "undefined" &&
-      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches
-    ) {
-      setIsPaused(true);
-    }
-  }, []);
-
-  // Avance automático cada 6,5 s salvo pausa explícita, hover o foco
-  useEffect(() => {
-    if (isPaused || hoverOrFocus) return;
-    const timer = window.setInterval(nextSlide, SLIDE_INTERVAL_MS);
-    return () => window.clearInterval(timer);
-  }, [isPaused, hoverOrFocus, nextSlide]);
-
   return (
-    <section
-      aria-roledescription="carousel"
-      aria-labelledby="hero-titulo"
-      onMouseEnter={() => setHoverOrFocus(true)}
-      onMouseLeave={() => setHoverOrFocus(false)}
-      onFocusCapture={() => setHoverOrFocus(true)}
-      onBlurCapture={() => setHoverOrFocus(false)}
-      className="relative w-full overflow-hidden bg-inverse-surface h-[380px] sm:h-[480px] lg:h-[580px]"
-    >
-      {/* Único H1 de la portada; los títulos de cada diapositiva son h2 */}
-      <h1 id="hero-titulo" className="sr-only">
-        Cerámica El Almacén: porcelanatos, griferías y baños en San Pedro de
-        Macorís
-      </h1>
+    <section className="relative w-full overflow-hidden bg-inverse-surface h-[440px] sm:h-[520px] lg:h-[600px]">
+      <Image
+        src="/images/hero/tina-sottovento-hero.jpg"
+        alt="Baño contemporáneo con tina exenta Sottovento blanco mate y grifería de piso dorada frente a revestimiento travertino"
+        fill
+        priority
+        fetchPriority="high"
+        sizes="100vw"
+        className="object-cover"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/35 to-black/5" />
 
-      {/* Pista animada en el compositor mediante transform translateX */}
-      <div
-        className="flex h-full w-full transition-transform duration-500 ease-out motion-reduce:transition-none"
-        style={{ transform: `translateX(-${activeIndex * 100}%)` }}
-      >
-        {BANNER_SLIDES.map((slide, idx) => {
-          const isCurrent = idx === activeIndex;
-          return (
-            <div
-              key={slide.id}
-              role="group"
-              aria-roledescription="slide"
-              aria-label={`${idx + 1} de ${slideCount}: ${slide.title}`}
-              aria-hidden={!isCurrent}
-              className="relative min-w-full h-full shrink-0 select-none"
+      <div className="absolute inset-x-0 bottom-0 pb-10 sm:pb-14">
+        <div className="max-w-7xl mx-auto px-margin-mobile lg:px-margin-desktop flex flex-col gap-3 text-white">
+          <p className="text-sm sm:text-base font-medium text-white/85">
+            Showroom en San Pedro de Macorís
+          </p>
+          <h1 className="max-w-3xl font-serif text-4xl sm:text-5xl lg:text-6xl font-normal tracking-tight text-white">
+            Porcelanatos, grifería y baños para tu obra
+          </h1>
+          <p className="max-w-2xl text-base sm:text-lg text-white/90">
+            Importación directa de España e Italia, en exhibición a escala real
+            y con despacho a pie de obra.
+          </p>
+          <div className="flex flex-wrap gap-3 pt-3">
+            <Link
+              href="/catalogo"
+              className="min-h-[48px] inline-flex items-center gap-2 rounded-lg bg-white px-5 py-3 text-sm font-semibold text-on-surface hover:bg-surface transition-colors"
             >
-              <Image
-                src={slide.image}
-                alt={slide.alt}
-                fill
-                priority={idx === 0}
-                fetchPriority={idx === 0 ? "high" : "low"}
-                loading={idx === 0 ? "eager" : "lazy"}
-                sizes="100vw"
-                className="object-cover"
-              />
-
-              {/* Gradiente editorial para lectura nítida */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/10" />
-
-              {/* Contenido superpuesto de la diapositiva */}
-              <div className="absolute inset-x-0 bottom-0 pb-[72px] sm:pb-14 pt-6">
-                <div className="max-w-7xl mx-auto px-5 sm:px-20 lg:px-24 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-                  <div className="max-w-2xl space-y-1.5 sm:space-y-2 text-white">
-                    <span className="inline-flex items-center px-3 py-1 rounded bg-primary text-on-primary font-label-caps text-label-caps uppercase tracking-wider">
-                      {slide.badge}
-                    </span>
-                    <h2 className="font-display-hero text-headline-xl-mobile sm:text-display-hero font-normal tracking-tight text-white">
-                      {slide.title}
-                    </h2>
-                    <p className="font-body-md sm:text-body-lg text-white/90">
-                      {slide.subtitle}
-                    </p>
-                  </div>
-
-                  <Link
-                    href={slide.href}
-                    tabIndex={isCurrent ? 0 : -1}
-                    className="w-fit shrink-0 min-h-[44px] inline-flex items-center gap-2 px-5 py-2.5 rounded bg-surface text-on-surface hover:bg-primary hover:text-on-primary font-label-md text-label-md uppercase tracking-wider font-semibold transition-colors shadow-md"
-                  >
-                    <span>{slide.ctaLabel}</span>
-                    <Icon name="arrow_forward" className="text-[18px]" />
-                  </Link>
-                </div>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Flechas: abajo en móvil (no tapan el título), centradas desde sm */}
-      {/* Botón Anterior (Izquierda) */}
-      <button
-        type="button"
-        onClick={prevSlide}
-        aria-label="Imagen anterior"
-        className="absolute left-3 sm:left-6 bottom-2 sm:bottom-auto sm:top-1/2 sm:-translate-y-1/2 z-20 min-h-[48px] min-w-[48px] inline-flex items-center justify-center rounded-full bg-black/55 hover:bg-black/80 text-white backdrop-blur-sm transition-colors shadow-md"
-      >
-        <Icon name="chevron_left" className="text-[26px]" />
-      </button>
-
-      {/* Botón Siguiente (Derecha) */}
-      <button
-        type="button"
-        onClick={nextSlide}
-        aria-label="Siguiente imagen"
-        className="absolute right-3 sm:right-6 bottom-2 sm:bottom-auto sm:top-1/2 sm:-translate-y-1/2 z-20 min-h-[48px] min-w-[48px] inline-flex items-center justify-center rounded-full bg-black/55 hover:bg-black/80 text-white backdrop-blur-sm transition-colors shadow-md"
-      >
-        <Icon name="chevron_right" className="text-[26px]" />
-      </button>
-
-      {/* Indicadores inferiores centrados */}
-      <div className="absolute bottom-2 inset-x-0 z-20 flex items-center justify-center gap-1">
-        <div
-          role="group"
-          aria-label="Seleccionar diapositiva"
-          className="flex items-center"
-        >
-          {BANNER_SLIDES.map((slide, idx) => {
-            const isCurrent = idx === activeIndex;
-            return (
-              <button
-                key={slide.id}
-                type="button"
-                onClick={() => setActiveIndex(idx)}
-                aria-label={`Ir a imagen ${idx + 1}: ${slide.title}`}
-                aria-current={isCurrent ? "true" : undefined}
-                className="min-h-[44px] min-w-[44px] inline-flex items-center justify-center p-2"
-              >
-                <span
-                  className={
-                    isCurrent
-                      ? "h-2 w-8 rounded-full bg-white transition-all"
-                      : "h-2 w-2 rounded-full bg-white/50 hover:bg-white/80 transition-all"
-                  }
-                />
-              </button>
-            );
-          })}
+              <span>Ver catálogo</span>
+              <Icon name="arrow_forward" className="text-[18px]" />
+            </Link>
+            <a
+              href={buildWhatsAppUrl(
+                "Hola, deseo cotizar materiales con Cerámica El Almacén."
+              )}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="min-h-[48px] inline-flex items-center gap-2 rounded-lg border border-white/70 px-5 py-3 text-sm font-semibold text-white hover:bg-white/10 transition-colors"
+            >
+              <Icon name="chat" className="text-[18px]" />
+              <span>Cotizar por WhatsApp</span>
+            </a>
+          </div>
         </div>
-
-        {/* Pausa explícita (WCAG 2.2.2): funciona también en táctil */}
-        <button
-          type="button"
-          onClick={() => setIsPaused((p) => !p)}
-          aria-label={
-            isPaused ? "Reanudar el carrusel" : "Pausar el carrusel"
-          }
-          className="min-h-[44px] min-w-[44px] inline-flex items-center justify-center rounded-full text-white/90 hover:text-white"
-        >
-          <Icon
-            name={isPaused ? "play_arrow" : "pause"}
-            className="text-[22px]"
-          />
-        </button>
       </div>
     </section>
   );
