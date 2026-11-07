@@ -9,7 +9,6 @@ import { Icon } from "@/components/Icon";
 import { ModalDialog } from "@/components/ModalDialog";
 import { CATALOG_PRODUCTS } from "@/data/catalog";
 import { SITE_INFO, buildWhatsAppUrl } from "@/data/site";
-import { SPACES } from "@/data/spaces";
 
 interface NavItem {
   href: string;
@@ -17,23 +16,16 @@ interface NavItem {
   children?: { href: string; label: string }[];
 }
 
-// Menú por espacios (Pisos, Paredes, Baños, Cocinas) y después el resto.
-// El logo lleva a Inicio en escritorio; en el menú móvil se lista aparte.
+// Los espacios (Pisos, Paredes, Baños, Cocinas) se recorren desde el banner
+// de la portada, "Elige por espacio" y el pie de página.
 const NAV_ITEMS: NavItem[] = [
-  ...SPACES.map((space) => ({
-    href: `/${space.slug}`,
-    label: space.label,
-    children: space.types.map((type) => ({
-      href: `/${space.slug}/${type.slug}`,
-      label: type.label,
-    })),
-  })),
+  { href: "/", label: "Inicio" },
   { href: "/catalogo", label: "Catálogo" },
   { href: "/showroom", label: "Proyectos" },
   { href: "/contacto", label: "Contacto" },
 ];
 
-const MOBILE_NAV_ITEMS: NavItem[] = [{ href: "/", label: "Inicio" }, ...NAV_ITEMS];
+const MOBILE_NAV_ITEMS: NavItem[] = NAV_ITEMS;
 
 export function Header() {
   const pathname = usePathname();
@@ -85,7 +77,7 @@ export function Header() {
 
             <nav
               aria-label="Principal"
-              className="hidden lg:flex items-center justify-center gap-5 xl:gap-8"
+              className="hidden lg:flex items-center justify-center gap-8 xl:gap-10"
             >
               {NAV_ITEMS.map((item) => {
                 // Resalta la sección (ej. /banos/duchas activa "Baños"),
