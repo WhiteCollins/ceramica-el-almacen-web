@@ -908,10 +908,9 @@ export function CatalogExplorer() {
           </p>
 
           {sampleSubmitted ? (
-            <div className="bg-surface-container-low rounded-lg p-space-md border border-surface-container-highest space-y-space-md">
-              <div className="flex items-center gap-space-xs text-emerald-800 font-semibold">
-                <Icon name="check_circle" className="text-emerald-600" />
-                <span>¡Solicitud lista para despacho!</span>
+            <div className="bg-surface-container-low rounded-lg p-space-md border border-outline space-y-space-md">
+              <div className="flex items-center gap-space-xs text-primary font-semibold">
+                <span>Solicitud lista para despacho</span>
               </div>
               <p className="font-body-sm text-body-sm text-on-surface-variant">
                 Elige por cuál vía prefieres remitir los datos de tu estudio a
@@ -922,17 +921,16 @@ export function CatalogExplorer() {
                   href={sampleWhatsAppHref}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex-1 min-h-[44px] inline-flex items-center justify-center gap-1.5 bg-[#128C7E] hover:bg-[#0d6f63] text-white py-2.5 px-space-md rounded font-label-md text-label-md uppercase tracking-wider"
+                  className="flex-1 min-h-[44px] inline-flex items-center justify-center gap-1.5 bg-primary hover:bg-primary-container text-white py-2.5 px-space-md rounded-lg text-sm font-semibold"
                 >
                   <Icon name="chat" className="text-[16px]" />
                   <span>Enviar por WhatsApp</span>
                 </a>
                 <a
                   href={sampleMailHref}
-                  className="flex-1 min-h-[44px] inline-flex items-center justify-center gap-1.5 bg-surface-container-highest hover:bg-surface-variant text-on-surface py-2.5 px-space-md rounded font-label-md text-label-md uppercase tracking-wider"
+                  className="flex-1 min-h-[44px] inline-flex items-center justify-center gap-1.5 border border-outline bg-white hover:bg-surface text-on-surface py-2.5 px-space-md rounded-lg text-sm font-medium"
                 >
-                  <Icon name="mail" className="text-[16px] text-primary" />
-                  <span>Enviar por Correo</span>
+                  <span>Enviar por correo</span>
                 </a>
               </div>
             </div>

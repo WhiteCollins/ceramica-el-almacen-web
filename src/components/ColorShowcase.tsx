@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Icon } from "@/components/Icon";
 import { COLOR_SWATCHES, buildWhatsAppUrl } from "@/data/site";
 
 export function ColorShowcase() {
@@ -13,30 +12,30 @@ export function ColorShowcase() {
     COLOR_SWATCHES.find((s) => s.id === selectedId) ?? COLOR_SWATCHES[0];
 
   return (
-    <section className="w-full bg-surface-container-highest py-9 lg:py-14">
+    <section className="w-full bg-surface-container-low py-16 lg:py-24">
       <div className="max-w-7xl mx-auto px-margin-mobile lg:px-margin-desktop">
-        <div className="scroll-reveal bg-surface-container-lowest rounded-xl shadow-md overflow-hidden grid grid-cols-1 lg:grid-cols-12">
+        <div className="scroll-reveal grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
           {/* Columna de Selección de Color */}
-          <div className="lg:col-span-7 p-5 sm:p-8 lg:p-10 flex flex-col justify-between gap-5">
+          <div className="lg:col-span-6 space-y-6">
             <div className="space-y-2">
-              <span className="inline-flex items-center px-3 py-1 bg-primary text-on-primary rounded font-label-caps text-label-caps uppercase">
-                Tendencia 2025 • 10×10 &amp; 15×15 cm
+              <span className="text-xs text-primary font-medium">
+                10×10 &amp; 15×15 cm
               </span>
-              <h2 className="font-headline-xl text-headline-xl-mobile lg:text-headline-xl text-on-surface font-normal">
+              <h2 className="font-serif text-2xl text-on-surface">
                 “El color lo cambia a todo”
               </h2>
-              <p className="font-body-md sm:text-body-lg text-on-surface-variant max-w-xl">
+              <p className="text-base text-secondary max-w-xl">
                 Baldosas vidriadas artesanales en tonos intensos con esmalte
                 vitrificado para cocinas, salpicaderos, barras y baños de autor.
               </p>
             </div>
 
-            <div>
-              <div className="flex items-center justify-between gap-2 mb-2">
-                <span className="font-label-caps text-label-caps text-secondary uppercase">
-                  Paleta en Stock Inmediato (Toca un color para previsualizar)
+            <div className="space-y-3">
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-xs text-secondary">
+                  Paleta en stock inmediato
                 </span>
-                <span className="font-label-md text-label-md text-primary font-semibold">
+                <span className="text-sm text-primary font-semibold">
                   {activeSwatch.name}
                 </span>
               </div>
@@ -44,7 +43,7 @@ export function ColorShowcase() {
               <div
                 role="group"
                 aria-label="Seleccionar color de baldosa artesanal"
-                className="grid grid-cols-5 gap-1.5 sm:gap-2.5"
+                className="grid grid-cols-5 gap-2"
               >
                 {COLOR_SWATCHES.map((swatch) => {
                   const isSelected = swatch.id === activeSwatch.id;
@@ -56,19 +55,19 @@ export function ColorShowcase() {
                       onClick={() => setSelectedId(swatch.id)}
                       className={
                         isSelected
-                          ? "flex flex-col items-center gap-1.5 p-1.5 sm:p-2 min-h-[72px] bg-surface-container-high ring-2 ring-primary rounded-lg text-center transition-all shadow-sm"
-                          : "flex flex-col items-center gap-1.5 p-1.5 sm:p-2 min-h-[72px] bg-surface hover:bg-surface-container rounded-lg text-center transition-all group"
+                          ? "flex flex-col items-center gap-1.5 p-2 min-h-[68px] bg-white ring-2 ring-primary rounded-lg text-center transition-all"
+                          : "flex flex-col items-center gap-1.5 p-2 min-h-[68px] bg-white/60 hover:bg-white rounded-lg text-center transition-all group"
                       }
                     >
                       <span
-                        className="w-full h-9 sm:h-11 rounded block transition-transform group-hover:scale-[1.03] shadow-inner"
+                        className="w-full h-9 sm:h-10 rounded-lg block transition-transform group-hover:scale-[1.03]"
                         style={{ backgroundColor: swatch.hex }}
                       />
                       <span
                         className={
                           isSelected
-                            ? "font-label-md text-label-md text-on-surface font-bold leading-tight truncate w-full"
-                            : "font-label-md text-label-md text-on-surface-variant leading-tight truncate w-full"
+                            ? "text-xs text-on-surface font-semibold truncate w-full"
+                            : "text-xs text-secondary truncate w-full"
                         }
                       >
                         {swatch.shortName}
@@ -79,30 +78,28 @@ export function ColorShowcase() {
               </div>
             </div>
 
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="flex flex-wrap items-center gap-4 pt-1">
               <a
                 href={buildWhatsAppUrl(
                   `Hola, quisiera solicitar muestras físicas de la colección artesanal de baldosas en tono ${activeSwatch.name}.`
                 )}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 min-h-[44px] px-5 py-2.5 bg-inverse-surface text-inverse-on-surface hover:bg-on-surface rounded font-label-md text-label-md uppercase tracking-wider transition-colors shadow-sm"
+                className="min-h-[44px] inline-flex items-center justify-center bg-primary hover:bg-primary-container text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition-colors"
               >
-                <Icon name="palette" className="text-[18px]" />
-                <span>Pedir Muestrario ({activeSwatch.shortName})</span>
+                Pedir muestrario ({activeSwatch.shortName})
               </a>
               <Link
                 href="/catalogo?categoria=revestimiento"
-                className="inline-flex items-center gap-1.5 min-h-[44px] px-3 py-2 font-label-md text-label-md text-primary hover:bg-surface-container rounded uppercase tracking-wider transition-colors"
+                className="min-h-[44px] inline-flex items-center gap-1 text-primary hover:underline text-sm font-medium"
               >
-                <span>Ver Colección</span>
-                <Icon name="arrow_forward" className="text-[16px]" />
+                <span>Ver colección →</span>
               </Link>
             </div>
           </div>
 
           {/* Vista Previa Dinámica por Color */}
-          <div className="lg:col-span-5 relative h-64 sm:h-80 lg:h-auto lg:min-h-full bg-surface-container overflow-hidden">
+          <div className="lg:col-span-6 relative aspect-[4/3] w-full rounded-lg bg-surface overflow-hidden">
             {COLOR_SWATCHES.map((swatch, idx) => {
               const isCurrent = swatch.id === activeSwatch.id;
               return (
@@ -113,7 +110,7 @@ export function ColorShowcase() {
                   fill
                   fetchPriority={idx === 0 ? undefined : "low"}
                   loading="lazy"
-                  sizes="(max-width: 1024px) 100vw, 42vw"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
                   className={
                     isCurrent
                       ? "object-cover opacity-100 transition-opacity duration-300"
@@ -123,15 +120,15 @@ export function ColorShowcase() {
               );
             })}
 
-            <div className="absolute bottom-3 left-3 right-3 bg-surface-container-lowest/95 backdrop-blur px-3.5 py-2.5 rounded-lg shadow-md flex items-center gap-2.5">
+            <div className="absolute bottom-3 left-3 bg-white/95 backdrop-blur px-3.5 py-2 rounded-lg flex items-center gap-2">
               <span
                 aria-hidden="true"
-                className="w-4 h-4 rounded-full shrink-0 ring-1 ring-black/15"
+                className="w-3.5 h-3.5 rounded-full shrink-0"
                 style={{ backgroundColor: activeSwatch.hex }}
               />
               <p
                 aria-live="polite"
-                className="font-headline-sm text-sm sm:text-headline-sm text-on-surface font-semibold truncate"
+                className="text-xs font-medium text-on-surface truncate"
               >
                 {activeSwatch.caption}
               </p>

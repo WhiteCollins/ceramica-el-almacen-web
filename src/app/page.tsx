@@ -11,32 +11,27 @@ export default function HomePage() {
       {/* SECCIÓN 1: BANNER CARRUSEL DE IMÁGENES EN TRANSICIÓN */}
       <HeroBanner />
 
-      {/* SECCIÓN 2: CATEGORÍAS PRINCIPALES (CARDS SIMPLIFICADAS Y LIMPIAS) */}
-      <section className="w-full bg-surface-container-low py-9 lg:py-14">
+      {/* SECCIÓN 2: CATEGORÍAS PRINCIPALES */}
+      <section className="w-full bg-surface py-16 lg:py-24">
         <div className="max-w-7xl mx-auto px-margin-mobile lg:px-margin-desktop">
-          <div className="scroll-reveal flex flex-col md:flex-row md:items-end justify-between gap-2 mb-6 lg:mb-8">
-            <div>
-              <span className="font-label-caps text-label-caps text-primary uppercase">
-                Curaduría de Acabados
-              </span>
-              <h2 className="font-headline-xl text-headline-xl-mobile lg:text-headline-xl text-on-surface mt-0.5">
-                Categorías Principales
-              </h2>
-            </div>
-            <p className="font-body-md text-body-md text-on-surface-variant max-w-md">
+          <div className="scroll-reveal flex flex-col md:flex-row md:items-end justify-between gap-2 mb-8 lg:mb-10">
+            <h2 className="font-serif text-2xl text-on-surface">
+              Categorías principales
+            </h2>
+            <p className="text-sm text-secondary max-w-md">
               Piezas cerámicas y sanitarias con estándares europeos de baja
               absorción y máxima durabilidad.
             </p>
           </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-gutter">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
             {MAIN_CATEGORIES.map((cat) => (
               <Link
                 key={cat.slug}
                 href={`/catalogo?categoria=${cat.slug}`}
-                className="scroll-reveal group bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-atelier transition-all duration-300 flex flex-col border border-surface-container-high"
+                className="scroll-reveal group flex flex-col gap-3"
               >
-                <div className="relative overflow-hidden aspect-[4/3] bg-surface-container">
+                <div className="relative overflow-hidden aspect-[4/3] rounded-lg bg-surface-container-low">
                   <Image
                     src={cat.image}
                     alt={cat.alt}
@@ -46,22 +41,14 @@ export default function HomePage() {
                   />
                 </div>
 
-                <div className="p-3.5 sm:p-5 flex flex-col justify-between flex-1 gap-3">
-                  <div>
-                    <h3 className="font-headline-sm sm:font-headline-md text-base sm:text-headline-md text-on-surface font-semibold group-hover:text-primary transition-colors leading-snug">
-                      {cat.title}
-                    </h3>
-                    <p className="font-body-sm text-body-sm text-on-surface-variant mt-1">
-                      {cat.subtitle}
-                    </p>
-                  </div>
-
-                  <span className="inline-flex items-center justify-between gap-1 min-h-[36px] pt-2.5 border-t border-surface-container text-primary font-label-md text-label-md font-semibold">
+                <div className="space-y-1">
+                  <h3 className="text-base font-semibold text-on-surface group-hover:text-primary transition-colors">
+                    {cat.title}
+                  </h3>
+                  <p className="text-sm text-secondary">{cat.subtitle}</p>
+                  <span className="inline-flex items-center gap-1 pt-1 text-primary text-sm font-medium group-hover:underline">
                     <span>{cat.cta}</span>
-                    <Icon
-                      name="east"
-                      className="text-[16px] shrink-0 transition-transform group-hover:translate-x-1"
-                    />
+                    <span>→</span>
                   </span>
                 </div>
               </Link>

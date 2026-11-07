@@ -241,8 +241,9 @@ export const SHOWROOM_PROJECTS = [
   {
     id: "villa-marina-juan-dolio",
     location: "Juan Dolio",
-    fullLocation: "Juan Dolio • Costa Caribe",
-    category: "Residencial de Lujo",
+    fullLocation: "Juan Dolio · Costa Caribe",
+    category: "Residencial",
+    filterType: "Residencial",
     title: "Villa Brisa Marina",
     area: "420 m² suministrados",
     year: "2025",
@@ -257,6 +258,20 @@ export const SHOWROOM_PROJECTS = [
       "Acabados metálicos en tratamiento PVD anticorrosión aptos para ambientes frente al mar.",
       "Despacho programado por etapas directamente a pie de obra en Juan Dolio.",
     ],
+    materials: [
+      {
+        label: "Statuario 60×120",
+        href: "/catalogo/porcelanato-statuario-imperial",
+      },
+      {
+        label: "Tina Sottovento",
+        href: "/catalogo/tina-sottovento-blanco-mate",
+      },
+      {
+        label: "Grifería IMEX Oro",
+        href: "/catalogo/griferia-monomando-gourmet-oro",
+      },
+    ],
     productIds: [
       "porcelanato-statuario-imperial",
       "tina-sottovento-blanco-mate",
@@ -268,8 +283,9 @@ export const SHOWROOM_PROJECTS = [
   {
     id: "residencia-estancia-romana",
     location: "La Romana",
-    fullLocation: "La Romana • Región Este",
-    category: "Arquitectura Interior",
+    fullLocation: "La Romana · Región Este",
+    category: "Residencial",
+    filterType: "Residencial",
     title: "Residencia Los Almendros",
     area: "310 m² suministrados",
     year: "2025",
@@ -284,6 +300,20 @@ export const SHOWROOM_PROJECTS = [
       "Instalación trabada al 20% con junta de 2 mm y mortero polimérico flexible.",
       "Equipamiento sanitario completo con grifería termostática de seguridad a 38 °C.",
     ],
+    materials: [
+      {
+        label: "Roble Escandinavo 20×120",
+        href: "/catalogo/porcelanato-roble-escandinavo-mate",
+      },
+      {
+        label: "Lavamanos Oval Fluted",
+        href: "/catalogo/lavamanos-oval-fluted-ranurado",
+      },
+      {
+        label: "Ducha Termostática",
+        href: "/catalogo/columna-ducha-termostatica-suecia",
+      },
+    ],
     productIds: [
       "porcelanato-roble-escandinavo-mate",
       "lavamanos-oval-fluted-ranurado",
@@ -295,8 +325,9 @@ export const SHOWROOM_PROJECTS = [
   {
     id: "atelier-gastronomico-spm",
     location: "San Pedro de Macorís",
-    fullLocation: "San Pedro de Macorís • Centro Histórico",
-    category: "Comercial & Hospitalidad",
+    fullLocation: "San Pedro de Macorís · Centro Histórico",
+    category: "Comercial",
+    filterType: "Comercial",
     title: "Bistró & Café del Puerto",
     area: "145 m² suministrados",
     year: "2025",
@@ -310,6 +341,20 @@ export const SHOWROOM_PROJECTS = [
       "Esmalte vitrificado impermeable a grasas, ácidos cítricos y limpieza intensiva diaria.",
       "Combinación de cajas alternadas en obra para resaltar el matiz artesanal V3.",
       "Entrega inmediata desde nuestro almacén local en San Pedro de Macorís.",
+    ],
+    materials: [
+      {
+        label: "Colors of Life 15×15",
+        href: "/catalogo/mural-artesanal-colors-of-life",
+      },
+      {
+        label: "Grifería Gourmet PVD",
+        href: "/catalogo/griferia-monomando-gourmet-oro",
+      },
+      {
+        label: "Bacha Mineral Stone",
+        href: "/catalogo/bacha-escultural-mineral-stone",
+      },
     ],
     productIds: [
       "mural-artesanal-colors-of-life",

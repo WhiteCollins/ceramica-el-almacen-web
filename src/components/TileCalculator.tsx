@@ -7,17 +7,17 @@ import { buildWhatsAppUrl } from "@/data/site";
 const TILE_SPECS = [
   {
     id: "60x120",
-    label: "Porcelanato Gran Formato 60 × 120 cm",
+    label: "Porcelanato gran formato 60 × 120 cm",
     boxCoverage: 1.44,
   },
   {
     id: "20x120",
-    label: "Listón Madera Cerámica 20 × 120 cm",
+    label: "Listón madera cerámica 20 × 120 cm",
     boxCoverage: 1.2,
   },
   {
     id: "15x15",
-    label: "Revestimiento Artesanal 15 × 15 cm",
+    label: "Revestimiento artesanal 15 × 15 cm",
     boxCoverage: 0.85,
   },
 ] as const;
@@ -40,7 +40,6 @@ export function TileCalculator() {
     const boxes =
       validArea > 0 ? Math.ceil(totalAreaWithWaste / spec.boxCoverage) : 0;
     const coveredArea = boxes * spec.boxCoverage;
-    // Rendimiento promedio de mortero polimérico gran formato: ~4.5 m² por funda de 50 lb
     const mortarBags = validArea > 0 ? Math.ceil(totalAreaWithWaste / 4.5) : 0;
 
     return {
@@ -54,7 +53,7 @@ export function TileCalculator() {
   }, [netArea, selectedFormatId, wastePercent]);
 
   const whatsappHref = buildWhatsAppUrl(
-    `Hola Cerámica El Almacén, realicé un cómputo preliminar en la web y deseo cotizar:\n• Formato: ${
+    `Hola Cerámica El Almacén, calculé mi metraje en la web y deseo cotizar:\n• Formato: ${
       calculation.spec.label
     }\n• Área neta: ${calculation.validArea.toFixed(
       1
@@ -66,30 +65,26 @@ export function TileCalculator() {
   );
 
   return (
-    <div className="bg-surface-container-lowest rounded-xl p-space-lg lg:p-space-xl shadow-atelier border border-surface-container-highest grid grid-cols-1 lg:grid-cols-12 gap-gutter-lg items-center">
-      {/* Controles de Entrada */}
-      <div className="lg:col-span-7 space-y-space-md">
-        <div className="space-y-space-xs">
-          <div className="inline-flex items-center gap-space-xs text-primary font-label-caps text-label-caps uppercase tracking-widest">
-            <Icon name="calculate" className="text-[16px]" />
-            <span>Herramienta de Cubicación Arquitectónica</span>
-          </div>
-          <h2 className="font-headline-lg text-headline-lg text-on-surface">
-            Calculadora de Cajas y Desperdicio (m²)
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
+      {/* Columna izquierda: Controles sin caja */}
+      <div className="lg:col-span-7 space-y-6">
+        <div className="space-y-2">
+          <h2 className="font-serif text-2xl text-on-surface">
+            Calculadora de cajas y desperdicio
           </h2>
-          <p className="font-body-md text-body-md text-on-surface-variant">
-            Estima al instante la cantidad exacta de cajas y mortero adhesivo
-            según las normas técnicas de instalación en República Dominicana.
+          <p className="text-base text-secondary">
+            Estima al instante la cantidad de cajas cerradas y mortero adhesivo
+            según el formato y tipo de corte.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-space-md">
-          <div className="space-y-1">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="space-y-1.5">
             <label
               htmlFor={areaId}
-              className="font-label-caps text-label-caps text-secondary uppercase block"
+              className="text-sm font-medium text-on-surface block"
             >
-              Área Neta a Revestir (m²)
+              Área neta a revestir (m²)
             </label>
             <input
               id={areaId}
@@ -98,22 +93,22 @@ export function TileCalculator() {
               value={netArea}
               onChange={(e) => setNetArea(e.target.value)}
               placeholder="Ej. 45"
-              className="w-full min-h-[48px] bg-surface-container-low text-base text-on-surface p-3 rounded border border-surface-container-highest focus:border-primary focus:bg-surface-container-lowest focus:outline-none"
+              className="w-full min-h-[44px] bg-white text-base text-on-surface px-3.5 py-2.5 rounded-lg border border-outline focus:border-primary focus:outline-none"
             />
           </div>
 
-          <div className="space-y-1">
+          <div className="space-y-1.5">
             <label
               htmlFor={formatId}
-              className="font-label-caps text-label-caps text-secondary uppercase block"
+              className="text-sm font-medium text-on-surface block"
             >
-              Formato de Pieza
+              Formato de pieza
             </label>
             <select
               id={formatId}
               value={selectedFormatId}
               onChange={(e) => setSelectedFormatId(e.target.value)}
-              className="w-full min-h-[48px] bg-surface-container-low text-base text-on-surface p-3 rounded border border-surface-container-highest focus:border-primary focus:bg-surface-container-lowest focus:outline-none"
+              className="w-full min-h-[44px] bg-white text-base text-on-surface px-3.5 py-2.5 rounded-lg border border-outline focus:border-primary focus:outline-none"
             >
               {TILE_SPECS.map((s) => (
                 <option key={s.id} value={s.id}>
@@ -124,11 +119,11 @@ export function TileCalculator() {
           </div>
         </div>
 
-        <fieldset className="space-y-1.5">
-          <legend className="font-label-caps text-label-caps text-secondary uppercase block mb-1">
-            Patrón de Instalación (Factor de Cortes)
+        <fieldset className="space-y-2">
+          <legend className="text-sm font-medium text-on-surface block">
+            Patrón de instalación
           </legend>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-space-xs">
+          <div className="flex flex-wrap gap-2">
             <label className="cursor-pointer">
               <input
                 type="radio"
@@ -137,8 +132,8 @@ export function TileCalculator() {
                 onChange={() => setWastePercent(10)}
                 className="peer sr-only"
               />
-              <span className="flex items-center min-h-[48px] p-3 rounded bg-surface-container-low peer-checked:bg-primary peer-checked:text-on-primary text-on-surface font-label-md text-label-md transition-colors">
-                Instalación Recta (+10% recomendado)
+              <span className="inline-flex items-center justify-center min-h-[40px] px-4 py-2 rounded-full border border-outline bg-white text-sm font-medium text-on-surface peer-checked:bg-primary peer-checked:text-white peer-checked:border-primary transition-colors">
+                Instalación recta (+10%)
               </span>
             </label>
             <label className="cursor-pointer">
@@ -149,61 +144,54 @@ export function TileCalculator() {
                 onChange={() => setWastePercent(15)}
                 className="peer sr-only"
               />
-              <span className="flex items-center min-h-[48px] p-3 rounded bg-surface-container-low peer-checked:bg-primary peer-checked:text-on-primary text-on-surface font-label-md text-label-md transition-colors">
-                Trabada / Espiga / Cortes (+15%)
+              <span className="inline-flex items-center justify-center min-h-[40px] px-4 py-2 rounded-full border border-outline bg-white text-sm font-medium text-on-surface peer-checked:bg-primary peer-checked:text-white peer-checked:border-primary transition-colors">
+                Trabada o espiga (+15%)
               </span>
             </label>
           </div>
         </fieldset>
       </div>
 
-      {/* Panel de Resultados */}
-      <div className="lg:col-span-5 bg-surface-container-low rounded-xl p-space-lg border border-surface-container-highest flex flex-col justify-between gap-space-md">
-        <div className="space-y-space-sm">
-          <span className="font-label-caps text-label-caps text-primary uppercase tracking-wider block">
-            Resultado del Cómputo Técnico
-          </span>
-
-          <div className="grid grid-cols-2 gap-space-sm">
-            <div className="bg-surface-container-lowest p-space-md rounded border border-surface-container-highest">
-              <span className="font-label-caps text-label-caps text-secondary uppercase block">
-                Cajas Cerradas
-              </span>
-              <p className="font-headline-lg text-headline-lg text-primary font-bold mt-1">
-                {calculation.boxes}
-              </p>
-              <span className="font-body-sm text-body-sm text-secondary">
-                {calculation.coveredArea.toFixed(2)} m² totales
-              </span>
-            </div>
-
-            <div className="bg-surface-container-lowest p-space-md rounded border border-surface-container-highest">
-              <span className="font-label-caps text-label-caps text-secondary uppercase block">
-                Mortero Adhesivo
-              </span>
-              <p className="font-headline-lg text-headline-lg text-on-surface font-bold mt-1">
-                {calculation.mortarBags}
-              </p>
-              <span className="font-body-sm text-body-sm text-secondary">
-                Fundas de 50 lb aprox.
-              </span>
-            </div>
+      {/* Columna derecha: Resultado limpio separado por línea */}
+      <div className="lg:col-span-5 lg:pl-10 lg:border-l border-outline space-y-6">
+        <div className="grid grid-cols-2 gap-6 pb-6 border-b border-outline">
+          <div>
+            <span className="text-xs text-secondary block">
+              Cajas cerradas
+            </span>
+            <p className="font-serif text-2xl text-primary mt-1">
+              {calculation.boxes}
+            </p>
+            <span className="text-xs text-secondary">
+              {calculation.coveredArea.toFixed(2)} m² totales
+            </span>
           </div>
 
-          <p className="font-body-sm text-body-sm text-on-surface-variant">
-            Incluye reserva de lote recomendada para mantenimiento futuro sin
-            variación tonal (destonificación).
-          </p>
+          <div>
+            <span className="text-xs text-secondary block">
+              Mortero adhesivo
+            </span>
+            <p className="font-serif text-2xl text-on-surface mt-1">
+              {calculation.mortarBags}
+            </p>
+            <span className="text-xs text-secondary">
+              Fundas de 50 lb aprox.
+            </span>
+          </div>
         </div>
+
+        <p className="text-sm text-secondary">
+          Incluye margen recomendado para cortes y reserva del mismo lote.
+        </p>
 
         <a
           href={whatsappHref}
           target="_blank"
           rel="noopener noreferrer"
-          className="w-full inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary-container text-on-primary py-3.5 px-space-lg rounded font-label-md text-label-md uppercase tracking-wider transition-colors shadow-sm"
+          className="w-full sm:w-auto min-h-[44px] inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary-container text-white py-2.5 px-6 rounded-lg text-sm font-semibold transition-colors"
         >
-          <Icon name="chat" className="text-[18px]" />
-          <span>Cotizar Este Metraje por WhatsApp</span>
+          <Icon name="chat" className="text-[16px]" />
+          <span>Cotizar este metraje</span>
         </a>
       </div>
     </div>
