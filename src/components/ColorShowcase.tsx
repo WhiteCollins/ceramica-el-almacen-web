@@ -37,31 +37,34 @@ const MATERIAL_CARDS = [
 
 export function ColorShowcase() {
   return (
-    <section className="relative w-full overflow-hidden bg-[#F4F0EA] py-16 lg:py-24 border-y border-outline/60">
-      {/* Retícula arquitectónica de despiece de losas (64×64 px) con máscara radial suave */}
+    <section className="relative w-full overflow-hidden bg-gradient-to-b from-[#F5F1EB] via-[#ECE4D9] to-[#F5F1EB] py-16 lg:py-24 border-y border-[#DFD5C7]">
+      {/* Veta mineral y textura de travertino / piedra caliza en marca de agua */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0"
+        className="pointer-events-none absolute inset-0 opacity-[0.07] mix-blend-multiply"
         style={{
-          backgroundImage: `
-            linear-gradient(to right, rgba(107, 29, 34, 0.055) 1px, transparent 1px),
-            linear-gradient(to bottom, rgba(107, 29, 34, 0.055) 1px, transparent 1px)
-          `,
-          backgroundSize: "64px 64px",
-          maskImage:
-            "radial-gradient(ellipse 85% 75% at 50% 50%, #000 45%, transparent 100%)",
-          WebkitMaskImage:
-            "radial-gradient(ellipse 85% 75% at 50% 50%, #000 45%, transparent 100%)",
+          backgroundImage: "url('/images/materials/piedra-natural.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          filter: "grayscale(35%) contrast(115%)",
         }}
       />
 
-      {/* Halo radial cálido central con sutil matiz arena/vino */}
+      {/* Vetas horizontales sutiles de piedra travertino + viñeta cálida */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0"
         style={{
-          background:
-            "radial-gradient(circle at 50% 55%, rgba(107, 29, 34, 0.07) 0%, rgba(235, 226, 213, 0.45) 45%, transparent 75%)",
+          background: `
+            radial-gradient(ellipse 80% 65% at 50% 50%, rgba(255, 252, 247, 0.55) 0%, rgba(226, 215, 200, 0.35) 60%, rgba(107, 29, 34, 0.05) 100%),
+            repeating-linear-gradient(
+              -8deg,
+              transparent 0px,
+              transparent 28px,
+              rgba(139, 113, 98, 0.035) 29px,
+              transparent 32px
+            )
+          `,
         }}
       />
 
