@@ -8,8 +8,8 @@ export function Footer() {
   return (
     <footer className="w-full bg-surface-container-low text-on-surface shadow-[0_-1px_8px_rgba(0,0,0,0.03)] border-t border-surface-container-highest">
       <div className="scroll-reveal max-w-7xl mx-auto px-margin-mobile lg:px-margin-desktop py-10 lg:py-14">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-gutter-lg">
-          {/* Columna 1: Marca */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-gutter-lg">
+          {/* Columna 1: Marca e Instagram (sin el texto institucional eliminado) */}
           <div className="flex flex-col gap-space-sm">
             <Link
               href="/"
@@ -17,10 +17,6 @@ export function Footer() {
             >
               <BrandLogo showTagline />
             </Link>
-            <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
-              Importadores directos de porcelanatos europeos, revestimientos,
-              griferías y sanitarios de alta gama en la República Dominicana.
-            </p>
             <div>
               <a
                 href={SITE_INFO.instagramUrl}
@@ -47,71 +43,46 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Columna 2: Colecciones (todos los enlaces con área táctil >= 44px) */}
-          <div className="flex flex-col gap-2">
-            <h2 className="font-headline-sm text-headline-sm text-on-surface font-semibold">
-              Colecciones &amp; Acabados
-            </h2>
-            <ul
-              role="list"
-              className="flex flex-col font-body-md text-body-md text-on-surface-variant"
-            >
-              <li>
-                <Link
-                  href="/pisos"
-                  className="inline-flex items-center min-h-[44px] py-2 w-full hover:text-primary transition-colors"
-                >
-                  Porcelanatos Españoles &amp; Italianos
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/paredes"
-                  className="inline-flex items-center min-h-[44px] py-2 w-full hover:text-primary transition-colors"
-                >
-                  Cerámicas de Revestimiento
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/cocinas/griferia"
-                  className="inline-flex items-center min-h-[44px] py-2 w-full hover:text-primary transition-colors"
-                >
-                  Grifería de Cocina
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/banos/sanitarios-y-tinas"
-                  className="inline-flex items-center min-h-[44px] py-2 w-full hover:text-primary transition-colors"
-                >
-                  Sanitarios y Tinas Arquitectónicas
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/banos/lavamanos"
-                  className="inline-flex items-center min-h-[44px] py-2 w-full hover:text-primary transition-colors"
-                >
-                  Muebles de Baño y Lavamanos
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Columna 3: Atelier & Showroom */}
+          {/* Columna 2: Sucursales & Horarios */}
           <div className="flex flex-col gap-space-sm">
             <h2 className="font-headline-sm text-headline-sm text-on-surface font-semibold">
-              Atelier &amp; Showroom
+              Atelier &amp; Sucursales
             </h2>
-            <address className="not-italic flex flex-col gap-space-sm font-body-md text-body-md text-on-surface-variant">
+            <address className="not-italic flex flex-col gap-3 font-body-md text-body-md text-on-surface-variant">
               <div className="flex items-start gap-2">
                 <Icon
                   name="location_on"
                   className="text-[18px] text-primary shrink-0 mt-1"
                 />
-                <span>{SITE_INFO.address.full}</span>
+                <div>
+                  <p className="font-semibold text-on-surface">Santiago</p>
+                  <p>Av. Rolando Martínez 33</p>
+                  <a
+                    href="tel:+18092462221"
+                    className="text-primary hover:underline font-medium"
+                  >
+                    +1 809-246-2221
+                  </a>
+                </div>
               </div>
+
+              <div className="flex items-start gap-2">
+                <Icon
+                  name="location_on"
+                  className="text-[18px] text-primary shrink-0 mt-1"
+                />
+                <div>
+                  <p className="font-semibold text-on-surface">La Romana</p>
+                  <p>Av. Profesor Juan Bosch (antigua Av. Padre Abreu)</p>
+                  <a
+                    href="tel:+18095564116"
+                    className="text-primary hover:underline font-medium"
+                  >
+                    +1 809-556-4116
+                  </a>
+                </div>
+              </div>
+
               <div className="flex items-start gap-2">
                 <Icon
                   name="schedule"
@@ -122,22 +93,10 @@ export function Footer() {
                   <p>Sáb: 8:30 AM – 1:00 PM</p>
                 </div>
               </div>
-              <div>
-                <a
-                  href={SITE_INFO.phoneHref}
-                  className="inline-flex items-center gap-2 min-h-[44px] py-2 font-semibold text-on-surface hover:text-primary transition-colors"
-                >
-                  <Icon
-                    name="call"
-                    className="text-[18px] text-primary shrink-0"
-                  />
-                  <span>{SITE_INFO.phoneDisplay}</span>
-                </a>
-              </div>
             </address>
           </div>
 
-          {/* Columna 4: Facilidades */}
+          {/* Columna 3: Facilidades */}
           <div className="flex flex-col gap-space-sm">
             <h2 className="font-headline-sm text-headline-sm text-on-surface font-semibold">
               Facilidades &amp; Servicios
@@ -147,7 +106,10 @@ export function Footer() {
               className="flex flex-col gap-2.5 font-body-md text-body-md text-on-surface-variant"
             >
               <li className="flex items-center gap-2">
-                <Icon name="accessible" className="text-[18px] text-primary shrink-0" />
+                <Icon
+                  name="accessible"
+                  className="text-[18px] text-primary shrink-0"
+                />
                 <span>Showroom accesible para sillas de ruedas</span>
               </li>
               <li className="flex items-center gap-2">

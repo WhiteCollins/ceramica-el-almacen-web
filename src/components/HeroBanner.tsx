@@ -7,7 +7,7 @@ import { Icon } from "@/components/Icon";
 import { buildWhatsAppUrl } from "@/data/site";
 import { SPACES } from "@/data/spaces";
 
-const SLIDE_INTERVAL_MS = 6500;
+const SLIDE_INTERVAL_MS = 4500;
 
 /** Una diapositiva por espacio (Pisos, Paredes, Baños, Cocinas). */
 const SLIDES = SPACES.map((space) => ({
@@ -23,14 +23,11 @@ const SLIDES = SPACES.map((space) => ({
 }));
 
 /**
- * Banner de la portada: alterna entre los espacios cada 6,5 s, con flechas a
- * izquierda y derecha, puntos y un botón de pausa (WCAG 2.2.2). Se detiene
- * con el ratón encima, con el foco dentro o con prefers-reduced-motion.
+ * Banner de la portada: cambia de forma automática y continua (autoplay)
+ * sin detenerse cuando el cursor está encima.
  */
 export function HeroBanner() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-  const [hoverOrFocus, setHoverOrFocus] = useState(false);
 
   const slideCount = SLIDES.length;
 
@@ -42,28 +39,16 @@ export function HeroBanner() {
     setActiveIndex((prev) => (prev - 1 + slideCount) % slideCount);
   }, [slideCount]);
 
+  // Autoplay continuo sin pausarse por hover del ratón
   useEffect(() => {
-    if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) {
-      setIsPaused(true);
-    }
-  }, []);
-
-  // Un temporizador por diapositiva: cualquier cambio (automático o manual)
-  // reinicia la cuenta, así no avanza justo después de tocar una flecha.
-  useEffect(() => {
-    if (isPaused || hoverOrFocus) return;
-    const timer = window.setTimeout(nextSlide, SLIDE_INTERVAL_MS);
-    return () => window.clearTimeout(timer);
-  }, [activeIndex, isPaused, hoverOrFocus, nextSlide]);
+    const timer = window.setInterval(nextSlide, SLIDE_INTERVAL_MS);
+    return () => window.clearInterval(timer);
+  }, [activeIndex, nextSlide]);
 
   return (
     <section
       aria-roledescription="carousel"
       aria-labelledby="hero-titulo"
-      onMouseEnter={() => setHoverOrFocus(true)}
-      onMouseLeave={() => setHoverOrFocus(false)}
-      onFocusCapture={() => setHoverOrFocus(true)}
-      onBlurCapture={() => setHoverOrFocus(false)}
       onKeyDown={(e) => {
         if (e.key === "ArrowRight") nextSlide();
         if (e.key === "ArrowLeft") prevSlide();
@@ -72,8 +57,8 @@ export function HeroBanner() {
     >
       {/* Único H1 de la portada; los títulos de cada diapositiva son h2 */}
       <h1 id="hero-titulo" className="sr-only">
-        Cerámica El Almacén: porcelanatos, grifería y baños en San Pedro de
-        Macorís
+        Cerámica El Almacén: porcelanatos, grifería y baños en República
+        Dominicana
       </h1>
 
       {/* Pista que se desplaza con transform (solo compositor) */}
@@ -100,6 +85,7 @@ export function HeroBanner() {
                 priority={idx === 0}
                 fetchPriority={idx === 0 ? "high" : "low"}
                 loading={idx === 0 ? "eager" : "lazy"}
+                quality={95}
                 sizes="100vw"
                 className="object-cover"
                 style={
@@ -166,10 +152,13 @@ export function HeroBanner() {
         <Icon name="chevron_right" className="text-[28px]" />
       </button>
 
-      {/* Puntos y pausa, centrados abajo */}
-      {/* Solo ocupa su contenido (no todo el ancho) para no tapar las flechas en móvil */}
+      {/* Puntos indicadores centrados abajo */}
       <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex items-center">
-        <div role="group" aria-label="Elegir espacio" className="flex items-center">
+        <div
+          role="group"
+          aria-label="Elegir espacio"
+          className="flex items-center"
+        >
           {SLIDES.map((slide, idx) => {
             const isCurrent = idx === activeIndex;
             return (
@@ -192,14 +181,6 @@ export function HeroBanner() {
             );
           })}
         </div>
-        <button
-          type="button"
-          onClick={() => setIsPaused((p) => !p)}
-          aria-label={isPaused ? "Reanudar el carrusel" : "Pausar el carrusel"}
-          className="h-11 w-11 inline-flex items-center justify-center rounded-full text-white/90 hover:text-white"
-        >
-          <Icon name={isPaused ? "play_arrow" : "pause"} className="text-[22px]" />
-        </button>
       </div>
     </section>
   );

@@ -8,7 +8,7 @@ export const SITE_INFO = {
   legalName: "Cerámica El Almacén SRL",
   tagline: "La Perfección en Cerámica",
   description:
-    "Importadores directos de porcelanatos europeos de gran formato, revestimientos cerámicos, griferías de autor, bañeras exentas y lavamanos escultóricos en San Pedro de Macorís, República Dominicana.",
+    "Importadores directos de porcelanatos europeos de gran formato, revestimientos cerámicos, griferías de autor, bañeras exentas y lavamanos escultóricos en República Dominicana.",
   phoneDisplay: "+1 809-246-2221",
   phoneHref: "tel:+18092462221",
   whatsappNumber: "18092462221",
@@ -17,20 +17,50 @@ export const SITE_INFO = {
   instagramUrl: "https://instagram.com/ceramicaelalmacenalterna",
   address: {
     street: "Av. Rolando Martínez 33",
-    city: "San Pedro de Macorís",
-    postalCode: "21000",
+    city: "Santiago",
+    postalCode: "51000",
     country: "República Dominicana",
-    full: "Av. Rolando Martínez 33, San Pedro de Macorís 21000, República Dominicana",
+    full: "Av. Rolando Martínez 33, Santiago, República Dominicana",
   },
   mapsUrl:
-    "https://maps.google.com/?q=Av.+Rolando+Mart%C3%ADnez+33,+San+Pedro+de+Macor%C3%ADs",
+    "https://maps.google.com/?q=Av.+Rolando+Mart%C3%ADnez+33,+Santiago",
   wazeUrl:
-    "https://waze.com/ul?q=Ceramica+El+Almacen+San+Pedro+de+Macoris",
+    "https://waze.com/ul?q=Ceramica+El+Almacen+Av+Rolando+Martinez+33",
   hours: {
     weekdays: "Lunes a Viernes: 8:00 AM – 6:00 PM",
     saturday: "Sábados: 8:30 AM – 1:00 PM",
     sunday: "Domingos: Cerrado (Atención Previa Cita)",
   },
+  locations: [
+    {
+      id: "santiago",
+      name: "Ubicación 1 (Santiago)",
+      city: "Santiago",
+      address: "Av. Rolando Martínez 33",
+      phoneDisplay: "+1 809-246-2221",
+      phoneHref: "tel:+18092462221",
+      mapsUrl:
+        "https://maps.google.com/?q=Av.+Rolando+Mart%C3%ADnez+33,+Santiago",
+      hours: {
+        weekdays: "Lunes a viernes: 8:00 AM – 6:00 PM",
+        saturday: "Sábados: 8:30 AM – 1:00 PM",
+      },
+    },
+    {
+      id: "la-romana",
+      name: "Ubicación 2 (La Romana)",
+      city: "La Romana",
+      address: "Av. Profesor Juan Bosch (antigua Av. Padre Abreu)",
+      phoneDisplay: "+1 809-556-4116",
+      phoneHref: "tel:+18095564116",
+      mapsUrl:
+        "https://maps.google.com/?q=Av.+Profesor+Juan+Bosch,+La+Romana,+Rep%C3%BAblica+Dominicana",
+      hours: {
+        weekdays: "Lunes a viernes: 8:00 AM – 6:00 PM",
+        saturday: "Sábados: 8:30 AM – 1:00 PM",
+      },
+    },
+  ],
   metrics: {
     googleRating: "4.5",
     googleReviewsCount: "+248 reseñas en Google",
@@ -241,10 +271,14 @@ export interface ShowroomProject {
   id: string;
   location: string;
   fullLocation: string;
+  regionFilter: "Punta Cana / Bávaro" | "La Romana" | "Santo Domingo" | "Costa Este";
   category: "Residencial" | "Comercial";
+  spaceBadge: string;
   filterType: "Residencial" | "Comercial";
   title: string;
   area: string;
+  areaValue: string;
+  areaUnit: string;
   year: string;
   summary: string;
   fullDescription: string[];
@@ -253,31 +287,22 @@ export interface ShowroomProject {
   productIds: string[];
   image: string;
   alt: string;
-  /**
-   * Proyecto de EJEMPLO (datos e imagen ilustrativos, no es una obra real).
-   * Se muestra en desarrollo con la etiqueta "Ejemplo" y se oculta en la build
-   * de producción. Reemplázalo por una obra real y quita `draft` para publicarlo.
-   */
   draft?: boolean;
 }
-
-/**
- * Muestra los proyectos de ejemplo. Siempre en `next dev`; en producción solo
- * si se compila con NEXT_PUBLIC_SHOW_DRAFTS=1 (útil para revisar el diseño).
- */
-export const SHOW_DRAFT_PROJECTS =
-  process.env.NODE_ENV !== "production" ||
-  process.env.NEXT_PUBLIC_SHOW_DRAFTS === "1";
 
 export const SHOWROOM_PROJECTS: ShowroomProject[] = [
   {
     id: "villa-marina-juan-dolio",
     location: "Juan Dolio",
-    fullLocation: "Juan Dolio · Costa Caribe",
+    fullLocation: "Juan Dolio, Rep. Dominicana",
+    regionFilter: "Costa Este",
     category: "Residencial",
+    spaceBadge: "Residencial de Lujo",
     filterType: "Residencial",
     title: "Villa Brisa Marina",
     area: "420 m² suministrados",
+    areaValue: "420 m²",
+    areaUnit: "suministrados en obra",
     year: "2025",
     summary:
       "Porcelanato Statuario Imperial 60×120 cm, tina exenta Sottovento blanco mate y grifería PVD oro cepillado.",
@@ -292,7 +317,7 @@ export const SHOWROOM_PROJECTS: ShowroomProject[] = [
     ],
     materials: [
       {
-        label: "Statuario 60×120",
+        label: "Porcelanato Statuario 60×120",
         href: "/catalogo/porcelanato-statuario-imperial",
       },
       {
@@ -300,7 +325,7 @@ export const SHOWROOM_PROJECTS: ShowroomProject[] = [
         href: "/catalogo/tina-sottovento-blanco-mate",
       },
       {
-        label: "Grifería IMEX Oro",
+        label: "Grifería Oro Cepillado",
         href: "/catalogo/griferia-monomando-gourmet-oro",
       },
     ],
@@ -315,11 +340,15 @@ export const SHOWROOM_PROJECTS: ShowroomProject[] = [
   {
     id: "residencia-estancia-romana",
     location: "La Romana",
-    fullLocation: "La Romana · Región Este",
+    fullLocation: "La Romana, Rep. Dominicana",
+    regionFilter: "La Romana",
     category: "Residencial",
+    spaceBadge: "Residencial de Lujo",
     filterType: "Residencial",
     title: "Residencia Los Almendros",
     area: "310 m² suministrados",
+    areaValue: "310 m²",
+    areaUnit: "suministrados en obra",
     year: "2025",
     summary:
       "Listón cerámico Roble Escandinavo 20×120 cm y baños equipados con lavamanos estriados Oval Fluted.",
@@ -351,17 +380,21 @@ export const SHOWROOM_PROJECTS: ShowroomProject[] = [
       "lavamanos-oval-fluted-ranurado",
       "columna-ducha-termostatica-suecia",
     ],
-    image: "/images/products/porcelanato-roble-escandinavo.jpg",
+    image: "/images/products/porcelanato-roble-hd.jpg",
     alt: "Sala abierta con piso de porcelanato tipo madera Roble Escandinavo 20x120 cm",
   },
   {
     id: "atelier-gastronomico-spm",
-    location: "San Pedro de Macorís",
-    fullLocation: "San Pedro de Macorís · Centro Histórico",
+    location: "San Pedro",
+    fullLocation: "San Pedro de Macorís, Rep. Dominicana",
+    regionFilter: "Costa Este",
     category: "Comercial",
+    spaceBadge: "Comercial / Gastronomía",
     filterType: "Comercial",
     title: "Bistró & Café del Puerto",
     area: "145 m² suministrados",
+    areaValue: "145 m²",
+    areaUnit: "suministrados en obra",
     year: "2025",
     summary:
       "Revestimiento artesanal vidriado Colors of Life 15×15 cm en tonos terracota y grifería gourmet PVD.",
@@ -396,23 +429,18 @@ export const SHOWROOM_PROJECTS: ShowroomProject[] = [
     image: "/images/hero/editorial-color-backsplash.jpg",
     alt: "Salpicadero artesanal con baldosas vidriadas en tonos terracota y detalles en latón cepillado",
   },
-  // ─────────────────────────────────────────────────────────────────────
-  // PROYECTOS DE EJEMPLO (draft: true). Datos ilustrativos y fotos de
-  // Unsplash (licencia Unsplash), NO son obras de Cerámica El Almacén.
-  // Se ocultan en producción. Sustitúyelos por obras reales y quita `draft`.
-  // Fotos: Aalo Lens (unsplash.com/photos/Z30QQmCIppU),
-  //        Rodrigo Rodrigues (unsplash.com/photos/-mvRveIArOo),
-  //        Josh Hild (unsplash.com/photos/UxeaC7_AnYo).
-  // ─────────────────────────────────────────────────────────────────────
   {
     id: "ejemplo-apartamento-bavaro",
-    draft: true,
     location: "Bávaro",
-    fullLocation: "Bávaro · Punta Cana",
+    fullLocation: "Bávaro · Punta Cana, Rep. Dominicana",
+    regionFilter: "Punta Cana / Bávaro",
     category: "Residencial",
+    spaceBadge: "Penthouse",
     filterType: "Residencial",
     title: "Apartamento Mirador Bávaro",
     area: "180 m² suministrados",
+    areaValue: "180 m²",
+    areaUnit: "suministrados en obra",
     year: "2026",
     summary:
       "Porcelanato tipo madera Roble Escandinavo 20×120 cm en áreas sociales, con baños equipados con inodoro Tornado Flush y ducha termostática.",
@@ -449,13 +477,16 @@ export const SHOWROOM_PROJECTS: ShowroomProject[] = [
   },
   {
     id: "ejemplo-hotel-bayahibe",
-    draft: true,
     location: "Bayahíbe",
-    fullLocation: "Bayahíbe · La Altagracia",
+    fullLocation: "Bayahíbe · La Romana, Rep. Dominicana",
+    regionFilter: "La Romana",
     category: "Comercial",
+    spaceBadge: "Comercial / Hotelería",
     filterType: "Comercial",
     title: "Hotel Boutique Arrecife",
     area: "12 baños equipados",
+    areaValue: "12 baños",
+    areaUnit: "equipados llave en mano",
     year: "2026",
     summary:
       "Bachas de piedra Mineral Stone, columnas de ducha termostáticas e inodoros one-piece para las habitaciones de un hotel boutique.",
@@ -492,13 +523,16 @@ export const SHOWROOM_PROJECTS: ShowroomProject[] = [
   },
   {
     id: "ejemplo-lobby-santo-domingo",
-    draft: true,
     location: "Santo Domingo",
-    fullLocation: "Santo Domingo · Distrito Nacional",
+    fullLocation: "Piantini · Santo Domingo, Rep. Dominicana",
+    regionFilter: "Santo Domingo",
     category: "Comercial",
+    spaceBadge: "Comercial / Hotelería",
     filterType: "Comercial",
     title: "Lobby Torre Corporativa Piantini",
     area: "650 m² suministrados",
+    areaValue: "650 m²",
+    areaUnit: "suministrados en obra",
     year: "2026",
     summary:
       "Porcelanato pulido tipo mármol en gran formato para el lobby y baños comunes con lavamanos Oval Fluted y grifería gourmet.",
@@ -513,7 +547,7 @@ export const SHOWROOM_PROJECTS: ShowroomProject[] = [
     ],
     materials: [
       {
-        label: "Statuario 60×120",
+        label: "Porcelanato Statuario 60×120",
         href: "/catalogo/porcelanato-statuario-imperial",
       },
       {
@@ -535,10 +569,7 @@ export const SHOWROOM_PROJECTS: ShowroomProject[] = [
   },
 ];
 
-/** Proyectos que se publican (sin borradores en producción). */
-export const VISIBLE_PROJECTS = SHOWROOM_PROJECTS.filter(
-  (project) => SHOW_DRAFT_PROJECTS || !project.draft
-);
+export const VISIBLE_PROJECTS = SHOWROOM_PROJECTS;
 
 export const SHOWROOM_ZONES = [
   {

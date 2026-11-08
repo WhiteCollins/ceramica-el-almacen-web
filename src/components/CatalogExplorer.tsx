@@ -1,6 +1,13 @@
 "use client";
 
-import React, { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Icon } from "@/components/Icon";
 import { ProductSwatchCard } from "@/components/ProductSwatchCard";
@@ -10,7 +17,7 @@ import {
   CATEGORY_FILTERS,
   FINISH_FILTERS,
   FORMAT_FILTERS,
-  type CatalogProduct,
+  getCategoryCount,
   type ProductCategory,
 } from "@/data/catalog";
 import { SITE_INFO, buildWhatsAppUrl } from "@/data/site";
@@ -20,7 +27,7 @@ type SortOption = "featured" | "stock" | "alpha";
 interface FilterState {
   category: "all" | ProductCategory;
   finish: string | null;
-  formats: string[];
+  format: string | null;
   q: string;
   sort: SortOption;
 }
@@ -49,13 +56,9 @@ function parseFiltersFromParams(
   const rawFinish = params.get("acabado");
   const finish = rawFinish && VALID_FINISHES.has(rawFinish) ? rawFinish : null;
 
-  const rawFormats = params.get("formato");
-  const formats = rawFormats
-    ? rawFormats
-        .split(",")
-        .map((v) => v.trim())
-        .filter((v) => VALID_FORMATS.has(v))
-    : [];
+  const rawFormat = params.get("formato")?.split(",")[0]?.trim() ?? null;
+  const format =
+    rawFormat && VALID_FORMATS.has(rawFormat) ? rawFormat : null;
 
   const rawSort = params.get("orden");
   const sort: SortOption =
@@ -63,7 +66,7 @@ function parseFiltersFromParams(
 
   const q = params.get("q") ?? "";
 
-  return { category, finish, formats, q, sort };
+  return { category, finish, format, q, sort };
 }
 
 function buildFilterSearchString(state: FilterState): string {
@@ -74,8 +77,8 @@ function buildFilterSearchString(state: FilterState): string {
   if (state.finish) {
     params.set("acabado", state.finish);
   }
-  if (state.formats.length > 0) {
-    params.set("formato", state.formats.join(","));
+  if (state.format) {
+    params.set("formato", state.format);
   }
   if (state.sort !== "featured") {
     params.set("orden", state.sort);
@@ -121,14 +124,12 @@ export function CatalogExplorer() {
   const [activeFinish, setActiveFinish] = useState<string | null>(
     initial.finish
   );
-  const [activeFormats, setActiveFormats] = useState<string[]>(initial.formats);
+  const [activeFormat, setActiveFormat] = useState<string | null>(
+    initial.format
+  );
   const [searchQuery, setSearchQuery] = useState(initial.q);
   const [sortBy, setSortBy] = useState<SortOption>(initial.sort);
 
-  const [filterDrawerOpen, setFilterDrawerOpen] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState<CatalogProduct | null>(
-    null
-  );
   const [sampleModalOpen, setSampleModalOpen] = useState(false);
   const [sampleSubmitted, setSampleSubmitted] = useState(false);
   const [sampleForm, setSampleForm] = useState({
@@ -140,10 +141,9 @@ export function CatalogExplorer() {
   const isTypingRef = useRef(false);
 
   const searchInputId = useId();
+  const finishSelectId = useId();
+  const formatSelectId = useId();
   const sortSelectId = useId();
-  const drawerSortSelectId = useId();
-  const filterDrawerTitleId = useId();
-  const specTitleId = useId();
   const sampleTitleId = useId();
   const sampleProfId = useId();
   const sampleCityId = useId();
@@ -166,7 +166,7 @@ export function CatalogExplorer() {
     const parsed = parseFiltersFromParams(searchParams);
     setActiveCategory(parsed.category);
     setActiveFinish(parsed.finish);
-    setActiveFormats(parsed.formats);
+    setActiveFormat(parsed.format);
     setSortBy(parsed.sort);
     if (!isTypingRef.current) {
       setSearchQuery(parsed.q);
@@ -180,7 +180,7 @@ export function CatalogExplorer() {
       pushUrlForState({
         category: activeCategory,
         finish: activeFinish,
-        formats: activeFormats,
+        format: activeFormat,
         q: searchQuery,
         sort: sortBy,
       });
@@ -190,7 +190,7 @@ export function CatalogExplorer() {
     searchQuery,
     activeCategory,
     activeFinish,
-    activeFormats,
+    activeFormat,
     sortBy,
     pushUrlForState,
   ]);
@@ -199,31 +199,24 @@ export function CatalogExplorer() {
     const next: FilterState = {
       category: patch.category !== undefined ? patch.category : activeCategory,
       finish: patch.finish !== undefined ? patch.finish : activeFinish,
-      formats: patch.formats !== undefined ? patch.formats : activeFormats,
+      format: patch.format !== undefined ? patch.format : activeFormat,
       q: patch.q !== undefined ? patch.q : searchQuery,
       sort: patch.sort !== undefined ? patch.sort : sortBy,
     };
     isTypingRef.current = false;
     setActiveCategory(next.category);
     setActiveFinish(next.finish);
-    setActiveFormats(next.formats);
+    setActiveFormat(next.format);
     setSearchQuery(next.q);
     setSortBy(next.sort);
     pushUrlForState(next);
-  };
-
-  const toggleFormat = (formatVal: string) => {
-    const nextFormats = activeFormats.includes(formatVal)
-      ? activeFormats.filter((v) => v !== formatVal)
-      : [...activeFormats, formatVal];
-    updateDiscreteFilters({ formats: nextFormats });
   };
 
   const resetFilters = () => {
     updateDiscreteFilters({
       category: "all",
       finish: null,
-      formats: [],
+      format: null,
       q: "",
       sort: "featured",
     });
@@ -237,8 +230,7 @@ export function CatalogExplorer() {
         activeCategory === "all" || item.category === activeCategory;
       const matchesFinish = !activeFinish || item.finish === activeFinish;
       const matchesFormat =
-        activeFormats.length === 0 ||
-        activeFormats.includes(item.formatFilter);
+        !activeFormat || item.formatFilter === activeFormat;
       const matchesSearch =
         !q ||
         item.name.toLowerCase().includes(q) ||
@@ -260,26 +252,14 @@ export function CatalogExplorer() {
       );
     }
     return matches.toSorted((a, b) => a.featuredOrder - b.featuredOrder);
-  }, [activeCategory, activeFinish, activeFormats, searchQuery, sortBy]);
+  }, [activeCategory, activeFinish, activeFormat, searchQuery, sortBy]);
 
   const hasActiveFilters =
     activeCategory !== "all" ||
     activeFinish !== null ||
-    activeFormats.length > 0 ||
-    searchQuery.trim().length > 0;
-
-  const secondaryFilterCount =
-    (activeFinish ? 1 : 0) +
-    activeFormats.length +
-    (sortBy !== "featured" ? 1 : 0);
-
-  const activeCategoryLabel = useMemo(() => {
-    if (activeCategory === "all") return null;
-    return (
-      CATEGORY_FILTERS.find((c) => c.id === activeCategory)?.label ??
-      activeCategory
-    );
-  }, [activeCategory]);
+    activeFormat !== null ||
+    searchQuery.trim().length > 0 ||
+    sortBy !== "featured";
 
   const sampleWhatsAppHref = buildWhatsAppUrl(
     `Hola Cerámica El Almacén, solicito muestrario físico para proyecto:\n• Profesional/Firma: ${sampleForm.professional}\n• Ciudad/Obra: ${sampleForm.city}\n• Muestras requeridas: ${sampleForm.samples}`
@@ -296,38 +276,78 @@ export function CatalogExplorer() {
     setSampleSubmitted(true);
   };
 
-  const formatFinishLabel = (finish: string) => {
-    if (finish === "Madera") return "Madera Roble";
-    if (finish === "Esmaltado Artesanal") return "Esmalte Artesanal";
-    return finish;
-  };
-
   return (
-    <>
-      {/* Encabezado Compacto */}
-      <div className="flex flex-wrap items-end justify-between gap-3 mb-4 lg:mb-5">
-        <div className="max-w-3xl space-y-1">
-          <h1 className="font-headline-xl text-headline-xl-mobile lg:text-headline-xl text-on-surface tracking-tight">
+    <div className="space-y-6">
+      {/* Encabezado + Botón de Muestrario Físico alineado */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div className="max-w-2xl space-y-1">
+          <h1 className="font-serif text-3xl sm:text-4xl text-on-surface tracking-tight">
             Catálogo de Acabados &amp; Terminaciones
           </h1>
-          <p className="font-body-sm sm:text-body-md text-secondary">
-            Selección curada de piezas representativas con ficha técnica en
-            línea. Solicita por WhatsApp o en nuestro showroom el muestrario
-            completo de referencias en almacén.
+          <p className="text-sm sm:text-base text-secondary">
+            Piezas con ficha técnica en línea y disponibilidad en almacén.
           </p>
         </div>
+
+        <button
+          type="button"
+          onClick={() => {
+            setSampleSubmitted(false);
+            setSampleModalOpen(true);
+          }}
+          className="w-fit inline-flex items-center gap-2 bg-white hover:bg-surface-container-low text-on-surface px-4 py-2.5 min-h-[44px] rounded-lg text-sm font-semibold border border-outline shadow-sm transition-colors shrink-0"
+        >
+          <Icon name="layers" className="text-primary text-[18px]" />
+          <span>Pedir muestrario físico</span>
+        </button>
       </div>
 
-      {/* Barra de Búsqueda (<search>) y Acciones */}
-      <search className="bg-surface-container-low rounded-xl p-3 sm:p-4 mb-5 lg:mb-7 shadow-sm border border-surface-container-high flex flex-col lg:flex-row gap-3 items-stretch lg:items-center justify-between">
-        <div className="flex items-center gap-2 flex-1">
-          <div className="relative flex-1 lg:max-w-xl">
+      {/* Pestañas superiores de categoría macro (Pills) */}
+      <nav aria-label="Categorías del catálogo" className="overflow-x-auto no-scrollbar -mx-1 px-1">
+        <ul role="list" className="flex items-center gap-2 min-w-max pb-1">
+          {CATEGORY_FILTERS.map((cat) => {
+            const isSelected = activeCategory === cat.id;
+            const count = getCategoryCount(cat.id);
+            return (
+              <li key={cat.id}>
+                <button
+                  type="button"
+                  onClick={() => updateDiscreteFilters({ category: cat.id })}
+                  aria-pressed={isSelected}
+                  className={
+                    isSelected
+                      ? "min-h-[42px] inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary text-white text-sm font-semibold shadow-sm transition-colors"
+                      : "min-h-[42px] inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white hover:bg-surface-container-low text-on-surface border border-outline text-sm font-medium transition-colors"
+                  }
+                >
+                  <span>{cat.label}</span>
+                  <span
+                    className={
+                      isSelected
+                        ? "text-xs px-2 py-0.5 rounded-full bg-white/20 text-white"
+                        : "text-xs px-2 py-0.5 rounded-full bg-surface-container text-secondary"
+                    }
+                  >
+                    {count}
+                  </span>
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
+
+      {/* Barra horizontal uniforme: Buscador + Dropdowns limpios (Formato, Acabado, Ordenar) */}
+      <search className="bg-white rounded-xl p-3 sm:p-4 border border-outline/80 shadow-sm">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3 items-center">
+          {/* Buscador */}
+          <div className="relative sm:col-span-2 lg:col-span-5">
             <label htmlFor={searchInputId} className="sr-only">
               Buscar por nombre, medida, acabado o código SKU
             </label>
             <Icon
               name="search"
-              className="absolute left-3.5 top-1/2 -translate-y-1/2 text-secondary text-[20px]"
+              className="absolute left-3.5 top-1/2 -translate-y-1/2 text-secondary text-[19px]"
             />
             <input
               id={searchInputId}
@@ -340,45 +360,73 @@ export function CatalogExplorer() {
               autoCorrect="off"
               autoCapitalize="off"
               spellCheck={false}
-              placeholder="Buscar por textura, medida (ej. 60×120), acabado o serie..."
-              className="w-full min-h-[48px] bg-surface-container-lowest text-base text-on-surface placeholder:text-secondary pl-11 pr-10 py-2.5 rounded-lg shadow-sm border border-surface-container-highest focus:border-primary focus:outline-none transition-colors"
+              placeholder="Buscar por nombre, medida (60×120), SKU..."
+              className="w-full h-11 bg-surface text-sm text-on-surface placeholder:text-secondary pl-10 pr-9 rounded-lg border border-outline focus:border-primary focus:bg-white focus:outline-none transition-colors"
             />
             {searchQuery ? (
               <button
                 type="button"
                 onClick={() => updateDiscreteFilters({ q: "" })}
                 aria-label="Limpiar búsqueda"
-                className="absolute right-1 top-1/2 -translate-y-1/2 min-h-[44px] min-w-[44px] inline-flex items-center justify-center text-secondary hover:text-on-surface rounded"
+                className="absolute right-1.5 top-1/2 -translate-y-1/2 h-8 w-8 inline-flex items-center justify-center text-secondary hover:text-on-surface rounded-md"
               >
-                <Icon name="close" className="text-[18px]" />
+                <Icon name="close" className="text-[16px]" />
               </button>
             ) : null}
           </div>
 
-          <button
-            type="button"
-            onClick={() => setFilterDrawerOpen(true)}
-            aria-expanded={filterDrawerOpen}
-            className="lg:hidden shrink-0 min-h-[48px] inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-lg bg-surface-container-lowest hover:bg-surface-container text-on-surface border border-surface-container-highest shadow-sm font-label-md text-label-md font-semibold transition-colors"
-          >
-            <Icon name="tune" className="text-primary text-[19px]" />
-            <span>Filtros</span>
-            {secondaryFilterCount > 0 ? (
-              <span className="min-w-[20px] h-5 px-1.5 rounded-full bg-primary text-on-primary text-label-caps inline-flex items-center justify-center">
-                {secondaryFilterCount}
-              </span>
-            ) : null}
-          </button>
-        </div>
-
-        <div className="hidden lg:flex items-center gap-2.5 shrink-0">
-          <div className="flex items-center gap-1.5 bg-surface-container-lowest px-3.5 py-2 rounded-lg shadow-sm border border-surface-container-highest min-h-[48px]">
-            <Icon name="tune" className="text-primary text-[18px]" />
-            <label
-              htmlFor={sortSelectId}
-              className="font-label-md text-label-md text-secondary"
+          {/* Selector de Formato */}
+          <div className="lg:col-span-3">
+            <label htmlFor={formatSelectId} className="sr-only">
+              Filtrar por formato
+            </label>
+            <select
+              id={formatSelectId}
+              value={activeFormat ?? ""}
+              onChange={(e) =>
+                updateDiscreteFilters({
+                  format: e.target.value ? e.target.value : null,
+                })
+              }
+              className="w-full h-11 bg-surface text-sm text-on-surface px-3 rounded-lg border border-outline focus:border-primary focus:bg-white focus:outline-none cursor-pointer"
             >
-              Ordenar:
+              <option value="">Formato: Todos</option>
+              {FORMAT_FILTERS.map((fmt) => (
+                <option key={fmt.value} value={fmt.value}>
+                  {fmt.label}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Selector de Acabado */}
+          <div className="lg:col-span-2">
+            <label htmlFor={finishSelectId} className="sr-only">
+              Filtrar por acabado
+            </label>
+            <select
+              id={finishSelectId}
+              value={activeFinish ?? ""}
+              onChange={(e) =>
+                updateDiscreteFilters({
+                  finish: e.target.value ? e.target.value : null,
+                })
+              }
+              className="w-full h-11 bg-surface text-sm text-on-surface px-3 rounded-lg border border-outline focus:border-primary focus:bg-white focus:outline-none cursor-pointer"
+            >
+              <option value="">Acabado: Todos</option>
+              {FINISH_FILTERS.map((finish) => (
+                <option key={finish} value={finish}>
+                  {finish}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Selector de Orden */}
+          <div className="lg:col-span-2">
+            <label htmlFor={sortSelectId} className="sr-only">
+              Ordenar productos
             </label>
             <select
               id={sortSelectId}
@@ -386,409 +434,76 @@ export function CatalogExplorer() {
               onChange={(e) =>
                 updateDiscreteFilters({ sort: e.target.value as SortOption })
               }
-              className="bg-transparent font-label-md text-label-md text-on-surface font-semibold outline-none cursor-pointer"
+              className="w-full h-11 bg-surface text-sm text-on-surface px-3 rounded-lg border border-outline focus:border-primary focus:bg-white focus:outline-none cursor-pointer"
             >
-              <option value="featured">Colección Destacada</option>
-              <option value="stock">Disponibilidad Inmediata</option>
-              <option value="alpha">Nombre (A–Z)</option>
+              <option value="featured">Orden: Destacados</option>
+              <option value="stock">Orden: En stock</option>
+              <option value="alpha">Orden: Nombre (A–Z)</option>
             </select>
           </div>
-
-          <button
-            type="button"
-            onClick={() => {
-              setSampleSubmitted(false);
-              setSampleModalOpen(true);
-            }}
-            className="inline-flex items-center gap-1.5 bg-surface-container-high hover:bg-surface-variant text-on-surface px-4 py-2.5 min-h-[48px] rounded-lg font-label-md text-label-md transition-colors shadow-sm"
-          >
-            <Icon name="layers" className="text-primary text-[18px]" />
-            <span>Pedir Muestrario Físico</span>
-          </button>
         </div>
-      </search>
 
-      {/* Grilla Principal: Filtros a la Izquierda + Mosaico de Productos a la Derecha */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-gutter-lg items-start">
-        {/* Barra Lateral de Filtros a la Izquierda */}
-        <aside
-          aria-label="Filtros de catálogo"
-          className="hidden lg:flex lg:col-span-3 lg:sticky lg:top-24 flex-col gap-6 bg-surface-container-low p-5 rounded-xl shadow-sm border border-surface-container-high"
-        >
-          <div className="flex items-center justify-between border-b border-surface-container-highest pb-2">
-            <span className="font-headline-sm text-base text-on-surface font-semibold flex items-center gap-1.5">
-              <Icon name="tune" className="text-primary text-[18px]" />
-              <span>Filtros</span>
-            </span>
-            {hasActiveFilters ? (
-              <button
-                type="button"
-                onClick={resetFilters}
-                className="inline-flex items-center min-h-[44px] px-2 font-label-caps text-label-caps text-primary hover:underline uppercase"
-              >
-                Limpiar
-              </button>
-            ) : null}
-          </div>
+        {/* Contador de resultados + botón limpiar cuando hay filtros activos */}
+        <div className="flex flex-wrap items-center justify-between gap-2 pt-3 mt-3 border-t border-outline/50 text-xs text-secondary">
+          <span>
+            Mostrando{" "}
+            <strong className="text-on-surface font-semibold">
+              {filteredProducts.length}
+            </strong>{" "}
+            {filteredProducts.length === 1
+              ? "pieza disponible"
+              : "piezas disponibles"}
+          </span>
 
-          {activeCategoryLabel ? (
-            <div className="flex items-center justify-between gap-2 bg-surface-container-lowest px-3 py-2 rounded-lg border border-surface-container-highest">
-              <span className="font-label-md text-label-md text-on-surface font-semibold truncate">
-                {activeCategoryLabel}
-              </span>
-              <button
-                type="button"
-                onClick={() => updateDiscreteFilters({ category: "all" })}
-                aria-label="Quitar filtro de categoría"
-                className="min-h-[36px] min-w-[36px] inline-flex items-center justify-center text-secondary hover:text-primary"
-              >
-                <Icon name="close" className="text-[16px]" />
-              </button>
-            </div>
-          ) : null}
-
-          {/* Acabado de Superficie */}
-          <div className="flex flex-col gap-2">
-            <span className="font-label-caps text-label-caps uppercase text-secondary">
-              Acabado de Superficie
-            </span>
-            <div className="flex flex-wrap gap-1.5">
-              {FINISH_FILTERS.map((finish) => {
-                const isSelected = activeFinish === finish;
-                return (
-                  <button
-                    key={finish}
-                    type="button"
-                    aria-pressed={isSelected}
-                    onClick={() =>
-                      updateDiscreteFilters({
-                        finish: isSelected ? null : finish,
-                      })
-                    }
-                    className={
-                      isSelected
-                        ? "inline-flex items-center min-h-[44px] font-label-caps text-label-caps px-3 py-2 rounded bg-primary text-on-primary shadow-sm transition-all"
-                        : "inline-flex items-center min-h-[44px] font-label-caps text-label-caps px-3 py-2 rounded bg-surface-container-lowest text-on-surface hover:bg-surface-container-high shadow-sm border border-surface-container-highest transition-all"
-                    }
-                  >
-                    {formatFinishLabel(finish)}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Formatos & Dimensiones */}
-          <fieldset className="flex flex-col gap-1">
-            <legend className="font-label-caps text-label-caps uppercase text-secondary mb-1.5">
-              Formatos &amp; Dimensiones
-            </legend>
-            <div className="flex flex-col text-body-sm font-body-sm text-on-surface-variant">
-              {FORMAT_FILTERS.map((fmt) => (
-                <label
-                  key={fmt.value}
-                  className="flex items-center gap-2.5 cursor-pointer hover:text-on-surface min-h-[44px] py-1.5"
-                >
-                  <input
-                    type="checkbox"
-                    checked={activeFormats.includes(fmt.value)}
-                    onChange={() => toggleFormat(fmt.value)}
-                    className="accent-primary h-5 w-5 rounded shrink-0"
-                  />
-                  <span>{fmt.label}</span>
-                </label>
-              ))}
-            </div>
-          </fieldset>
-
-          {/* Disponibilidad Almacén */}
-          <div className="flex flex-col gap-1.5 bg-surface-container-high p-3.5 rounded-lg">
-            <div className="flex items-center gap-1.5 text-primary font-label-md text-label-md font-semibold">
-              <Icon name="warehouse" className="text-[18px]" />
-              <span>Disponibilidad Almacén</span>
-            </div>
-            <p className="font-body-sm text-body-sm text-secondary leading-snug">
-              Stock listo para despacho en San Pedro de Macorís con entrega
-              express 24–48h en la región Este y Santo Domingo.
-            </p>
-          </div>
-        </aside>
-
-        {/* Grilla de Productos */}
-        <section aria-label="Listado de piezas" className="lg:col-span-9">
-          {filteredProducts.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-12 text-center bg-surface-container-low rounded-xl p-6 border border-surface-container-high">
-              <Icon
-                name="search_off"
-                className="text-secondary text-[44px] mb-2"
-              />
-              <h2 className="font-headline-md text-headline-md text-on-surface">
-                No encontramos piezas con esos criterios
-              </h2>
-              <p className="font-body-md text-body-md text-secondary max-w-md mt-1">
-                Prueba restableciendo los filtros seleccionados o escríbenos
-                para consultar referencias adicionales en almacén.
-              </p>
-              <button
-                type="button"
-                onClick={resetFilters}
-                className="mt-4 min-h-[44px] bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md px-5 py-2.5 rounded transition-colors"
-              >
-                Restablecer Filtros
-              </button>
-            </div>
-          ) : (
-            <ul
-              role="list"
-              className="grid grid-cols-2 xl:grid-cols-3 gap-x-4 gap-y-8 sm:gap-x-6"
-            >
-              {filteredProducts.map((product, index) => (
-                <li key={product.id}>
-                  <ProductSwatchCard product={product} priority={index < 2} />
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
-      </div>
-
-      {/* Panel Deslizante de Filtros para Móvil y Tablet (<dialog> drawer) */}
-      <ModalDialog
-        open={filterDrawerOpen}
-        onClose={() => setFilterDrawerOpen(false)}
-        labelledBy={filterDrawerTitleId}
-        variant="drawer"
-      >
-        <div className="h-full flex flex-col justify-between">
-          <div className="px-5 py-3.5 border-b border-surface-container-high flex items-center justify-between gap-2 bg-surface-container-lowest">
-            <h2
-              id={filterDrawerTitleId}
-              className="font-headline-md text-headline-md text-on-surface font-semibold"
-            >
-              Filtros y Orden
-            </h2>
-            <button
-              type="button"
-              onClick={() => setFilterDrawerOpen(false)}
-              aria-label="Cerrar panel de filtros"
-              className="min-h-[44px] min-w-[44px] inline-flex items-center justify-center rounded bg-surface-container text-on-surface"
-            >
-              <Icon name="close" className="text-[20px]" />
-            </button>
-          </div>
-
-          <div className="flex-1 overflow-y-auto p-5 space-y-6">
-            <div className="space-y-1.5">
-              <label
-                htmlFor={drawerSortSelectId}
-                className="font-label-caps text-label-caps uppercase text-secondary block"
-              >
-                Ordenar Resultados
-              </label>
-              <select
-                id={drawerSortSelectId}
-                value={sortBy}
-                onChange={(e) =>
-                  updateDiscreteFilters({ sort: e.target.value as SortOption })
-                }
-                className="w-full min-h-[48px] bg-surface-container-low text-base text-on-surface px-3.5 py-2.5 rounded-lg border border-surface-container-highest focus:border-primary focus:outline-none"
-              >
-                <option value="featured">Colección Destacada</option>
-                <option value="stock">Disponibilidad Inmediata</option>
-                <option value="alpha">Nombre (A–Z)</option>
-              </select>
-            </div>
-
-            <div className="space-y-2">
-              <span className="font-label-caps text-label-caps uppercase text-secondary block">
-                Acabado de Superficie
-              </span>
-              <div className="flex flex-wrap gap-2">
-                {FINISH_FILTERS.map((finish) => {
-                  const isSelected = activeFinish === finish;
-                  return (
-                    <button
-                      key={finish}
-                      type="button"
-                      aria-pressed={isSelected}
-                      onClick={() =>
-                        updateDiscreteFilters({
-                          finish: isSelected ? null : finish,
-                        })
-                      }
-                      className={
-                        isSelected
-                          ? "inline-flex items-center min-h-[44px] font-label-caps text-label-caps px-3 py-2 rounded bg-primary text-on-primary shadow-sm transition-colors"
-                          : "inline-flex items-center min-h-[44px] font-label-caps text-label-caps px-3 py-2 rounded bg-surface-container-low text-on-surface border border-surface-container-highest transition-colors"
-                      }
-                    >
-                      {formatFinishLabel(finish)}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            <fieldset className="space-y-1">
-              <legend className="font-label-caps text-label-caps uppercase text-secondary mb-1.5">
-                Formatos &amp; Dimensiones
-              </legend>
-              <div className="flex flex-col text-body-md font-body-md text-on-surface">
-                {FORMAT_FILTERS.map((fmt) => (
-                  <label
-                    key={fmt.value}
-                    className="flex items-center gap-3 cursor-pointer min-h-[44px] py-1.5"
-                  >
-                    <input
-                      type="checkbox"
-                      checked={activeFormats.includes(fmt.value)}
-                      onChange={() => toggleFormat(fmt.value)}
-                      className="accent-primary h-5 w-5 rounded shrink-0"
-                    />
-                    <span>{fmt.label}</span>
-                  </label>
-                ))}
-              </div>
-            </fieldset>
-
-            <div className="pt-2 border-t border-surface-container">
-              <button
-                type="button"
-                onClick={() => {
-                  setFilterDrawerOpen(false);
-                  setSampleSubmitted(false);
-                  setSampleModalOpen(true);
-                }}
-                className="w-full min-h-[48px] inline-flex items-center justify-center gap-2 bg-surface-container-high hover:bg-surface-variant text-on-surface px-4 py-2.5 rounded-lg font-label-md text-label-md transition-colors"
-              >
-                <Icon name="layers" className="text-primary text-[18px]" />
-                <span>Pedir Muestrario Físico</span>
-              </button>
-            </div>
-          </div>
-
-          <div className="p-4 border-t border-surface-container-high bg-surface-container-lowest flex items-center gap-2.5">
+          {hasActiveFilters ? (
             <button
               type="button"
               onClick={resetFilters}
-              className="min-h-[48px] px-4 py-2.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md transition-colors"
+              className="inline-flex items-center gap-1 font-semibold text-primary hover:underline"
             >
-              Limpiar
+              <Icon name="close" className="text-[14px]" />
+              <span>Limpiar filtros</span>
             </button>
-            <button
-              type="button"
-              onClick={() => setFilterDrawerOpen(false)}
-              className="flex-1 min-h-[48px] px-4 py-2.5 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md uppercase tracking-wider font-semibold transition-colors"
-            >
-              Ver {filteredProducts.length}{" "}
-              {filteredProducts.length === 1 ? "pieza" : "piezas"}
-            </button>
-          </div>
+          ) : null}
         </div>
-      </ModalDialog>
+      </search>
 
-      {/* Modal de Ficha Técnica Oficial Específica por Tipo de Producto */}
-      <ModalDialog
-        open={selectedProduct !== null}
-        onClose={() => setSelectedProduct(null)}
-        labelledBy={specTitleId}
-        className="max-w-xl"
-      >
-        {selectedProduct ? (
-          <div className="p-5 sm:p-space-xl flex flex-col gap-4 relative">
+      {/* Grilla 100% de ancho: 4 columnas holgadas en escritorio */}
+      <section aria-label="Listado de piezas">
+        {filteredProducts.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-14 text-center bg-white rounded-2xl p-6 border border-outline/80">
+            <Icon
+              name="search_off"
+              className="text-secondary text-[44px] mb-2"
+            />
+            <h2 className="font-serif text-2xl text-on-surface">
+              No encontramos piezas con esos criterios
+            </h2>
+            <p className="text-sm text-secondary max-w-md mt-1">
+              Prueba restableciendo los filtros seleccionados o escríbenos para
+              consultar referencias adicionales en almacén.
+            </p>
             <button
               type="button"
-              onClick={() => setSelectedProduct(null)}
-              aria-label="Cerrar ficha técnica"
-              className="absolute top-3 right-3 min-h-[44px] min-w-[44px] inline-flex items-center justify-center text-secondary hover:text-on-surface rounded bg-surface-container transition-colors"
+              onClick={resetFilters}
+              className="mt-4 min-h-[44px] bg-primary hover:bg-primary-container text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
             >
-              <Icon name="close" className="text-[20px]" />
+              Restablecer filtros
             </button>
-
-            <div className="flex items-center gap-1.5 text-primary font-label-caps text-label-caps uppercase">
-              <Icon name="description" className="text-[16px]" />
-              <span>Ficha Técnica de Especificación</span>
-            </div>
-
-            <h2
-              id={specTitleId}
-              className="font-headline-lg text-headline-lg text-on-surface font-medium pr-10"
-            >
-              {selectedProduct.name}
-            </h2>
-
-            <dl className="bg-surface-container-low rounded-lg p-4 flex flex-col gap-1 text-body-sm sm:text-body-md font-body-md text-on-surface-variant border border-surface-container-high">
-              <div className="flex justify-between gap-4 py-1.5 border-b border-surface-variant/50">
-                <dt className="text-secondary">Código SKU:</dt>
-                <dd className="font-semibold text-on-surface text-right">
-                  {selectedProduct.sku}
-                </dd>
-              </div>
-              <div className="flex justify-between gap-4 py-1.5 border-b border-surface-variant/50">
-                <dt className="text-secondary">Dimensiones:</dt>
-                <dd className="font-semibold text-on-surface text-right">
-                  {selectedProduct.detailedDimensions}
-                </dd>
-              </div>
-              <div className="flex justify-between gap-4 py-1.5 border-b border-surface-variant/50">
-                <dt className="text-secondary">Material Base:</dt>
-                <dd className="font-semibold text-on-surface text-right">
-                  {selectedProduct.materialBase}
-                </dd>
-              </div>
-              <div className="flex justify-between gap-4 py-1.5 border-b border-surface-variant/50">
-                <dt className="text-secondary">Acabado / País:</dt>
-                <dd className="font-semibold text-on-surface text-right">
-                  {selectedProduct.finish} • {selectedProduct.originCountry}
-                </dd>
-              </div>
-              {selectedProduct.techSpecs.map((spec, idx) => (
-                <div
-                  key={spec.label}
-                  className={
-                    idx === selectedProduct.techSpecs.length - 1
-                      ? "flex justify-between gap-4 py-1.5"
-                      : "flex justify-between gap-4 py-1.5 border-b border-surface-variant/50"
-                  }
-                >
-                  <dt className="text-secondary">{spec.label}:</dt>
-                  <dd className="font-semibold text-on-surface text-right">
-                    {spec.value}
-                  </dd>
-                </div>
-              ))}
-            </dl>
-
-            <ul
-              role="list"
-              className="flex flex-col gap-1.5 text-body-sm text-secondary"
-            >
-              {selectedProduct.technicalNotes.map((note, idx) => (
-                <li key={idx}>• {note}</li>
-              ))}
-            </ul>
-
-            <div className="flex flex-wrap items-center justify-end gap-2.5 pt-1">
-              <button
-                type="button"
-                onClick={() => setSelectedProduct(null)}
-                className="min-h-[44px] px-4 py-2.5 text-on-surface font-label-md text-label-md bg-surface-container hover:bg-surface-container-high rounded transition-colors"
-              >
-                Cerrar
-              </button>
-              <a
-                href={buildWhatsAppUrl(selectedProduct.whatsappText)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="min-h-[44px] px-4 py-2.5 text-on-primary font-label-md text-label-md bg-primary hover:bg-primary-container rounded transition-colors inline-flex items-center gap-1.5"
-              >
-                <Icon name="chat" className="text-[16px]" />
-                <span>Pedir Cotización de Este Producto</span>
-              </a>
-            </div>
           </div>
-        ) : null}
-      </ModalDialog>
+        ) : (
+          <ul
+            role="list"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+          >
+            {filteredProducts.map((product, index) => (
+              <li key={product.id}>
+                <ProductSwatchCard product={product} priority={index < 4} />
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
 
       {/* Modal de Solicitud de Muestrario Físico (<dialog> nativo) */}
       <ModalDialog
@@ -807,160 +522,155 @@ export function CatalogExplorer() {
             <Icon name="close" className="text-[20px]" />
           </button>
 
-          <div className="flex items-center gap-space-xs text-primary font-label-caps text-label-caps uppercase">
-            <Icon name="layers" className="text-[16px]" />
-            <span>Atelier para Profesionales</span>
+          <div className="space-y-1 pr-10">
+            <span className="font-label-caps text-label-caps text-primary uppercase block">
+              Servicio para Arquitectos &amp; Diseñadores
+            </span>
+            <h2
+              id={sampleTitleId}
+              className="font-headline-lg text-headline-lg text-on-surface"
+            >
+              Solicitar Muestrario Físico
+            </h2>
+            <p className="font-body-sm text-body-sm text-secondary">
+              Preparamos cajas de muestras físicas de porcelanatos y cartas de
+              acabados PVD para presentar en su estudio o contrastar en obra.
+            </p>
           </div>
 
-          <h2
-            id={sampleTitleId}
-            className="font-headline-lg text-headline-lg text-on-surface font-medium pr-8"
+          <form
+            onSubmit={handleSampleSubmit}
+            onBlur={(e) => syncAriaInvalid(e.target)}
+            onInput={(e) => syncAriaInvalid(e.target)}
+            className="space-y-4"
           >
-            Solicitud de Muestras Físicas
-          </h2>
-
-          <p className="font-body-md text-body-md text-secondary">
-            Enviamos muestras táctiles de porcelanatos y paletas cerámicas a
-            estudios de arquitectura y constructoras en Santo Domingo, San Pedro
-            de Macorís, Casa de Campo y Punta Cana.
-          </p>
-
-          {sampleSubmitted ? (
-            <div className="bg-surface-container-low rounded-lg p-space-md border border-outline space-y-space-md">
-              <div className="flex items-center gap-space-xs text-primary font-semibold">
-                <span>Solicitud lista para despacho</span>
-              </div>
-              <p className="font-body-sm text-body-sm text-on-surface-variant">
-                Elige por cuál vía prefieres remitir los datos de tu estudio a
-                nuestro equipo en San Pedro de Macorís:
+            <div className="space-y-1.5">
+              <label
+                htmlFor={sampleProfId}
+                className="font-label-caps text-label-caps text-on-surface-variant uppercase block"
+              >
+                Profesional o Estudio de Arquitectura *
+              </label>
+              <input
+                id={sampleProfId}
+                type="text"
+                required
+                autoComplete="name"
+                value={sampleForm.professional}
+                onChange={(e) => {
+                  setSampleForm({
+                    ...sampleForm,
+                    professional: e.target.value,
+                  });
+                  if (sampleSubmitted) setSampleSubmitted(false);
+                }}
+                placeholder="Ej. Arq. Laura Gómez / Estudio LG"
+                className="atelier-input w-full min-h-[48px] bg-surface-container-low text-base text-on-surface px-3.5 py-2.5 rounded border border-outline-variant/50 focus:border-primary focus:bg-surface-container-lowest focus:outline-none"
+              />
+              <p className="field-error hidden items-center gap-1 text-error font-body-sm text-body-sm">
+                <Icon name="error" className="text-[15px]" />
+                <span>Indique su nombre o firma profesional.</span>
               </p>
-              <div className="flex flex-col sm:flex-row gap-space-sm">
-                <a
-                  href={sampleWhatsAppHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex-1 min-h-[44px] inline-flex items-center justify-center gap-1.5 bg-primary hover:bg-primary-container text-white py-2.5 px-space-md rounded-lg text-sm font-semibold"
-                >
-                  <Icon name="chat" className="text-[16px]" />
-                  <span>Enviar por WhatsApp</span>
-                </a>
-                <a
-                  href={sampleMailHref}
-                  className="flex-1 min-h-[44px] inline-flex items-center justify-center gap-1.5 border border-outline bg-white hover:bg-surface text-on-surface py-2.5 px-space-md rounded-lg text-sm font-medium"
-                >
-                  <span>Enviar por correo</span>
-                </a>
-              </div>
             </div>
-          ) : (
-            <form
-              onSubmit={handleSampleSubmit}
-              onBlur={(e) => syncAriaInvalid(e.target)}
-              onInput={(e) => syncAriaInvalid(e.target)}
-              className="flex flex-col gap-space-sm mt-space-xs"
-            >
-              <div>
-                <label
-                  htmlFor={sampleProfId}
-                  className="font-label-caps text-label-caps text-secondary uppercase block mb-1"
-                >
-                  Nombre del Profesional o Firma *
-                </label>
-                <input
-                  id={sampleProfId}
-                  name="professional"
-                  type="text"
-                  required
-                  autoComplete="name"
-                  value={sampleForm.professional}
-                  onChange={(e) =>
-                    setSampleForm((prev) => ({
-                      ...prev,
-                      professional: e.target.value,
-                    }))
-                  }
-                  placeholder="Ej. Arq. Carlos Peña — Studio Diseño"
-                  className="atelier-input w-full min-h-[48px] bg-surface-container p-3 rounded text-base text-on-surface border border-surface-container-highest focus:border-primary focus:bg-surface-container-lowest outline-none transition-colors"
-                />
-                <p className="field-error hidden items-center gap-1 text-error font-body-sm text-body-sm mt-1">
-                  <Icon name="error" className="text-[15px]" />
-                  <span>Indica tu nombre o estudio de arquitectura.</span>
-                </p>
-              </div>
 
-              <div>
-                <label
-                  htmlFor={sampleCityId}
-                  className="font-label-caps text-label-caps text-secondary uppercase block mb-1"
-                >
-                  Ciudad / Destino de Entrega *
-                </label>
-                <input
-                  id={sampleCityId}
-                  name="city"
-                  type="text"
-                  required
-                  autoComplete="address-level2"
-                  value={sampleForm.city}
-                  onChange={(e) =>
-                    setSampleForm((prev) => ({ ...prev, city: e.target.value }))
-                  }
-                  placeholder="Ej. Piantini, Santo Domingo / Casa de Campo"
-                  className="atelier-input w-full min-h-[48px] bg-surface-container p-3 rounded text-base text-on-surface border border-surface-container-highest focus:border-primary focus:bg-surface-container-lowest outline-none transition-colors"
-                />
-                <p className="field-error hidden items-center gap-1 text-error font-body-sm text-body-sm mt-1">
-                  <Icon name="error" className="text-[15px]" />
-                  <span>Indica la ciudad o dirección de obra.</span>
-                </p>
-              </div>
+            <div className="space-y-1.5">
+              <label
+                htmlFor={sampleCityId}
+                className="font-label-caps text-label-caps text-on-surface-variant uppercase block"
+              >
+                Ciudad / Ubicación del Proyecto *
+              </label>
+              <input
+                id={sampleCityId}
+                type="text"
+                required
+                autoComplete="address-level2"
+                value={sampleForm.city}
+                onChange={(e) => {
+                  setSampleForm({ ...sampleForm, city: e.target.value });
+                  if (sampleSubmitted) setSampleSubmitted(false);
+                }}
+                placeholder="Ej. Santiago, La Romana, Juan Dolio, Punta Cana..."
+                className="atelier-input w-full min-h-[48px] bg-surface-container-low text-base text-on-surface px-3.5 py-2.5 rounded border border-outline-variant/50 focus:border-primary focus:bg-surface-container-lowest focus:outline-none"
+              />
+              <p className="field-error hidden items-center gap-1 text-error font-body-sm text-body-sm">
+                <Icon name="error" className="text-[15px]" />
+                <span>Indique la ciudad o zona del proyecto.</span>
+              </p>
+            </div>
 
-              <div>
-                <label
-                  htmlFor={sampleItemsId}
-                  className="font-label-caps text-label-caps text-secondary uppercase block mb-1"
-                >
-                  Muestras de Interés *
-                </label>
-                <input
-                  id={sampleItemsId}
-                  name="samples"
-                  type="text"
-                  required
-                  value={sampleForm.samples}
-                  onChange={(e) =>
-                    setSampleForm((prev) => ({
-                      ...prev,
-                      samples: e.target.value,
-                    }))
-                  }
-                  placeholder="Ej. Statuario Imperial 60×120 y Roble Escandinavo"
-                  className="atelier-input w-full min-h-[48px] bg-surface-container p-3 rounded text-base text-on-surface border border-surface-container-highest focus:border-primary focus:bg-surface-container-lowest outline-none transition-colors"
-                />
-                <p className="field-error hidden items-center gap-1 text-error font-body-sm text-body-sm mt-1">
-                  <Icon name="error" className="text-[15px]" />
-                  <span>Especifica al menos una referencia o colección.</span>
-                </p>
-              </div>
+            <div className="space-y-1.5">
+              <label
+                htmlFor={sampleItemsId}
+                className="font-label-caps text-label-caps text-on-surface-variant uppercase block"
+              >
+                Colecciones o Acabados Requeridos *
+              </label>
+              <textarea
+                id={sampleItemsId}
+                rows={3}
+                required
+                value={sampleForm.samples}
+                onChange={(e) => {
+                  setSampleForm({ ...sampleForm, samples: e.target.value });
+                  if (sampleSubmitted) setSampleSubmitted(false);
+                }}
+                placeholder="Ej. Muestra Statuario 60×120, Roble Escandinavo y carta de acabados oro cepillado..."
+                className="atelier-input w-full bg-surface-container-low text-base text-on-surface p-3.5 rounded border border-outline-variant/50 focus:border-primary focus:bg-surface-container-lowest focus:outline-none"
+              />
+              <p className="field-error hidden items-center gap-1 text-error font-body-sm text-body-sm">
+                <Icon name="error" className="text-[15px]" />
+                <span>Detalle qué muestras desea evaluar.</span>
+              </p>
+            </div>
 
-              <div className="flex items-center justify-end gap-space-sm pt-space-sm">
-                <button
-                  type="button"
-                  onClick={() => setSampleModalOpen(false)}
-                  className="min-h-[44px] px-space-md py-2.5 text-on-surface font-label-md text-label-md bg-surface-container hover:bg-surface-container-high rounded transition-colors"
-                >
-                  Cancelar
-                </button>
-                <button
-                  type="submit"
-                  className="min-h-[44px] px-space-lg py-2.5 text-on-primary font-label-md text-label-md bg-primary hover:bg-primary-container rounded transition-colors uppercase tracking-wider"
-                >
-                  Preparar Solicitud
-                </button>
-              </div>
-            </form>
-          )}
+            <div className="pt-1 flex flex-wrap items-center justify-end gap-2.5">
+              <button
+                type="button"
+                onClick={() => setSampleModalOpen(false)}
+                className="min-h-[44px] px-4 py-2.5 rounded bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md transition-colors"
+              >
+                Cancelar
+              </button>
+              <button
+                type="submit"
+                className="min-h-[44px] px-5 py-2.5 rounded bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md uppercase tracking-wider font-semibold transition-colors"
+              >
+                Preparar Solicitud
+              </button>
+            </div>
+
+            <div aria-live="polite">
+              {sampleSubmitted ? (
+                <div className="p-4 rounded-lg bg-surface-container-low border border-primary/30 space-y-3">
+                  <p className="font-body-sm text-body-sm text-on-surface font-medium">
+                    Solicitud lista. Elige por qué vía deseas enviarla a nuestro
+                    equipo técnico:
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-2.5">
+                    <a
+                      href={sampleWhatsAppHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 min-h-[44px] inline-flex items-center justify-center gap-1.5 bg-primary hover:bg-primary-container text-on-primary px-4 py-2.5 rounded font-label-md text-label-md uppercase font-semibold transition-colors"
+                    >
+                      <Icon name="chat" className="text-[16px]" />
+                      <span>Enviar por WhatsApp</span>
+                    </a>
+                    <a
+                      href={sampleMailHref}
+                      className="flex-1 min-h-[44px] inline-flex items-center justify-center gap-1.5 bg-surface-container-highest hover:bg-surface-variant text-on-surface px-4 py-2.5 rounded font-label-md text-label-md uppercase font-semibold transition-colors"
+                    >
+                      <Icon name="mail" className="text-[16px] text-primary" />
+                      <span>Enviar por Correo</span>
+                    </a>
+                  </div>
+                </div>
+              ) : null}
+            </div>
+          </form>
         </div>
       </ModalDialog>
-    </>
+    </div>
   );
 }

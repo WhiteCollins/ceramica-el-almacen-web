@@ -110,6 +110,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                 alt={product.imageAlt}
                 fill
                 priority
+                unoptimized
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-cover"
               />
@@ -298,6 +299,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                     src={item.image}
                     alt={item.imageAlt}
                     fill
+                    unoptimized
                     sizes="(max-width: 768px) 100vw, 33vw"
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                   />

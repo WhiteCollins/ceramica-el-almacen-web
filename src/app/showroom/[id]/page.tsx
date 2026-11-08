@@ -56,17 +56,6 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
   return (
     <div className="w-full bg-surface py-6 lg:py-12">
       <div className="max-w-7xl mx-auto px-margin-mobile lg:px-margin-desktop space-y-10 lg:space-y-14">
-        {project.draft ? (
-          <p
-            role="note"
-            className="rounded-lg border border-dashed border-outline bg-surface-container-low px-4 py-3 text-sm text-on-surface"
-          >
-            <strong>Proyecto de ejemplo.</strong> Datos e imagen ilustrativos:
-            reemplázalo por una obra real en <code>src/data/site.ts</code>{" "}
-            antes de publicarlo. No aparece en la build de producción.
-          </p>
-        ) : null}
-
         {/* Barra superior de retorno y migas de pan */}
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-surface-container-high pb-4">
           <nav
@@ -115,7 +104,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
                 className="object-cover"
               />
               <div className="absolute top-4 left-4 bg-inverse-surface/85 backdrop-blur-sm text-inverse-on-surface px-3 py-1 rounded font-label-caps text-label-caps uppercase">
-                {project.category}
+                {project.spaceBadge}
               </div>
               <div className="absolute bottom-4 right-4 bg-surface/95 backdrop-blur-sm text-primary px-3.5 py-1.5 rounded-lg font-label-md text-label-md font-semibold shadow-md">
                 {project.area}

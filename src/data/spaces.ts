@@ -32,6 +32,8 @@ export interface Space {
   label: string;
   title: string;
   description: string;
+  /** Descripción breve que se revela al hacer hover en las 4 cards de categorías. */
+  cardDetail: string;
   image: string;
   imageAlt: string;
   /** Encuadre CSS (object-position) del banner, ej. "50% 70%". */
@@ -46,6 +48,8 @@ export const SPACES: Space[] = [
     title: "Pisos de porcelanato",
     description:
       "Porcelanatos rectificados de gran formato con aspecto de mármol y de madera, de baja absorción para interiores y terrazas techadas.",
+    cardDetail:
+      "Formatos rectificados 60 × 120 y 20 × 120 cm en acabados tipo mármol pulido y madera natural antideslizante.",
     image: "/images/banners/espacio-pisos.webp",
     imageAlt:
       "Sala abierta con piso de porcelanato tipo mármol blanco pulido de gran formato y puertas de vidrio hacia una terraza con palmas",
@@ -83,6 +87,8 @@ export const SPACES: Space[] = [
     title: "Revestimientos de pared",
     description:
       "Revestimientos artesanales esmaltados y porcelanato de gran formato para muros de baños, cocinas y áreas sociales.",
+    cardDetail:
+      "Cerámica artesanal vidriada 15 × 15 cm en tonos intensos y losas de gran formato para muros con junta mínima.",
     image: "/images/banners/espacio-paredes.webp",
     imageAlt:
       "Cocina con pared de azulejos artesanales esmaltados en verde esmeralda, repisa de roble y fregadero blanco",
@@ -110,6 +116,7 @@ export const SPACES: Space[] = [
         imageAlt:
           "Baño con muro de porcelanato tipo mármol blanco de gran formato, franja de piezas decorativas en relieve, mueble de madera flotante y espejo redondo con luz",
         imagePosition: "45% 45%",
+        cardImage: "/images/banners/muro-marmol-relieve-tina.jpg",
         productIds: ["porcelanato-statuario-imperial"],
       },
     ],
@@ -120,6 +127,8 @@ export const SPACES: Space[] = [
     title: "Baños",
     description:
       "Tinas exentas, inodoros, lavamanos de apoyo y duchas termostáticas en exhibición a escala real en el showroom.",
+    cardDetail:
+      "Tinas exentas, inodoros one-piece, lavamanos escultóricos, griferías de baño y sistemas de ducha termostáticos.",
     image: "/images/banners/espacio-banos.webp",
     imageAlt:
       "Baño con tina exenta blanca, grifería de piso dorada y muros de porcelanato tipo travertino de gran formato",
@@ -145,15 +154,20 @@ export const SPACES: Space[] = [
         label: "Lavamanos",
         title: "Lavamanos y bachas",
         description:
-          "Lavamanos de apoyo en cerámica estriada y bachas esculturales de piedra para muebles de baño.",
-        image: "/images/banners/banos-lavamanos-doble.webp",
+          "Lavamanos de apoyo en cerámica estriada, bachas esculturales de piedra y grifería especializada para baño.",
+        image: "/images/banners/banos-lavamanos-piedra-roble.jpg",
         imageAlt:
-          "Mueble de madera flotante con dos lavamanos de apoyo, grifería dorada empotrada y espejos redondos con luz",
-        imagePosition: "55% 45%",
-        cardImage: "/images/banners/banos-mueble-lavamanos.webp",
+          "Mueble de madera flotante con lavamanos estriado blanco y bacha de piedra natural con griferías negras empotradas",
+        imagePosition: "55% 50%",
+        cardImage: "/images/banners/banos-lavamanos-piedra-roble.jpg",
         productIds: [
           "lavamanos-oval-fluted-ranurado",
           "bacha-escultural-mineral-stone",
+          "monomando-lavamanos-alto-negro",
+          "griferia-bimando-dorada-cep",
+          "monomando-cascada-inox-cep",
+          "monomando-cilindrico-negro-mate",
+          "monomando-bajo-cromo-espejo",
         ],
       },
       {
@@ -161,12 +175,19 @@ export const SPACES: Space[] = [
         label: "Duchas",
         title: "Duchas",
         description:
-          "Columnas de ducha termostáticas con temperatura estable y altura regulable.",
-        image: "/images/banners/tipo-banos-duchas.webp",
+          "Columnas de ducha termostáticas, sistemas empotrables a muro y desagües de acero inoxidable.",
+        image: "/images/banners/ducha-cabina-panoramica.jpg",
         imageAlt:
           "Ducha de obra con columna termostática negra mate, mampara de vidrio y muros de porcelanato tipo pizarra gris oscuro",
-        imagePosition: "72% 50%",
-        productIds: ["columna-ducha-termostatica-suecia"],
+        imagePosition: "65% 50%",
+        cardImage: "/images/banners/ducha-cabina-pizarra.jpg",
+        productIds: [
+          "columna-ducha-termostatica-suecia",
+          "sistema-ducha-empotrable-negro",
+          "griferia-mural-termostatica-ducha",
+          "columna-ducha-cuadrada-cromo",
+          "desague-ducha-oculto-negro",
+        ],
       },
     ],
   },
@@ -176,6 +197,8 @@ export const SPACES: Space[] = [
     title: "Cocinas",
     description:
       "Grifería monomando con caño extraíble y revestimientos esmaltados para salpicaderos y barras.",
+    cardDetail:
+      "Monomandos gourmet en acabado PVD oro cepillado y cerámicas esmaltadas impermeables para salpicaderos.",
     image: "/images/banners/espacio-cocinas.webp",
     imageAlt:
       "Grifería de cocina en oro cepillado con caño extraíble sobre fregadero negro y salpicadero de azulejo terracota",

@@ -17,9 +17,10 @@ export function ShowroomBanner({ topic }: { topic?: string }) {
       <div className="max-w-7xl mx-auto px-margin-mobile lg:px-margin-desktop py-14 lg:py-20 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
         <div className="relative lg:col-span-5 aspect-[16/10] overflow-hidden rounded-lg bg-surface">
           <Image
-            src="/images/showroom/vignette-sottovento.jpg"
-            alt="Ambiente de baño a escala real en el showroom de Cerámica El Almacén"
+            src="/images/banners/showroom-islas-marmol.jpg"
+            alt="Exhibición de islas de porcelanato, mármol y grifería a escala real en el showroom de Cerámica El Almacén"
             fill
+            unoptimized
             sizes="(max-width: 1024px) 100vw, 40vw"
             className="object-cover"
           />

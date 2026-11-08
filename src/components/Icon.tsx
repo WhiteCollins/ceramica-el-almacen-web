@@ -25,6 +25,7 @@ export const ICON_NAMES = [
   "domain",
   "energy_savings_leaf",
   "error",
+  "expand_more",
   "floor_lamp",
   "grid_view",
   "layers",

@@ -1,9 +1,32 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Icon } from "@/components/Icon";
 import { CATALOG_PRODUCTS } from "@/data/catalog";
-import { VISIBLE_PROJECTS, type ShowroomProject } from "@/data/site";
+import {
+  VISIBLE_PROJECTS,
+  buildWhatsAppUrl,
+  type ShowroomProject,
+} from "@/data/site";
+
+type FilterOption =
+  | "all"
+  | "Residencial"
+  | "Comercial"
+  | "Punta Cana / Bávaro"
+  | "La Romana"
+  | "Santo Domingo";
+
+const PROJECT_FILTERS: { id: FilterOption; label: string }[] = [
+  { id: "all", label: "Todos" },
+  { id: "Residencial", label: "Residencial" },
+  { id: "Comercial", label: "Hotelería / Comercial" },
+  { id: "Punta Cana / Bávaro", label: "Punta Cana / Bávaro" },
+  { id: "La Romana", label: "La Romana" },
+  { id: "Santo Domingo", label: "Santo Domingo" },
+];
 
 function productsFor(project: ShowroomProject) {
   return project.productIds
@@ -11,221 +34,367 @@ function productsFor(project: ShowroomProject) {
     .filter((p): p is (typeof CATALOG_PRODUCTS)[number] => Boolean(p));
 }
 
-function DraftBadge() {
-  return (
-    <span className="absolute top-3 left-3 z-10 rounded bg-white/95 px-2.5 py-1 text-xs font-semibold text-on-surface shadow-sm">
-      Ejemplo
-    </span>
-  );
-}
-
-/** Metadatos en una línea: ubicación, tipo y año. */
-function ProjectMeta({ project }: { project: ShowroomProject }) {
-  return (
-    <p className="text-sm text-secondary">
-      {project.location}
-      <span aria-hidden="true"> · </span>
-      {project.category}
-      <span aria-hidden="true"> · </span>
-      {project.year}
-    </p>
-  );
-}
-
-/** Proyecto destacado: foto grande y ficha con los productos usados. */
+/**
+ * Tarjeta Featured tipo Split Hero equilibrada:
+ * - Badge de ubicación superpuesto en la imagen principal (ej. Juan Dolio, Rep. Dominicana)
+ * - Badge de tipología (ej. Residencial de Lujo)
+ * - Columna de datos con KPI grande en color vino (#6b1d22) para los m² suministrados
+ * - Chips / pills interactivos de producto con enlace directo al catálogo
+ */
 function FeaturedProject({ project }: { project: ShowroomProject }) {
-  const products = productsFor(project);
   const href = `/showroom/${project.id}`;
 
   return (
-    <article className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-12 items-center">
+    <article className="grid grid-cols-1 lg:grid-cols-12 rounded-2xl bg-white border border-outline/80 shadow-sm overflow-hidden">
+      {/* Columna Imagen (50% en desktop para equilibrar pesos con la columna de datos) */}
       <Link
         href={href}
-        className="group relative block lg:col-span-7 aspect-[4/3] overflow-hidden rounded-lg bg-surface-container-low"
+        className="group relative block lg:col-span-6 aspect-[4/3] lg:aspect-auto lg:min-h-[440px] overflow-hidden bg-surface-container-low"
       >
-        {project.draft ? <DraftBadge /> : null}
         <Image
           src={project.image}
           alt={project.alt}
           fill
           priority
-          sizes="(max-width: 1024px) 100vw, 58vw"
-          className="scroll-reveal object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+          unoptimized
+          sizes="(max-width: 1024px) 100vw, 50vw"
+          className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
         />
+
+        {/* Gradiente sutil para legibilidad de los badges */}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20" />
+
+        {/* Badge de tipología superior izquierdo */}
+        <span className="absolute top-4 left-4 z-10 rounded-full bg-white/95 backdrop-blur-sm px-3.5 py-1.5 text-xs font-semibold text-on-surface shadow-sm">
+          {project.spaceBadge}
+        </span>
+
+        {/* Badge de ubicación superpuesto en la esquina inferior izquierda */}
+        <span className="absolute bottom-4 left-4 z-10 inline-flex items-center gap-1.5 rounded-full bg-inverse-surface/85 backdrop-blur-sm px-3.5 py-1.5 text-xs font-medium text-white shadow-sm">
+          <Icon name="location_on" className="text-[15px] text-white/90" />
+          <span>{project.fullLocation}</span>
+        </span>
       </Link>
 
-      <div className="lg:col-span-5 flex flex-col gap-5">
-        <div className="space-y-2">
-          <ProjectMeta project={project} />
-          <h2 className="font-serif text-3xl text-on-surface">
+      {/* Columna de Datos Equilibrada (50% en desktop) */}
+      <div className="lg:col-span-6 p-6 sm:p-8 lg:p-10 flex flex-col justify-between gap-6">
+        <div className="space-y-4">
+          {/* Metadatos claros y jerarquizados */}
+          <div className="flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-wider text-secondary">
+            <span className="text-primary">{project.category}</span>
+            <span aria-hidden="true">•</span>
+            <span>{project.location}</span>
+            <span aria-hidden="true">•</span>
+            <span>Entrega {project.year}</span>
+          </div>
+
+          <h2 className="font-serif text-2xl sm:text-3xl lg:text-[34px] text-on-surface leading-tight">
             <Link href={href} className="hover:text-primary transition-colors">
               {project.title}
             </Link>
           </h2>
-          <p className="text-base text-secondary">{project.summary}</p>
+
+          <p className="text-sm sm:text-base text-secondary leading-relaxed">
+            {project.summary}
+          </p>
         </div>
 
-        <p className="text-base font-semibold text-on-surface">
-          {project.area}
-        </p>
+        {/* KPI Grande de Capacidad de Suministro con acento en color vino (#6b1d22) */}
+        <div className="flex items-baseline gap-3 rounded-xl bg-surface-container-low px-5 py-4 border border-outline/60">
+          <span className="font-serif text-3xl sm:text-4xl font-semibold text-[#6b1d22] tracking-tight">
+            {project.areaValue}
+          </span>
+          <span className="text-xs sm:text-sm font-medium text-secondary">
+            {project.areaUnit} · Lote único garantizado
+          </span>
+        </div>
 
-        {products.length > 0 ? (
-          <div className="space-y-2.5 border-t border-outline pt-5">
-            <h3 className="text-sm font-semibold text-on-surface">
-              Productos usados
-            </h3>
-            <ul role="list" className="flex flex-col gap-2">
-              {products.map((product) => (
-                <li key={product.id}>
-                  <Link
-                    href={`/catalogo/${product.id}`}
-                    className="group/prod flex items-center gap-3 min-h-[44px] rounded-lg"
-                  >
-                    <span className="relative h-12 w-12 shrink-0 overflow-hidden rounded-md bg-surface-container-low">
-                      <Image
-                        src={product.image}
-                        alt=""
-                        fill
-                        sizes="48px"
-                        className="object-cover"
-                      />
-                    </span>
-                    <span className="text-sm text-on-surface group-hover/prod:text-primary group-hover/prod:underline">
-                      {product.name}
-                    </span>
-                  </Link>
-                </li>
+        {/* Chips / Pills interactivos de producto con enlace directo al catálogo */}
+        {project.materials.length > 0 ? (
+          <div className="space-y-2.5">
+            <span className="text-xs font-semibold uppercase tracking-wider text-secondary block">
+              Materiales especificados
+            </span>
+            <div className="flex flex-wrap gap-2">
+              {project.materials.map((material) => (
+                <Link
+                  key={material.href + material.label}
+                  href={material.href}
+                  className="inline-flex items-center gap-1.5 rounded-full bg-surface hover:bg-[#6b1d22] text-on-surface hover:text-white border border-outline px-3.5 py-1.5 text-xs font-medium transition-colors"
+                >
+                  <span>{material.label}</span>
+                  <Icon name="arrow_forward" className="text-[13px]" />
+                </Link>
               ))}
-            </ul>
+            </div>
           </div>
         ) : null}
 
-        <Link
-          href={href}
-          className="w-fit min-h-[44px] inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-semibold text-white hover:bg-primary-container transition-colors"
-        >
-          <span>Ver proyecto</span>
-          <Icon name="arrow_forward" className="text-[18px]" />
-        </Link>
+        {/* Acción principal */}
+        <div className="pt-1 flex flex-wrap items-center gap-3">
+          <Link
+            href={href}
+            className="min-h-[44px] inline-flex items-center gap-2 rounded-lg bg-primary hover:bg-primary-container px-5 py-2.5 text-sm font-semibold text-white transition-colors"
+          >
+            <span>Ver proyecto completo</span>
+            <Icon name="arrow_forward" className="text-[17px]" />
+          </Link>
+        </div>
       </div>
     </article>
   );
 }
 
-/** Tarjeta de proyecto: misma proporción de foto y mismo orden de datos. */
+/**
+ * Tarjeta de proyecto enriquecida en el grid:
+ * - Proporción uniforme aspect-[4/3] con zoom suave al hover
+ * - Badge con el tipo de espacio (Residencial de Lujo, Comercial / Hotelería, Penthouse) en lugar de "Ejemplo"
+ * - Tag de ciudad (La Romana, San Pedro, Bávaro, Santo Domingo) directamente sobre la foto
+ * - Avatares circulares superpuestos en la esquina inferior con tooltip del material al pasar el ratón
+ * - KPI de suministro destacado en color vino (#6b1d22)
+ */
 export function ProjectCard({ project }: { project: ShowroomProject }) {
   const products = productsFor(project);
   const href = `/showroom/${project.id}`;
 
   return (
-    <article className="flex flex-col gap-4">
-      <Link
-        href={href}
-        className="group relative block aspect-[4/3] overflow-hidden rounded-lg bg-surface-container-low"
-      >
-        {project.draft ? <DraftBadge /> : null}
-        <Image
-          src={project.image}
-          alt={project.alt}
-          fill
-          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          className="scroll-reveal object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-        />
-      </Link>
+    <article className="group flex flex-col rounded-2xl bg-white border border-outline/75 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300">
+      <div className="relative aspect-[4/3] w-full overflow-hidden bg-surface-container-low">
+        <Link href={href} className="block w-full h-full">
+          <Image
+            src={project.image}
+            alt={project.alt}
+            fill
+            unoptimized
+            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+          />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent" />
+        </Link>
 
-      <div className="flex flex-col gap-2">
-        <ProjectMeta project={project} />
-        <h2 className="font-serif text-xl text-on-surface">
-          <Link href={href} className="hover:text-primary transition-colors">
-            {project.title}
-          </Link>
-        </h2>
-        <p className="text-sm text-secondary line-clamp-2">{project.summary}</p>
-      </div>
-
-      <div className="mt-auto flex items-center justify-between gap-3 border-t border-outline pt-3">
-        <span className="text-sm font-semibold text-on-surface">
-          {project.area}
+        {/* Tipo de espacio (reemplaza el antiguo badge "Ejemplo") */}
+        <span className="pointer-events-none absolute top-3.5 left-3.5 z-10 rounded-full bg-white/95 backdrop-blur-sm px-3 py-1 text-xs font-semibold text-on-surface shadow-sm">
+          {project.spaceBadge}
         </span>
+
+        {/* Tag de ciudad directamente sobre la foto */}
+        <span className="pointer-events-none absolute top-3.5 right-3.5 z-10 inline-flex items-center gap-1 rounded-full bg-inverse-surface/85 backdrop-blur-sm px-3 py-1 text-xs font-medium text-white">
+          <Icon name="location_on" className="text-[13px]" />
+          <span>{project.location}</span>
+        </span>
+
+        {/* Avatares circulares superpuestos en la esquina inferior de la foto con tooltip al pasar el ratón */}
         {products.length > 0 ? (
-          <ul role="list" aria-label="Productos usados" className="flex -space-x-2">
+          <ul
+            role="list"
+            aria-label="Materiales utilizados"
+            className="absolute bottom-3 left-3.5 z-10 flex items-center -space-x-2"
+          >
             {products.map((product) => (
-              <li key={product.id}>
+              <li key={product.id} className="relative group/avatar">
                 <Link
                   href={`/catalogo/${product.id}`}
-                  title={product.name}
-                  className="relative block h-11 w-11 overflow-hidden rounded-full border-2 border-surface bg-surface-container-low hover:z-10 hover:scale-110 transition-transform"
+                  aria-label={product.name}
+                  className="relative block h-10 w-10 overflow-hidden rounded-full border-2 border-white bg-surface shadow-md hover:z-20 hover:scale-110 transition-transform"
                 >
                   <Image
                     src={product.image}
                     alt={product.name}
                     fill
-                    sizes="44px"
+                    unoptimized
+                    sizes="40px"
                     className="object-cover"
                   />
                 </Link>
+                {/* Tooltip del material al pasar el ratón */}
+                <span className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2 whitespace-nowrap rounded-md bg-inverse-surface px-2.5 py-1 text-[11px] font-medium text-white opacity-0 translate-y-1 group-hover/avatar:opacity-100 group-hover/avatar:translate-y-0 transition-all shadow-md z-30">
+                  {product.name}
+                </span>
               </li>
             ))}
           </ul>
         ) : null}
       </div>
+
+      {/* Cuerpo de la tarjeta */}
+      <div className="p-5 flex flex-col justify-between flex-1 gap-4">
+        <div className="space-y-1.5">
+          <div className="flex items-center justify-between gap-2 text-xs font-medium text-secondary">
+            <span>
+              {project.location} · {project.year}
+            </span>
+            <span className="font-semibold text-[#6b1d22]">{project.area}</span>
+          </div>
+
+          <h3 className="font-serif text-xl text-on-surface group-hover:text-primary transition-colors">
+            <Link href={href}>{project.title}</Link>
+          </h3>
+
+          <p className="text-sm text-secondary line-clamp-2 leading-relaxed">
+            {project.summary}
+          </p>
+        </div>
+
+        {/* Chips compactos de productos + enlace al proyecto */}
+        <div className="pt-3 border-t border-outline/60 flex items-center justify-between gap-2">
+          <div className="flex flex-wrap gap-1.5">
+            {project.materials.slice(0, 2).map((mat) => (
+              <Link
+                key={mat.href + mat.label}
+                href={mat.href}
+                className="rounded-full bg-surface-container-low hover:bg-surface-container px-2.5 py-1 text-[11px] font-medium text-on-surface transition-colors"
+              >
+                {mat.label}
+              </Link>
+            ))}
+          </div>
+
+          <Link
+            href={href}
+            className="inline-flex items-center gap-1 text-xs font-semibold text-primary group-hover:translate-x-0.5 transition-transform shrink-0"
+          >
+            <span>Ver obra</span>
+            <Icon name="arrow_forward" className="text-[14px]" />
+          </Link>
+        </div>
+      </div>
     </article>
   );
 }
 
-/** Ocupa el hueco de la última fila para que la cuadrícula no quede coja. */
+/**
+ * Tarjeta CTA de captación ("Tu obra puede ser la próxima"):
+ * Card con fondo cálido sutil y borde sólido premium con botón de acción directo:
+ * "Enviar planos para cubicación".
+ */
 function NextProjectCard() {
+  const whatsappPlanesHref = buildWhatsAppUrl(
+    "Hola, deseo enviar los planos de mi proyecto para cubicación y reserva de lote."
+  );
+
   return (
-    <Link
-      href="/contacto"
-      className="group flex flex-col justify-center gap-3 rounded-lg border border-dashed border-outline p-8 min-h-[280px] hover:border-primary hover:bg-surface-container-low transition-colors"
-    >
-      <h2 className="font-serif text-xl text-on-surface">
-        Tu obra puede ser la próxima
-      </h2>
-      <p className="text-sm text-secondary max-w-xs">
-        Cubicamos tus planos, reservamos un solo lote y despachamos a pie de
-        obra en todo el país.
-      </p>
-      <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary group-hover:underline">
-        <span>Cotizar mi proyecto</span>
-        <Icon name="arrow_forward" className="text-[18px]" />
-      </span>
-    </Link>
+    <article className="flex flex-col justify-between rounded-2xl border border-[#6b1d22]/25 bg-gradient-to-br from-[#FAF6F2] via-surface-container-low to-[#F3ECE4] p-7 lg:p-8 shadow-sm">
+      <div className="space-y-4">
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-[#6b1d22]/10 text-[#6b1d22] px-3 py-1 text-xs font-semibold">
+          <Icon name="architecture" className="text-[15px]" />
+          <span>Departamento Técnico &amp; Obras</span>
+        </span>
+
+        <h3 className="font-serif text-2xl text-on-surface leading-snug">
+          Tu obra puede ser la próxima
+        </h3>
+
+        <p className="text-sm text-secondary leading-relaxed">
+          Cubicamos tus planos DWG o PDF sin costo, garantizamos reserva de un
+          solo lote para evitar variaciones de tono y programamos despachos a
+          pie de obra en todo el país.
+        </p>
+
+        <ul className="space-y-2 pt-1 text-xs text-on-surface font-medium">
+          <li className="flex items-center gap-2">
+            <Icon name="check_circle" className="text-[16px] text-[#6b1d22]" />
+            <span>Cálculo exacto de m² y porcentaje de desperdicio</span>
+          </li>
+          <li className="flex items-center gap-2">
+            <Icon name="check_circle" className="text-[16px] text-[#6b1d22]" />
+            <span>Muestras físicas para presentación a clientes</span>
+          </li>
+        </ul>
+      </div>
+
+      <div className="pt-6 flex flex-col gap-2.5">
+        <Link
+          href="/contacto"
+          className="w-full min-h-[44px] inline-flex items-center justify-center gap-2 rounded-lg bg-[#6b1d22] hover:bg-primary-container text-white px-5 py-3 text-sm font-semibold shadow-sm transition-colors"
+        >
+          <Icon name="assignment" className="text-[17px]" />
+          <span>Enviar planos para cubicación</span>
+        </Link>
+        <a
+          href={whatsappPlanesHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-full min-h-[40px] inline-flex items-center justify-center gap-1.5 rounded-lg bg-white hover:bg-surface text-on-surface border border-outline px-4 py-2 text-xs font-semibold transition-colors"
+        >
+          <Icon name="chat" className="text-[15px] text-[#6b1d22]" />
+          <span>Hablar con especialista de obras</span>
+        </a>
+      </div>
+    </article>
   );
 }
 
 export function ProjectsGrid() {
-  const [featured, ...rest] = VISIBLE_PROJECTS;
-  const regions = new Set(VISIBLE_PROJECTS.map((p) => p.location)).size;
-  const columns = rest.length >= 3 ? 3 : 2;
-  const leavesGap = rest.length > 0 && rest.length % columns !== 0;
+  const [activeFilter, setActiveFilter] = useState<FilterOption>("all");
+
+  const filteredProjects = VISIBLE_PROJECTS.filter((project) => {
+    if (activeFilter === "all") return true;
+    if (activeFilter === "Residencial" || activeFilter === "Comercial") {
+      return project.category === activeFilter;
+    }
+    return project.regionFilter === activeFilter;
+  });
+
+  const [featured, ...rest] = filteredProjects;
+  const gridProjects = activeFilter === "all" ? rest : filteredProjects;
 
   return (
-    <div className="flex flex-col gap-12 lg:gap-16">
-      <header className="max-w-2xl space-y-3">
-        <h1 className="font-serif text-4xl text-on-surface">Proyectos</h1>
-        <p className="text-base text-secondary">
-          Obras residenciales y comerciales que equipamos desde nuestro
-          almacén en San Pedro de Macorís: {VISIBLE_PROJECTS.length} proyectos
-          en {regions} localidades de la República Dominicana.
-        </p>
-      </header>
+    <div className="flex flex-col gap-10 lg:gap-12">
+      {/* Encabezado + Barra de Filtros por Tipología y Ubicación */}
+      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 border-b border-outline/70 pb-6">
+        <header className="max-w-2xl space-y-2.5">
+          <span className="text-xs font-semibold uppercase tracking-wider text-primary">
+            Portafolio de Suministro &amp; Especificación
+          </span>
+          <h1 className="font-serif text-3xl sm:text-4xl text-on-surface">
+            Proyectos y obras equipadas
+          </h1>
+          <p className="text-sm sm:text-base text-secondary">
+            Residencias privadas, desarrollos turísticos y espacios comerciales
+            suministrados con reserva de lote en toda la República Dominicana.
+          </p>
+        </header>
 
-      {featured ? <FeaturedProject project={featured} /> : null}
-
-      {rest.length > 0 ? (
+        {/* Selector de filtros por tipología y ubicación */}
         <div
-          className={`grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-12 ${
-            columns === 3 ? "lg:grid-cols-3" : ""
-          }`}
+          role="tablist"
+          aria-label="Filtrar proyectos por tipología o ubicación"
+          className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar"
         >
-          {rest.map((project) => (
-            <ProjectCard key={project.id} project={project} />
-          ))}
-          {leavesGap ? <NextProjectCard /> : null}
+          {PROJECT_FILTERS.map((filter) => {
+            const isSelected = activeFilter === filter.id;
+            return (
+              <button
+                key={filter.id}
+                type="button"
+                role="tab"
+                aria-selected={isSelected}
+                onClick={() => setActiveFilter(filter.id)}
+                className={
+                  isSelected
+                    ? "shrink-0 inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#6b1d22] text-white text-xs sm:text-sm font-semibold shadow-sm transition-all"
+                    : "shrink-0 inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white hover:bg-surface-container-low text-on-surface border border-outline/80 text-xs sm:text-sm font-medium transition-all"
+                }
+              >
+                <span>{filter.label}</span>
+              </button>
+            );
+          })}
         </div>
+      </div>
+
+      {/* Tarjeta Principal Split Hero (cuando se visualizan "Todos") */}
+      {activeFilter === "all" && featured ? (
+        <FeaturedProject project={featured} />
       ) : null}
+
+      {/* Grid de Proyectos + Tarjeta CTA de Captación */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        {gridProjects.map((project) => (
+          <ProjectCard key={project.id} project={project} />
+        ))}
+        <NextProjectCard />
+      </div>
     </div>
   );
 }
