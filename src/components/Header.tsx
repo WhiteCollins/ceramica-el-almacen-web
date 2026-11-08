@@ -412,7 +412,7 @@ export function Header() {
                   {SPACES.map((space) => (
                     <Link
                       key={space.slug}
-                      href={`/${space.slug}`}
+                      href={space.catalogHref}
                       onClick={() => setCatalogMenuOpen(false)}
                       className="group relative block aspect-[16/10] w-full rounded-xl overflow-hidden bg-surface-container-low shadow-sm hover:shadow-md transition-all"
                     >
@@ -494,7 +494,7 @@ export function Header() {
                       {SPACES.map((space) => (
                         <Link
                           key={space.slug}
-                          href={`/${space.slug}`}
+                          href={space.catalogHref}
                           onClick={() => setMobileMenuOpen(false)}
                           className="relative aspect-[16/10] rounded-lg overflow-hidden group"
                         >

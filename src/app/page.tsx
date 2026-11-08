@@ -31,7 +31,7 @@ export default function HomePage() {
                 className="scroll-reveal flex flex-col gap-3"
               >
                 <Link
-                  href={`/${space.slug}`}
+                  href={space.catalogHref}
                   className="
                     card-wine-glow group relative block overflow-hidden
                     aspect-[4/3] sm:aspect-[5/4] rounded-xl bg-inverse-surface

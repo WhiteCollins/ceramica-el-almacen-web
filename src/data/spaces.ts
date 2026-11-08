@@ -34,6 +34,8 @@ export interface Space {
   description: string;
   /** Descripción breve que se revela al hacer hover en las 4 cards de categorías. */
   cardDetail: string;
+  /** Enlace directo al catálogo filtrado para esta categoría. */
+  catalogHref: string;
   image: string;
   imageAlt: string;
   /** Encuadre CSS (object-position) del banner, ej. "50% 70%". */
@@ -50,6 +52,7 @@ export const SPACES: Space[] = [
       "Porcelanatos rectificados de gran formato con aspecto de mármol y de madera, de baja absorción para interiores y terrazas techadas.",
     cardDetail:
       "Formatos rectificados 60 × 120 y 20 × 120 cm en acabados tipo mármol pulido y madera natural antideslizante.",
+    catalogHref: "/catalogo?categoria=porcelanato",
     image: "/images/banners/espacio-pisos.webp",
     imageAlt:
       "Sala abierta con piso de porcelanato tipo mármol blanco pulido de gran formato y puertas de vidrio hacia una terraza con palmas",
@@ -89,6 +92,7 @@ export const SPACES: Space[] = [
       "Revestimientos artesanales esmaltados y porcelanato de gran formato para muros de baños, cocinas y áreas sociales.",
     cardDetail:
       "Cerámica artesanal vidriada 15 × 15 cm en tonos intensos y losas de gran formato para muros con junta mínima.",
+    catalogHref: "/catalogo?categoria=revestimiento",
     image: "/images/banners/espacio-paredes.webp",
     imageAlt:
       "Cocina con pared de azulejos artesanales esmaltados en verde esmeralda, repisa de roble y fregadero blanco",
@@ -129,6 +133,7 @@ export const SPACES: Space[] = [
       "Tinas exentas, inodoros, lavamanos de apoyo y duchas termostáticas en exhibición a escala real en el showroom.",
     cardDetail:
       "Tinas exentas, inodoros one-piece, lavamanos escultóricos, griferías de baño y sistemas de ducha termostáticos.",
+    catalogHref: "/catalogo?categoria=sanitarios",
     image: "/images/banners/espacio-banos.webp",
     imageAlt:
       "Baño con tina exenta blanca, grifería de piso dorada y muros de porcelanato tipo travertino de gran formato",
@@ -199,6 +204,7 @@ export const SPACES: Space[] = [
       "Grifería monomando con caño extraíble y revestimientos esmaltados para salpicaderos y barras.",
     cardDetail:
       "Monomandos gourmet en acabado PVD oro cepillado y cerámicas esmaltadas impermeables para salpicaderos.",
+    catalogHref: "/catalogo?categoria=griferia",
     image: "/images/banners/espacio-cocinas.webp",
     imageAlt:
       "Grifería de cocina en oro cepillado con caño extraíble sobre fregadero negro y salpicadero de azulejo terracota",
