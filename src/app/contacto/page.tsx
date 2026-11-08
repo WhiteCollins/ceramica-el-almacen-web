@@ -12,7 +12,7 @@ import {
 export const metadata: Metadata = {
   title: "Contacto",
   description:
-    "Solicita tu cotización, contacta a nuestras asesoras o visita nuestros showrooms en Santiago y La Romana.",
+    "Solicita tu cotización, contacta a nuestras asesoras o visita nuestros showrooms en San Pedro de Macorís y La Romana.",
 };
 
 export default function ContactoPage() {

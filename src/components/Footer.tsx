@@ -55,7 +55,9 @@ export function Footer() {
                   className="text-[18px] text-primary shrink-0 mt-1"
                 />
                 <div>
-                  <p className="font-semibold text-on-surface">Santiago</p>
+                  <p className="font-semibold text-on-surface">
+                    San Pedro de Macorís
+                  </p>
                   <p>Av. Rolando Martínez 33</p>
                   <a
                     href="tel:+18092462221"

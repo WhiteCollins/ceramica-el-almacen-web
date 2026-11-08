@@ -17,13 +17,13 @@ export const SITE_INFO = {
   instagramUrl: "https://instagram.com/ceramicaelalmacenalterna",
   address: {
     street: "Av. Rolando Martínez 33",
-    city: "Santiago",
-    postalCode: "51000",
+    city: "San Pedro de Macorís",
+    postalCode: "21000",
     country: "República Dominicana",
-    full: "Av. Rolando Martínez 33, Santiago, República Dominicana",
+    full: "Av. Rolando Martínez 33, San Pedro de Macorís, República Dominicana",
   },
   mapsUrl:
-    "https://maps.google.com/?q=Av.+Rolando+Mart%C3%ADnez+33,+Santiago",
+    "https://maps.google.com/?q=Av.+Rolando+Mart%C3%ADnez+33,+San+Pedro+de+Macor%C3%ADs",
   wazeUrl:
     "https://waze.com/ul?q=Ceramica+El+Almacen+Av+Rolando+Martinez+33",
   hours: {
@@ -33,14 +33,14 @@ export const SITE_INFO = {
   },
   locations: [
     {
-      id: "santiago",
-      name: "Ubicación 1 (Santiago)",
-      city: "Santiago",
+      id: "san-pedro",
+      name: "Ubicación 1 (San Pedro de Macorís)",
+      city: "San Pedro de Macorís",
       address: "Av. Rolando Martínez 33",
       phoneDisplay: "+1 809-246-2221",
       phoneHref: "tel:+18092462221",
       mapsUrl:
-        "https://maps.google.com/?q=Av.+Rolando+Mart%C3%ADnez+33,+Santiago",
+        "https://maps.google.com/?q=Av.+Rolando+Mart%C3%ADnez+33,+San+Pedro+de+Macor%C3%ADs",
       hours: {
         weekdays: "Lunes a viernes: 8:00 AM – 6:00 PM",
         saturday: "Sábados: 8:30 AM – 1:00 PM",
