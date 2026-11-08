@@ -146,7 +146,7 @@ export function Footer() {
           </p>
           <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-1 font-label-md text-label-md">
             <Link
-              href="/contacto#faq"
+              href="/terminos"
               className="inline-flex items-center min-h-[44px] py-2 px-1 hover:text-primary transition-colors"
             >
               Términos de Garantía
