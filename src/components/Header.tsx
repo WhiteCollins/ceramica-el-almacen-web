@@ -7,7 +7,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { BrandLogo } from "@/components/BrandLogo";
 import { Icon } from "@/components/Icon";
 import { ModalDialog } from "@/components/ModalDialog";
-import { CATALOG_PRODUCTS } from "@/data/catalog";
+import { CATALOG_PRODUCTS, CATEGORY_FILTERS, FINISH_FILTERS } from "@/data/catalog";
 import { SITE_INFO, buildWhatsAppUrl } from "@/data/site";
 import { SPACES } from "@/data/spaces";
 
@@ -43,13 +43,11 @@ export function Header() {
   const searchContainerRef = useRef<HTMLDivElement>(null);
   const closeMenuTimerRef = useRef<number | null>(null);
 
-  // Cierra el megamenú y el buscador al cambiar de ruta
   useEffect(() => {
     setCatalogMenuOpen(false);
     setSearchOpen(false);
   }, [pathname]);
 
-  // Enfoca el input al abrir la barra de búsqueda desplegable
   useEffect(() => {
     if (searchOpen) {
       const id = window.setTimeout(() => {
@@ -59,7 +57,6 @@ export function Header() {
     }
   }, [searchOpen]);
 
-  // Cierra la barra de búsqueda al hacer clic fuera o presionar Escape
   useEffect(() => {
     if (!searchOpen) return;
 
@@ -100,7 +97,7 @@ export function Header() {
     }
     closeMenuTimerRef.current = window.setTimeout(() => {
       setCatalogMenuOpen(false);
-    }, 120);
+    }, 130);
   };
 
   const quickResults = useMemo(() => {
@@ -131,9 +128,22 @@ export function Header() {
     pathname.startsWith("/catalogo/") ||
     SPACE_SLUGS.has(firstSegment);
 
+  const catalogCategoryLinks = CATEGORY_FILTERS.filter((c) => c.id !== "all");
+
   return (
     <>
-      {/* Header Sticky con expansión fluida de megamenú al pasar el puntero sobre "Catálogo" */}
+      {/* Cortina oscura editorial (estilo Manolo Blahnik) cuando se despliega el megamenú */}
+      <div
+        aria-hidden="true"
+        onClick={() => setCatalogMenuOpen(false)}
+        className={`hidden lg:block fixed inset-0 z-30 bg-black/25 backdrop-blur-[1px] transition-opacity duration-300 ${
+          catalogMenuOpen
+            ? "opacity-100 pointer-events-auto"
+            : "opacity-0 pointer-events-none"
+        }`}
+      />
+
+      {/* Header Sticky Editorial */}
       <header
         onMouseLeave={scheduleCloseMegaMenu}
         onKeyDown={(e) => {
@@ -143,22 +153,12 @@ export function Header() {
         }}
         className="site-sticky-header w-full"
       >
-        <div className="site-sticky-bar bg-surface/95 backdrop-blur-md shadow-[0_1px_6px_rgba(0,0,0,0.04)] border-b border-surface-container-high">
-          <div className="h-16 lg:h-20 w-full px-margin-mobile lg:px-margin-desktop max-w-7xl mx-auto flex items-center justify-between lg:grid lg:grid-cols-[1fr_auto_1fr] gap-2 sm:gap-gutter">
-            {/* Logo */}
-            <div className="flex items-center justify-start">
-              <Link
-                href="/"
-                className="inline-flex items-center min-h-[44px] py-1 rounded"
-              >
-                <BrandLogo />
-              </Link>
-            </div>
-
-            {/* Navegación Principal Centrada */}
+        <div className="site-sticky-bar bg-white/95 backdrop-blur-md border-b border-outline/60">
+          <div className="h-16 lg:h-[74px] w-full px-margin-mobile lg:px-margin-desktop max-w-7xl mx-auto flex items-center justify-between lg:grid lg:grid-cols-12 gap-2">
+            {/* Navegación Izquierda (Estilo Manolo Blahnik: uppercase tracking-widest text-xs) */}
             <nav
               aria-label="Principal"
-              className="hidden lg:flex items-center justify-center gap-8 xl:gap-10"
+              className="hidden lg:flex lg:col-span-5 items-center justify-start gap-7 xl:gap-9 h-full"
             >
               {NAV_ITEMS.map((item) => {
                 const isActive = item.hasMegaMenu
@@ -179,7 +179,7 @@ export function Header() {
                           scheduleCloseMegaMenu();
                         }
                       }}
-                      className="relative flex items-center"
+                      className="relative flex items-center h-full"
                     >
                       <Link
                         href={item.href}
@@ -188,17 +188,17 @@ export function Header() {
                         aria-current={
                           pathname === item.href ? "page" : undefined
                         }
-                        className={
+                        className={`inline-flex items-center gap-1.5 h-full text-xs uppercase tracking-[0.2em] transition-colors border-b-2 ${
                           isActive || catalogMenuOpen
-                            ? "inline-flex items-center gap-1 min-h-[44px] px-1 transition-colors text-primary font-label-lg text-label-lg font-semibold border-b-2 border-primary"
-                            : "inline-flex items-center gap-1 min-h-[44px] px-1 text-on-surface-variant hover:text-on-surface font-label-lg text-label-lg transition-colors"
-                        }
+                            ? "text-on-surface font-semibold border-[#6b1d22]"
+                            : "text-on-surface/80 hover:text-on-surface border-transparent"
+                        }`}
                       >
                         <span>{item.label}</span>
                         <Icon
                           name="expand_more"
-                          className={`text-[18px] transition-transform duration-300 ${
-                            catalogMenuOpen ? "rotate-180 text-primary" : ""
+                          className={`text-[15px] transition-transform duration-300 ${
+                            catalogMenuOpen ? "rotate-180 text-[#6b1d22]" : ""
                           }`}
                         />
                       </Link>
@@ -212,11 +212,11 @@ export function Header() {
                     href={item.href}
                     onMouseEnter={() => setCatalogMenuOpen(false)}
                     aria-current={pathname === item.href ? "page" : undefined}
-                    className={
+                    className={`inline-flex items-center h-full text-xs uppercase tracking-[0.2em] transition-colors border-b-2 ${
                       isActive
-                        ? "inline-flex items-center min-h-[44px] px-1 transition-colors text-primary font-label-lg text-label-lg font-semibold border-b-2 border-primary"
-                        : "inline-flex items-center min-h-[44px] px-1 text-on-surface-variant hover:text-on-surface font-label-lg text-label-lg transition-colors"
-                    }
+                        ? "text-on-surface font-semibold border-[#6b1d22]"
+                        : "text-on-surface/80 hover:text-on-surface border-transparent"
+                    }`}
                   >
                     {item.label}
                   </Link>
@@ -224,8 +224,18 @@ export function Header() {
               })}
             </nav>
 
-            {/* Buscador desplegable hacia la izquierda de la lupa + botón menú móvil */}
-            <div className="flex items-center justify-end gap-1.5 sm:gap-2">
+            {/* Logotipo Protagonista Centrado (En móvil a la izquierda, en escritorio centrado col-span-3) */}
+            <div className="flex items-center justify-start lg:justify-center lg:col-span-3">
+              <Link
+                href="/"
+                className="inline-flex items-center min-h-[44px] py-1"
+              >
+                <BrandLogo />
+              </Link>
+            </div>
+
+            {/* Utilidades Derecha: Buscador desplegable hacia la izquierda + Acceso rápido */}
+            <div className="flex items-center justify-end gap-2 lg:col-span-4">
               <div
                 ref={searchContainerRef}
                 className="relative flex items-center justify-end"
@@ -238,7 +248,7 @@ export function Header() {
                     <div
                       className={`overflow-hidden transition-all duration-300 ease-out flex items-center ${
                         searchOpen
-                          ? "w-[210px] sm:w-[270px] lg:w-[300px] opacity-100 mr-1.5"
+                          ? "w-[200px] sm:w-[250px] lg:w-[260px] opacity-100 mr-1.5"
                           : "w-0 opacity-0 mr-0 pointer-events-none"
                       }`}
                     >
@@ -258,7 +268,7 @@ export function Header() {
                           spellCheck={false}
                           tabIndex={searchOpen ? 0 : -1}
                           placeholder="Buscar acabado, medida, SKU..."
-                          className="w-full h-10 bg-white text-sm text-on-surface pl-3.5 pr-8 rounded-full border border-outline focus:border-primary focus:outline-none transition-colors shadow-sm"
+                          className="w-full h-9 bg-surface text-xs tracking-wide text-on-surface pl-3 pr-8 border border-outline focus:border-on-surface focus:outline-none transition-colors"
                         />
                         {quickQuery ? (
                           <button
@@ -269,9 +279,9 @@ export function Header() {
                             }}
                             aria-label="Limpiar texto de búsqueda"
                             tabIndex={searchOpen ? 0 : -1}
-                            className="absolute right-1.5 top-1/2 -translate-y-1/2 h-7 w-7 inline-flex items-center justify-center rounded-full text-secondary hover:text-on-surface"
+                            className="absolute right-1.5 top-1/2 -translate-y-1/2 h-6 w-6 inline-flex items-center justify-center text-secondary hover:text-on-surface"
                           >
-                            <Icon name="close" className="text-[16px]" />
+                            <Icon name="close" className="text-[15px]" />
                           </button>
                         ) : null}
                       </div>
@@ -297,22 +307,22 @@ export function Header() {
                           ? "Ejecutar o cerrar búsqueda"
                           : "Abrir barra de búsqueda"
                       }
-                      className={`min-h-[44px] min-w-[44px] inline-flex items-center justify-center rounded-full transition-colors ${
+                      className={`min-h-[42px] min-w-[42px] inline-flex items-center justify-center transition-colors ${
                         searchOpen
-                          ? "bg-primary text-white"
-                          : "text-on-surface-variant hover:text-on-surface hover:bg-surface-container"
+                          ? "bg-on-surface text-white"
+                          : "text-on-surface hover:text-[#6b1d22]"
                       }`}
                     >
-                      <Icon name="search" className="text-[22px]" />
+                      <Icon name="search" className="text-[20px]" />
                     </button>
                   </form>
                 </search>
 
                 {/* Sugerencias rápidas cuando el usuario escribe en el buscador */}
                 {searchOpen && quickQuery.trim().length > 0 ? (
-                  <div className="absolute right-0 top-full mt-2 w-[300px] sm:w-[360px] rounded-xl bg-white border border-outline shadow-lg p-3 z-50">
+                  <div className="absolute right-0 top-full mt-2 w-[300px] sm:w-[350px] bg-white border border-outline shadow-xl p-3 z-50">
                     <div className="flex items-center justify-between px-2 pb-2 border-b border-outline/60">
-                      <span className="text-xs font-semibold uppercase tracking-wider text-secondary">
+                      <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-secondary">
                         Resultados ({quickResults.length})
                       </span>
                       <Link
@@ -320,7 +330,7 @@ export function Header() {
                           quickQuery.trim()
                         )}`}
                         onClick={() => setSearchOpen(false)}
-                        className="text-xs font-semibold text-primary hover:underline"
+                        className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#6b1d22] hover:underline"
                       >
                         Ver todos →
                       </Link>
@@ -340,20 +350,21 @@ export function Header() {
                             <Link
                               href={`/catalogo/${product.id}`}
                               onClick={() => setSearchOpen(false)}
-                              className="flex items-center gap-3 py-2 px-2 hover:bg-surface-container-low rounded-lg transition-colors"
+                              className="flex items-center gap-3 py-2.5 px-2 hover:bg-surface-container-low transition-colors"
                             >
                               <Image
                                 src={product.image}
                                 alt={product.imageAlt}
-                                width={40}
-                                height={40}
-                                className="w-10 h-10 object-cover rounded bg-surface-container shrink-0"
+                                width={42}
+                                height={42}
+                                unoptimized
+                                className="w-10 h-10 object-cover bg-surface-container shrink-0"
                               />
                               <div className="flex-1 min-w-0">
-                                <p className="text-sm font-medium text-on-surface truncate">
+                                <p className="text-xs font-semibold uppercase tracking-wider text-on-surface truncate">
                                   {product.name}
                                 </p>
-                                <p className="text-xs text-secondary truncate">
+                                <p className="text-[11px] text-secondary truncate">
                                   {product.dimensionsLabel} · {product.finish}
                                 </p>
                               </div>
@@ -366,77 +377,135 @@ export function Header() {
                 ) : null}
               </div>
 
+              <Link
+                href="/contacto"
+                className="hidden xl:inline-flex items-center justify-center min-h-[38px] px-4 border border-on-surface text-on-surface hover:bg-on-surface hover:text-white text-[11px] uppercase tracking-[0.2em] font-medium transition-colors"
+              >
+                Cotizar
+              </Link>
+
               <button
                 type="button"
                 onClick={() => setMobileMenuOpen(true)}
                 aria-label="Abrir menú de navegación"
-                className="lg:hidden min-h-[44px] min-w-[44px] inline-flex items-center justify-center text-on-surface hover:bg-surface-container rounded transition-colors"
+                className="lg:hidden min-h-[44px] min-w-[44px] inline-flex items-center justify-center text-on-surface hover:bg-surface-container transition-colors"
               >
                 <Icon name="menu" className="text-[24px]" />
               </button>
             </div>
           </div>
 
-          {/* Megamenú Desplegable de Catálogo con tarjetas visuales (animación fluida hacia abajo) */}
+          {/* Megamenú Editorial Desplegable estilo Manolo Blahnik (Columnas con guion "–" + 4 Tarjetas Visuales de Espacio) */}
           <div
             id={megaMenuId}
             onMouseEnter={openMegaMenu}
             onMouseLeave={scheduleCloseMegaMenu}
             aria-hidden={!catalogMenuOpen}
             inert={!catalogMenuOpen}
-            className={`hidden lg:grid transition-[grid-template-rows,opacity] duration-300 ease-out ${
+            className={`hidden lg:grid bg-white transition-[grid-template-rows,opacity] duration-300 ease-out ${
               catalogMenuOpen
-                ? "grid-rows-[1fr] opacity-100 border-t border-surface-container-high"
+                ? "grid-rows-[1fr] opacity-100 border-t border-outline/60 shadow-xl"
                 : "grid-rows-[0fr] opacity-0 pointer-events-none"
             }`}
           >
             <div className="overflow-hidden">
-              <div className="max-w-7xl mx-auto px-margin-desktop py-6 flex flex-col gap-5">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="font-serif text-xl text-on-surface">
-                      Explora por categoría y espacio
-                    </p>
+              <div className="max-w-7xl mx-auto px-margin-desktop py-8 grid grid-cols-12 gap-8 items-start">
+                {/* Columnas de Navegación por Línea y Acabado con microinteracción "–" (4 cols) */}
+                <div className="col-span-4 grid grid-cols-2 gap-6 border-r border-outline/50 pr-6">
+                  <div className="space-y-3">
+                    <span className="block text-[11px] font-semibold uppercase tracking-[0.22em] text-on-surface pb-1 border-b border-outline/50">
+                      Colecciones
+                    </span>
+                    <ul role="list" className="space-y-1.5">
+                      {catalogCategoryLinks.map((cat) => (
+                        <li key={cat.id}>
+                          <Link
+                            href={`/catalogo?categoria=${cat.id}`}
+                            onClick={() => setCatalogMenuOpen(false)}
+                            className="group/item flex items-center text-xs tracking-wider text-secondary hover:text-on-surface py-1 transition-colors"
+                          >
+                            <span className="inline-block w-0 overflow-hidden opacity-0 group-hover/item:w-3.5 group-hover/item:opacity-100 text-[#6b1d22] transition-all duration-200">
+                              –
+                            </span>
+                            <span>{cat.label}</span>
+                          </Link>
+                        </li>
+                      ))}
+                      <li className="pt-2">
+                        <Link
+                          href="/catalogo"
+                          onClick={() => setCatalogMenuOpen(false)}
+                          className="inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#6b1d22] hover:underline"
+                        >
+                          <span>Ver todo el catálogo</span>
+                          <Icon name="arrow_forward" className="text-[13px]" />
+                        </Link>
+                      </li>
+                    </ul>
                   </div>
-                  <Link
-                    href="/catalogo"
-                    onClick={() => setCatalogMenuOpen(false)}
-                    className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline"
-                  >
-                    <span>Ver todo el catálogo</span>
-                    <Icon name="arrow_forward" className="text-[16px]" />
-                  </Link>
+
+                  <div className="space-y-3">
+                    <span className="block text-[11px] font-semibold uppercase tracking-[0.22em] text-on-surface pb-1 border-b border-outline/50">
+                      Acabados
+                    </span>
+                    <ul role="list" className="space-y-1.5">
+                      {FINISH_FILTERS.map((finish) => (
+                        <li key={finish}>
+                          <Link
+                            href={`/catalogo?acabado=${encodeURIComponent(
+                              finish
+                            )}`}
+                            onClick={() => setCatalogMenuOpen(false)}
+                            className="group/item flex items-center text-xs tracking-wider text-secondary hover:text-on-surface py-1 transition-colors"
+                          >
+                            <span className="inline-block w-0 overflow-hidden opacity-0 group-hover/item:w-3.5 group-hover/item:opacity-100 text-[#6b1d22] transition-all duration-200">
+                              –
+                            </span>
+                            <span>{finish}</span>
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
 
-                <div className="grid grid-cols-4 gap-5">
-                  {SPACES.map((space) => (
-                    <Link
-                      key={space.slug}
-                      href={space.catalogHref}
-                      onClick={() => setCatalogMenuOpen(false)}
-                      className="group relative block aspect-[16/10] w-full rounded-xl overflow-hidden bg-surface-container-low shadow-sm hover:shadow-md transition-all"
-                    >
-                      <Image
-                        src={space.image}
-                        alt={space.imageAlt}
-                        fill
-                        sizes="25vw"
-                        quality={90}
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
-                        style={
-                          space.imagePosition
-                            ? { objectPosition: space.imagePosition }
-                            : undefined
-                        }
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent" />
-                      <div className="absolute inset-x-0 bottom-0 p-3.5 text-white">
-                        <span className="font-serif text-xl font-normal">
-                          {space.label}
-                        </span>
-                      </div>
-                    </Link>
-                  ))}
+                {/* 4 Tarjetas Visuales de Espacio a la derecha (8 cols) */}
+                <div className="col-span-8 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-secondary">
+                      Explorar por espacio arquitectónico
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-4 gap-4">
+                    {SPACES.map((space) => (
+                      <Link
+                        key={space.slug}
+                        href={space.catalogHref}
+                        onClick={() => setCatalogMenuOpen(false)}
+                        className="group relative block aspect-[4/5] w-full overflow-hidden bg-surface-container-low"
+                      >
+                        <Image
+                          src={space.image}
+                          alt={space.imageAlt}
+                          fill
+                          unoptimized
+                          sizes="20vw"
+                          className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                          style={
+                            space.imagePosition
+                              ? { objectPosition: space.imagePosition }
+                              : undefined
+                          }
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-transparent" />
+                        <div className="absolute inset-x-0 bottom-0 p-3.5 text-center">
+                          <span className="text-xs font-semibold uppercase tracking-[0.22em] text-white">
+                            {space.label}
+                          </span>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
@@ -460,13 +529,13 @@ export function Header() {
               type="button"
               onClick={() => setMobileMenuOpen(false)}
               aria-label="Cerrar menú"
-              className="min-h-[44px] min-w-[44px] inline-flex items-center justify-center rounded bg-surface-container text-on-surface"
+              className="min-h-[44px] min-w-[44px] inline-flex items-center justify-center bg-surface-container text-on-surface"
             >
               <Icon name="close" className="text-[20px]" />
             </button>
           </div>
 
-          <nav aria-label="Móvil" className="flex flex-col gap-1">
+          <nav aria-label="Móvil" className="flex flex-col divide-y divide-outline/40">
             {NAV_ITEMS.map((item) => {
               const isActive =
                 item.href === "/"
@@ -474,39 +543,40 @@ export function Header() {
                   : pathname === item.href ||
                     pathname.startsWith(`${item.href}/`);
               return (
-                <div key={item.href} className="flex flex-col">
+                <div key={item.href} className="flex flex-col py-1">
                   <Link
                     href={item.href}
                     aria-current={pathname === item.href ? "page" : undefined}
                     onClick={() => setMobileMenuOpen(false)}
-                    className={
+                    className={`min-h-[48px] px-2 py-3 text-xs uppercase tracking-[0.2em] flex items-center justify-between ${
                       isActive
-                        ? "min-h-[48px] px-space-md py-3 rounded bg-primary text-on-primary font-label-lg text-label-lg font-semibold flex items-center justify-between"
-                        : "min-h-[48px] px-space-md py-3 rounded text-on-surface hover:bg-surface-container font-label-lg text-label-lg flex items-center justify-between"
-                    }
+                        ? "text-[#6b1d22] font-semibold"
+                        : "text-on-surface"
+                    }`}
                   >
                     <span>{item.label}</span>
                     <Icon name="chevron_right" className="text-[18px]" />
                   </Link>
 
                   {item.hasMegaMenu ? (
-                    <div className="grid grid-cols-2 gap-2 pl-3 pr-1 py-2">
+                    <div className="grid grid-cols-2 gap-2 pb-3 pt-1">
                       {SPACES.map((space) => (
                         <Link
                           key={space.slug}
                           href={space.catalogHref}
                           onClick={() => setMobileMenuOpen(false)}
-                          className="relative aspect-[16/10] rounded-lg overflow-hidden group"
+                          className="relative aspect-[16/10] overflow-hidden group"
                         >
                           <Image
                             src={space.image}
                             alt={space.imageAlt}
                             fill
+                            unoptimized
                             sizes="45vw"
                             className="object-cover"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent" />
-                          <span className="absolute bottom-2 left-2.5 font-serif text-sm text-white">
+                          <span className="absolute bottom-2 inset-x-0 text-center text-[11px] uppercase tracking-[0.18em] text-white font-medium">
                             {space.label}
                           </span>
                         </Link>
@@ -518,24 +588,24 @@ export function Header() {
             })}
           </nav>
 
-          <div className="pt-space-sm border-t border-surface-container flex flex-col gap-space-sm">
+          <div className="pt-space-sm border-t border-surface-container flex flex-col gap-2.5">
             <a
               href={buildWhatsAppUrl(
                 "Hola, deseo cotizar materiales con Cerámica El Almacén."
               )}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full min-h-[48px] inline-flex items-center justify-center gap-space-xs bg-primary hover:bg-primary-container text-on-primary py-3 rounded font-label-md text-label-md uppercase tracking-wider"
+              className="w-full min-h-[46px] inline-flex items-center justify-center gap-2 bg-on-surface hover:bg-[#6b1d22] text-white py-3 text-xs uppercase tracking-[0.2em] font-semibold transition-colors"
             >
-              <Icon name="chat" className="text-[18px]" />
+              <Icon name="chat" className="text-[16px]" />
               <span>Cotizar por WhatsApp</span>
             </a>
             <a
               href={SITE_INFO.phoneHref}
-              className="w-full min-h-[48px] inline-flex items-center justify-center gap-space-xs bg-surface-container text-on-surface py-3 rounded font-label-md text-label-md"
+              className="w-full min-h-[46px] inline-flex items-center justify-center gap-2 border border-on-surface text-on-surface py-3 text-xs uppercase tracking-[0.18em]"
             >
-              <Icon name="call" className="text-[18px] text-primary" />
-              <span>Llamar: {SITE_INFO.phoneDisplay}</span>
+              <Icon name="call" className="text-[16px] text-[#6b1d22]" />
+              <span>{SITE_INFO.phoneDisplay}</span>
             </a>
           </div>
         </div>

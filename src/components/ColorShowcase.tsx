@@ -6,6 +6,7 @@ const MATERIAL_CARDS = [
   {
     id: "ceramica",
     title: "Cerámica",
+    subtitle: "Pasta Blanca & Esmaltes Artesanales",
     description:
       "Revestimientos artesanales y formatos versátiles de pasta blanca con esmaltes cálidos, relieves táctiles y alta resistencia para muros, cocinas y baños.",
     image: "/images/materials/ceramica.jpg",
@@ -16,6 +17,7 @@ const MATERIAL_CARDS = [
   {
     id: "porcelanato",
     title: "Porcelanato",
+    subtitle: "Gran Formato Rectificado",
     description:
       "Losas rectificadas de gran formato con mínima absorción de agua y vetas continuas, ideales para pisos residenciales y áreas comerciales de alto tráfico.",
     image: "/images/materials/porcelanato.jpg",
@@ -26,6 +28,7 @@ const MATERIAL_CARDS = [
   {
     id: "piedra-natural",
     title: "Piedra Natural",
+    subtitle: "Travertino, Caliza & Mármol",
     description:
       "Superficies con la nobleza orgánica del travertino, la caliza y el mármol, seleccionadas para aportar textura auténtica y carácter arquitectónico atemporal.",
     image: "/images/materials/piedra-natural.jpg",
@@ -68,9 +71,12 @@ export function ColorShowcase() {
         }}
       />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-margin-mobile lg:px-margin-desktop flex flex-col gap-10 lg:gap-12">
+      <div className="relative z-10 max-w-7xl mx-auto px-margin-mobile lg:px-margin-desktop flex flex-col gap-10 lg:gap-14">
         <div className="scroll-reveal flex flex-col items-center text-center space-y-2">
-          <h2 className="font-serif text-3xl sm:text-4xl text-on-surface">
+          <span className="text-[11px] uppercase tracking-[0.28em] text-[#6b1d22] font-semibold">
+            Curaduría Europea
+          </span>
+          <h2 className="font-serif text-3xl sm:text-4xl text-on-surface tracking-tight">
             Materiales y superficies
           </h2>
           <p className="text-sm sm:text-base text-secondary max-w-2xl">
@@ -93,7 +99,7 @@ export function ColorShowcase() {
                 href={item.href}
                 className="
                   card-wine-glow group relative block overflow-hidden aspect-[4/3]
-                  rounded-2xl bg-inverse-surface
+                  rounded-sm bg-inverse-surface
                   ring-1 ring-black/5 hover:ring-2 hover:ring-[#6b1d22]/80
                   transition-all duration-300 ease-out hover:-translate-y-1.5
                 "
@@ -111,14 +117,17 @@ export function ColorShowcase() {
                 <div
                   className="
                     pointer-events-none absolute inset-0
-                    bg-gradient-to-t from-black/80 via-black/20 to-transparent
+                    bg-gradient-to-t from-black/85 via-black/25 to-transparent
                     transition-all duration-500
-                    group-hover:from-[#2b090c]/90 group-hover:via-black/40
+                    group-hover:from-[#2b090c]/90 group-hover:via-black/45
                   "
                 />
 
                 {/* Título superpuesto y descripción breve con animación fluida al pasar el puntero */}
-                <div className="absolute inset-x-0 bottom-0 p-6 flex flex-col justify-end text-white">
+                <div className="absolute inset-x-0 bottom-0 p-6 flex flex-col items-center text-center justify-end text-white">
+                  <span className="text-[10px] uppercase tracking-[0.22em] text-white/75 mb-1">
+                    {item.subtitle}
+                  </span>
                   <h3 className="font-serif text-2xl sm:text-[26px] text-white tracking-tight transition-transform duration-300 ease-out group-hover:-translate-y-0.5">
                     {item.title}
                   </h3>

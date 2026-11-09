@@ -23,6 +23,7 @@ import {
 import { SITE_INFO, buildWhatsAppUrl } from "@/data/site";
 
 type SortOption = "featured" | "stock" | "alpha";
+type ViewMode = "gallery" | "grid";
 
 interface FilterState {
   category: "all" | ProductCategory;
@@ -129,6 +130,8 @@ export function CatalogExplorer() {
   );
   const [searchQuery, setSearchQuery] = useState(initial.q);
   const [sortBy, setSortBy] = useState<SortOption>(initial.sort);
+  const [viewMode, setViewMode] = useState<ViewMode>("grid");
+  const [descExpanded, setDescExpanded] = useState(false);
 
   const [sampleModalOpen, setSampleModalOpen] = useState(false);
   const [sampleSubmitted, setSampleSubmitted] = useState(false);
@@ -261,6 +264,10 @@ export function CatalogExplorer() {
     searchQuery.trim().length > 0 ||
     sortBy !== "featured";
 
+  const activeCategoryMeta =
+    CATEGORY_FILTERS.find((c) => c.id === activeCategory) ??
+    CATEGORY_FILTERS[0];
+
   const sampleWhatsAppHref = buildWhatsAppUrl(
     `Hola Cerámica El Almacén, solicito muestrario físico para proyecto:\n• Profesional/Firma: ${sampleForm.professional}\n• Ciudad/Obra: ${sampleForm.city}\n• Muestras requeridas: ${sampleForm.samples}`
   );
@@ -277,34 +284,51 @@ export function CatalogExplorer() {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Encabezado + Botón de Muestrario Físico alineado */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-        <div className="max-w-2xl space-y-1">
-          <h1 className="font-serif text-3xl sm:text-4xl text-on-surface tracking-tight">
-            Catálogo de Acabados &amp; Terminaciones
-          </h1>
-          <p className="text-sm sm:text-base text-secondary">
-            Piezas con ficha técnica en línea y disponibilidad en almacén.
+    <div className="space-y-8">
+      {/* Cabecera Editorial Centrada estilo Manolo Blahnik con "Leer más" */}
+      <header className="text-center max-w-3xl mx-auto space-y-3 pt-2">
+        <span className="text-[11px] uppercase tracking-[0.28em] text-[#6b1d22] font-semibold block">
+          Colección Permanente · Importación Directa
+        </span>
+        <h1 className="font-serif text-3xl sm:text-5xl text-on-surface tracking-tight">
+          {activeCategory === "all"
+            ? "Catálogo de Superficies & Baños"
+            : activeCategoryMeta.label}
+        </h1>
+        <div className="text-xs sm:text-sm tracking-wider text-secondary leading-relaxed max-w-2xl mx-auto">
+          <p className="inline">
+            Explora nuestra selección curada de porcelanatos rectificados,
+            revestimientos artesanales, griferías en acabado PVD y equipamiento
+            sanitario con disponibilidad en almacén.
           </p>
+          {descExpanded ? (
+            <span className="inline">
+              {" "}
+              Cada pieza cuenta con ficha técnica verificada, reserva de lote
+              único para obras residenciales o hoteleras y envío de muestras
+              físicas para estudios de arquitectura en toda la República
+              Dominicana.
+            </span>
+          ) : null}
+          <button
+            type="button"
+            onClick={() => setDescExpanded((prev) => !prev)}
+            className="block mx-auto mt-2 text-[11px] uppercase tracking-[0.2em] text-on-surface underline hover:text-[#6b1d22] transition-colors"
+          >
+            {descExpanded ? "Leer menos" : "Leer más"}
+          </button>
         </div>
+      </header>
 
-        <button
-          type="button"
-          onClick={() => {
-            setSampleSubmitted(false);
-            setSampleModalOpen(true);
-          }}
-          className="w-fit inline-flex items-center gap-2 bg-white hover:bg-surface-container-low text-on-surface px-4 py-2.5 min-h-[44px] rounded-lg text-sm font-semibold border border-outline shadow-sm transition-colors shrink-0"
+      {/* Selector de Categorías con líneas editoriales */}
+      <nav
+        aria-label="Categorías del catálogo"
+        className="overflow-x-auto no-scrollbar border-y border-outline/60 py-3"
+      >
+        <ul
+          role="list"
+          className="flex items-center justify-start lg:justify-center gap-2 sm:gap-4 min-w-max px-1"
         >
-          <Icon name="layers" className="text-primary text-[18px]" />
-          <span>Pedir muestrario físico</span>
-        </button>
-      </div>
-
-      {/* Pestañas superiores de categoría macro (Pills) */}
-      <nav aria-label="Categorías del catálogo" className="overflow-x-auto no-scrollbar -mx-1 px-1">
-        <ul role="list" className="flex items-center gap-2 min-w-max pb-1">
           {CATEGORY_FILTERS.map((cat) => {
             const isSelected = activeCategory === cat.id;
             const count = getCategoryCount(cat.id);
@@ -316,19 +340,19 @@ export function CatalogExplorer() {
                   aria-pressed={isSelected}
                   className={
                     isSelected
-                      ? "min-h-[42px] inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary text-white text-sm font-semibold shadow-sm transition-colors"
-                      : "min-h-[42px] inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white hover:bg-surface-container-low text-on-surface border border-outline text-sm font-medium transition-colors"
+                      ? "min-h-[38px] inline-flex items-center gap-2 px-4 py-1.5 bg-on-surface text-white text-[11px] uppercase tracking-[0.18em] font-semibold transition-colors"
+                      : "min-h-[38px] inline-flex items-center gap-2 px-4 py-1.5 bg-transparent hover:bg-surface-container-low text-on-surface text-[11px] uppercase tracking-[0.18em] font-medium transition-colors"
                   }
                 >
                   <span>{cat.label}</span>
                   <span
                     className={
                       isSelected
-                        ? "text-xs px-2 py-0.5 rounded-full bg-white/20 text-white"
-                        : "text-xs px-2 py-0.5 rounded-full bg-surface-container text-secondary"
+                        ? "text-[10px] opacity-80"
+                        : "text-[10px] text-secondary"
                     }
                   >
-                    {count}
+                    ({count})
                   </span>
                 </button>
               </li>
@@ -337,141 +361,201 @@ export function CatalogExplorer() {
         </ul>
       </nav>
 
-      {/* Barra horizontal uniforme: Buscador + Dropdowns limpios (Formato, Acabado, Ordenar) */}
-      <search className="bg-white rounded-xl p-3 sm:p-4 border border-outline/80 shadow-sm">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3 items-center">
-          {/* Buscador */}
-          <div className="relative sm:col-span-2 lg:col-span-5">
-            <label htmlFor={searchInputId} className="sr-only">
-              Buscar por nombre, medida, acabado o código SKU
-            </label>
-            <Icon
-              name="search"
-              className="absolute left-3.5 top-1/2 -translate-y-1/2 text-secondary text-[19px]"
-            />
-            <input
-              id={searchInputId}
-              type="search"
-              value={searchQuery}
-              onChange={(e) => {
-                isTypingRef.current = true;
-                setSearchQuery(e.target.value);
-              }}
-              autoCorrect="off"
-              autoCapitalize="off"
-              spellCheck={false}
-              placeholder="Buscar por nombre, medida (60×120), SKU..."
-              className="w-full h-11 bg-surface text-sm text-on-surface placeholder:text-secondary pl-10 pr-9 rounded-lg border border-outline focus:border-primary focus:bg-white focus:outline-none transition-colors"
-            />
-            {searchQuery ? (
+      {/* Barra Sticky de Filtros + Conmutador Vista Galería (2 cols) / Vista Grid (4 cols) estilo Manolo Blahnik */}
+      <search className="sticky top-[64px] lg:top-[74px] z-20 bg-surface/95 backdrop-blur-md py-3 border-b border-outline/70">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+          {/* Izquierda: Buscador + Selectores de Formato y Acabado */}
+          <div className="flex flex-wrap items-center gap-2.5 flex-1">
+            <div className="relative w-full sm:w-[260px]">
+              <label htmlFor={searchInputId} className="sr-only">
+                Buscar por nombre, medida, acabado o código SKU
+              </label>
+              <Icon
+                name="search"
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary text-[17px]"
+              />
+              <input
+                id={searchInputId}
+                type="search"
+                value={searchQuery}
+                onChange={(e) => {
+                  isTypingRef.current = true;
+                  setSearchQuery(e.target.value);
+                }}
+                autoCorrect="off"
+                autoCapitalize="off"
+                spellCheck={false}
+                placeholder="Buscar acabado, 60×120, SKU..."
+                className="w-full h-10 bg-white text-xs tracking-wider text-on-surface placeholder:text-secondary pl-9 pr-8 border border-outline focus:border-on-surface focus:outline-none transition-colors"
+              />
+              {searchQuery ? (
+                <button
+                  type="button"
+                  onClick={() => updateDiscreteFilters({ q: "" })}
+                  aria-label="Limpiar búsqueda"
+                  className="absolute right-1.5 top-1/2 -translate-y-1/2 h-7 w-7 inline-flex items-center justify-center text-secondary hover:text-on-surface"
+                >
+                  <Icon name="close" className="text-[15px]" />
+                </button>
+              ) : null}
+            </div>
+
+            {/* Formato */}
+            <div>
+              <label htmlFor={formatSelectId} className="sr-only">
+                Filtrar por formato
+              </label>
+              <select
+                id={formatSelectId}
+                value={activeFormat ?? ""}
+                onChange={(e) =>
+                  updateDiscreteFilters({
+                    format: e.target.value ? e.target.value : null,
+                  })
+                }
+                className="h-10 bg-white text-xs uppercase tracking-[0.14em] text-on-surface px-3 border border-outline focus:border-on-surface focus:outline-none cursor-pointer"
+              >
+                <option value="">Formato: Todos</option>
+                {FORMAT_FILTERS.map((fmt) => (
+                  <option key={fmt.value} value={fmt.value}>
+                    {fmt.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Acabado */}
+            <div>
+              <label htmlFor={finishSelectId} className="sr-only">
+                Filtrar por acabado
+              </label>
+              <select
+                id={finishSelectId}
+                value={activeFinish ?? ""}
+                onChange={(e) =>
+                  updateDiscreteFilters({
+                    finish: e.target.value ? e.target.value : null,
+                  })
+                }
+                className="h-10 bg-white text-xs uppercase tracking-[0.14em] text-on-surface px-3 border border-outline focus:border-on-surface focus:outline-none cursor-pointer"
+              >
+                <option value="">Acabado: Todos</option>
+                {FINISH_FILTERS.map((finish) => (
+                  <option key={finish} value={finish}>
+                    {finish}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {hasActiveFilters ? (
               <button
                 type="button"
-                onClick={() => updateDiscreteFilters({ q: "" })}
-                aria-label="Limpiar búsqueda"
-                className="absolute right-1.5 top-1/2 -translate-y-1/2 h-8 w-8 inline-flex items-center justify-center text-secondary hover:text-on-surface rounded-md"
+                onClick={resetFilters}
+                className="h-10 px-3 inline-flex items-center gap-1 text-[11px] uppercase tracking-[0.16em] font-semibold text-[#6b1d22] hover:underline"
               >
-                <Icon name="close" className="text-[16px]" />
+                <Icon name="close" className="text-[14px]" />
+                <span>Limpiar</span>
               </button>
             ) : null}
           </div>
 
-          {/* Selector de Formato */}
-          <div className="lg:col-span-3">
-            <label htmlFor={formatSelectId} className="sr-only">
-              Filtrar por formato
-            </label>
-            <select
-              id={formatSelectId}
-              value={activeFormat ?? ""}
-              onChange={(e) =>
-                updateDiscreteFilters({
-                  format: e.target.value ? e.target.value : null,
-                })
-              }
-              className="w-full h-11 bg-surface text-sm text-on-surface px-3 rounded-lg border border-outline focus:border-primary focus:bg-white focus:outline-none cursor-pointer"
+          {/* Derecha: Contador + Orden + Conmutador Vista Galería (2 cols) / Grid (4 cols) + Muestrario */}
+          <div className="flex flex-wrap items-center justify-between lg:justify-end gap-4">
+            <span className="text-[11px] uppercase tracking-[0.16em] text-secondary">
+              <strong className="text-on-surface font-semibold">
+                {filteredProducts.length}
+              </strong>{" "}
+              {filteredProducts.length === 1 ? "Resultado" : "Resultados"}
+            </span>
+
+            <div>
+              <label htmlFor={sortSelectId} className="sr-only">
+                Ordenar productos
+              </label>
+              <select
+                id={sortSelectId}
+                value={sortBy}
+                onChange={(e) =>
+                  updateDiscreteFilters({ sort: e.target.value as SortOption })
+                }
+                className="h-10 bg-white text-xs uppercase tracking-[0.14em] text-on-surface px-3 border border-outline focus:border-on-surface focus:outline-none cursor-pointer"
+              >
+                <option value="featured">Ordenar: Destacados</option>
+                <option value="stock">Ordenar: En stock</option>
+                <option value="alpha">Ordenar: Nombre (A–Z)</option>
+              </select>
+            </div>
+
+            {/* Conmutador Gallery (2 cols) vs Grid (4 cols) estilo Manolo Blahnik */}
+            <div
+              role="radiogroup"
+              aria-label="Cambiar modo de visualización"
+              className="hidden sm:flex items-center border border-outline bg-white"
             >
-              <option value="">Formato: Todos</option>
-              {FORMAT_FILTERS.map((fmt) => (
-                <option key={fmt.value} value={fmt.value}>
-                  {fmt.label}
-                </option>
-              ))}
-            </select>
-          </div>
+              <button
+                type="button"
+                role="radio"
+                aria-checked={viewMode === "gallery"}
+                onClick={() => setViewMode("gallery")}
+                className={`h-10 px-3 inline-flex items-center gap-1.5 text-[11px] uppercase tracking-[0.15em] transition-colors ${
+                  viewMode === "gallery"
+                    ? "bg-on-surface text-white font-semibold"
+                    : "text-secondary hover:text-on-surface"
+                }`}
+              >
+                <span
+                  aria-hidden="true"
+                  className="grid grid-cols-2 gap-0.5 w-3.5 h-3.5"
+                >
+                  <span className="bg-current" />
+                  <span className="bg-current" />
+                </span>
+                <span>Galería</span>
+              </button>
+              <button
+                type="button"
+                role="radio"
+                aria-checked={viewMode === "grid"}
+                onClick={() => setViewMode("grid")}
+                className={`h-10 px-3 inline-flex items-center gap-1.5 text-[11px] uppercase tracking-[0.15em] transition-colors ${
+                  viewMode === "grid"
+                    ? "bg-on-surface text-white font-semibold"
+                    : "text-secondary hover:text-on-surface"
+                }`}
+              >
+                <span
+                  aria-hidden="true"
+                  className="grid grid-cols-2 gap-0.5 w-3.5 h-3.5"
+                >
+                  <span className="bg-current" />
+                  <span className="bg-current" />
+                  <span className="bg-current" />
+                  <span className="bg-current" />
+                </span>
+                <span>Cuadrícula</span>
+              </button>
+            </div>
 
-          {/* Selector de Acabado */}
-          <div className="lg:col-span-2">
-            <label htmlFor={finishSelectId} className="sr-only">
-              Filtrar por acabado
-            </label>
-            <select
-              id={finishSelectId}
-              value={activeFinish ?? ""}
-              onChange={(e) =>
-                updateDiscreteFilters({
-                  finish: e.target.value ? e.target.value : null,
-                })
-              }
-              className="w-full h-11 bg-surface text-sm text-on-surface px-3 rounded-lg border border-outline focus:border-primary focus:bg-white focus:outline-none cursor-pointer"
-            >
-              <option value="">Acabado: Todos</option>
-              {FINISH_FILTERS.map((finish) => (
-                <option key={finish} value={finish}>
-                  {finish}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Selector de Orden */}
-          <div className="lg:col-span-2">
-            <label htmlFor={sortSelectId} className="sr-only">
-              Ordenar productos
-            </label>
-            <select
-              id={sortSelectId}
-              value={sortBy}
-              onChange={(e) =>
-                updateDiscreteFilters({ sort: e.target.value as SortOption })
-              }
-              className="w-full h-11 bg-surface text-sm text-on-surface px-3 rounded-lg border border-outline focus:border-primary focus:bg-white focus:outline-none cursor-pointer"
-            >
-              <option value="featured">Orden: Destacados</option>
-              <option value="stock">Orden: En stock</option>
-              <option value="alpha">Orden: Nombre (A–Z)</option>
-            </select>
-          </div>
-        </div>
-
-        {/* Contador de resultados + botón limpiar cuando hay filtros activos */}
-        <div className="flex flex-wrap items-center justify-between gap-2 pt-3 mt-3 border-t border-outline/50 text-xs text-secondary">
-          <span>
-            Mostrando{" "}
-            <strong className="text-on-surface font-semibold">
-              {filteredProducts.length}
-            </strong>{" "}
-            {filteredProducts.length === 1
-              ? "pieza disponible"
-              : "piezas disponibles"}
-          </span>
-
-          {hasActiveFilters ? (
             <button
               type="button"
-              onClick={resetFilters}
-              className="inline-flex items-center gap-1 font-semibold text-primary hover:underline"
+              onClick={() => {
+                setSampleSubmitted(false);
+                setSampleModalOpen(true);
+              }}
+              className="h-10 px-3.5 inline-flex items-center gap-1.5 border border-on-surface bg-white hover:bg-on-surface text-on-surface hover:text-white text-[11px] uppercase tracking-[0.16em] font-medium transition-colors"
             >
-              <Icon name="close" className="text-[14px]" />
-              <span>Limpiar filtros</span>
+              <Icon name="layers" className="text-[15px]" />
+              <span>Pedir muestrario</span>
             </button>
-          ) : null}
+          </div>
         </div>
       </search>
 
-      {/* Grilla 100% de ancho: 4 columnas holgadas en escritorio */}
+      {/* Grilla de Productos: 2 columnas gigantes en modo Galería o 4 columnas en modo Cuadrícula */}
       <section aria-label="Listado de piezas">
         {filteredProducts.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-14 text-center bg-white rounded-2xl p-6 border border-outline/80">
+          <div className="flex flex-col items-center justify-center py-16 text-center bg-white p-8 border border-outline/70">
             <Icon
               name="search_off"
               className="text-secondary text-[44px] mb-2"
@@ -486,7 +570,7 @@ export function CatalogExplorer() {
             <button
               type="button"
               onClick={resetFilters}
-              className="mt-4 min-h-[44px] bg-primary hover:bg-primary-container text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
+              className="mt-5 min-h-[44px] bg-on-surface hover:bg-[#6b1d22] text-white text-xs uppercase tracking-[0.2em] font-semibold px-6 py-3 transition-colors"
             >
               Restablecer filtros
             </button>
@@ -494,11 +578,19 @@ export function CatalogExplorer() {
         ) : (
           <ul
             role="list"
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+            className={
+              viewMode === "gallery"
+                ? "grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-12"
+                : "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-5 gap-y-10"
+            }
           >
             {filteredProducts.map((product, index) => (
               <li key={product.id}>
-                <ProductSwatchCard product={product} priority={index < 4} />
+                <ProductSwatchCard
+                  product={product}
+                  priority={index < 4}
+                  viewMode={viewMode}
+                />
               </li>
             ))}
           </ul>
@@ -517,7 +609,7 @@ export function CatalogExplorer() {
             type="button"
             onClick={() => setSampleModalOpen(false)}
             aria-label="Cerrar solicitud de muestras"
-            className="absolute top-3 right-3 min-h-[44px] min-w-[44px] inline-flex items-center justify-center text-secondary hover:text-on-surface rounded bg-surface-container transition-colors"
+            className="absolute top-3 right-3 min-h-[44px] min-w-[44px] inline-flex items-center justify-center text-secondary hover:text-on-surface bg-surface-container transition-colors"
           >
             <Icon name="close" className="text-[20px]" />
           </button>
@@ -565,7 +657,7 @@ export function CatalogExplorer() {
                   if (sampleSubmitted) setSampleSubmitted(false);
                 }}
                 placeholder="Ej. Arq. Laura Gómez / Estudio LG"
-                className="atelier-input w-full min-h-[48px] bg-surface-container-low text-base text-on-surface px-3.5 py-2.5 rounded border border-outline-variant/50 focus:border-primary focus:bg-surface-container-lowest focus:outline-none"
+                className="atelier-input w-full min-h-[48px] bg-surface-container-low text-base text-on-surface px-3.5 py-2.5 border border-outline-variant/50 focus:border-primary focus:bg-surface-container-lowest focus:outline-none"
               />
               <p className="field-error hidden items-center gap-1 text-error font-body-sm text-body-sm">
                 <Icon name="error" className="text-[15px]" />
@@ -590,8 +682,8 @@ export function CatalogExplorer() {
                   setSampleForm({ ...sampleForm, city: e.target.value });
                   if (sampleSubmitted) setSampleSubmitted(false);
                 }}
-                placeholder="Ej. Santiago, La Romana, Juan Dolio, Punta Cana..."
-                className="atelier-input w-full min-h-[48px] bg-surface-container-low text-base text-on-surface px-3.5 py-2.5 rounded border border-outline-variant/50 focus:border-primary focus:bg-surface-container-lowest focus:outline-none"
+                placeholder="Ej. San Pedro de Macorís, La Romana, Juan Dolio, Punta Cana..."
+                className="atelier-input w-full min-h-[48px] bg-surface-container-low text-base text-on-surface px-3.5 py-2.5 border border-outline-variant/50 focus:border-primary focus:bg-surface-container-lowest focus:outline-none"
               />
               <p className="field-error hidden items-center gap-1 text-error font-body-sm text-body-sm">
                 <Icon name="error" className="text-[15px]" />
@@ -616,7 +708,7 @@ export function CatalogExplorer() {
                   if (sampleSubmitted) setSampleSubmitted(false);
                 }}
                 placeholder="Ej. Muestra Statuario 60×120, Roble Escandinavo y carta de acabados oro cepillado..."
-                className="atelier-input w-full bg-surface-container-low text-base text-on-surface p-3.5 rounded border border-outline-variant/50 focus:border-primary focus:bg-surface-container-lowest focus:outline-none"
+                className="atelier-input w-full bg-surface-container-low text-base text-on-surface p-3.5 border border-outline-variant/50 focus:border-primary focus:bg-surface-container-lowest focus:outline-none"
               />
               <p className="field-error hidden items-center gap-1 text-error font-body-sm text-body-sm">
                 <Icon name="error" className="text-[15px]" />
@@ -628,13 +720,13 @@ export function CatalogExplorer() {
               <button
                 type="button"
                 onClick={() => setSampleModalOpen(false)}
-                className="min-h-[44px] px-4 py-2.5 rounded bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md transition-colors"
+                className="min-h-[44px] px-4 py-2.5 bg-surface-container hover:bg-surface-container-high text-on-surface text-xs uppercase tracking-wider transition-colors"
               >
                 Cancelar
               </button>
               <button
                 type="submit"
-                className="min-h-[44px] px-5 py-2.5 rounded bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md uppercase tracking-wider font-semibold transition-colors"
+                className="min-h-[44px] px-5 py-2.5 bg-on-surface hover:bg-[#6b1d22] text-white text-xs uppercase tracking-[0.18em] font-semibold transition-colors"
               >
                 Preparar Solicitud
               </button>
@@ -642,7 +734,7 @@ export function CatalogExplorer() {
 
             <div aria-live="polite">
               {sampleSubmitted ? (
-                <div className="p-4 rounded-lg bg-surface-container-low border border-primary/30 space-y-3">
+                <div className="p-4 bg-surface-container-low border border-primary/30 space-y-3">
                   <p className="font-body-sm text-body-sm text-on-surface font-medium">
                     Solicitud lista. Elige por qué vía deseas enviarla a nuestro
                     equipo técnico:
@@ -652,14 +744,14 @@ export function CatalogExplorer() {
                       href={sampleWhatsAppHref}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-1 min-h-[44px] inline-flex items-center justify-center gap-1.5 bg-primary hover:bg-primary-container text-on-primary px-4 py-2.5 rounded font-label-md text-label-md uppercase font-semibold transition-colors"
+                      className="flex-1 min-h-[44px] inline-flex items-center justify-center gap-1.5 bg-primary hover:bg-primary-container text-on-primary px-4 py-2.5 text-xs uppercase tracking-wider font-semibold transition-colors"
                     >
                       <Icon name="chat" className="text-[16px]" />
                       <span>Enviar por WhatsApp</span>
                     </a>
                     <a
                       href={sampleMailHref}
-                      className="flex-1 min-h-[44px] inline-flex items-center justify-center gap-1.5 bg-surface-container-highest hover:bg-surface-variant text-on-surface px-4 py-2.5 rounded font-label-md text-label-md uppercase font-semibold transition-colors"
+                      className="flex-1 min-h-[44px] inline-flex items-center justify-center gap-1.5 bg-surface-container-highest hover:bg-surface-variant text-on-surface px-4 py-2.5 text-xs uppercase tracking-wider font-semibold transition-colors"
                     >
                       <Icon name="mail" className="text-[16px] text-primary" />
                       <span>Enviar por Correo</span>

@@ -214,3 +214,24 @@ details > summary::-webkit-details-marker {
     0 8px 20px -6px rgba(107, 29, 34, 0.22),
     0 0 0 1.5px rgba(107, 29, 34, 0.55);
 }
+
+/* Barra de progreso lineal continua del Hero Banner (estilo Manolo Blahnik) */
+@keyframes hero-progress-fill {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+.hero-progress-bar-fill {
+  animation: hero-progress-fill 4500ms linear forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-progress-bar-fill {
+    animation: none;
+    width: 100%;
+  }
+}
