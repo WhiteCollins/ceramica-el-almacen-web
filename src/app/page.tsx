@@ -14,11 +14,11 @@ export default function HomePage() {
       {/* SECCIÓN 2: ELIGE POR ESPACIO (ESTÉTICA DE GALERÍA EDITORIAL) */}
       <section className="w-full bg-surface py-16 lg:py-24">
         <div className="max-w-7xl mx-auto px-margin-mobile lg:px-margin-desktop flex flex-col gap-10 lg:gap-14">
-          <div className="scroll-reveal flex flex-col items-center text-center space-y-2">
+          <div className="scroll-reveal flex flex-col items-center text-center space-y-2.5">
             <span className="text-[11px] uppercase tracking-[0.28em] text-[#6b1d22] font-semibold">
               Arquitectura Interior
             </span>
-            <h2 className="font-serif text-3xl sm:text-4xl text-on-surface tracking-tight">
+            <h2 className="text-xl sm:text-2xl uppercase tracking-[0.18em] font-semibold text-on-surface">
               Elige por espacio
             </h2>
           </div>
@@ -61,7 +61,7 @@ export default function HomePage() {
 
                   {/* Contenido superpuesto dentro de la imagen */}
                   <div className="absolute inset-x-0 bottom-0 p-6 flex flex-col items-center text-center justify-end text-white">
-                    <h3 className="text-sm sm:text-base uppercase tracking-[0.24em] font-semibold text-white transition-transform duration-300 ease-out group-hover:-translate-y-0.5">
+                    <h3 className="text-sm sm:text-base uppercase tracking-[0.22em] font-semibold text-white transition-transform duration-300 ease-out group-hover:-translate-y-0.5">
                       {space.label}
                     </h3>
 

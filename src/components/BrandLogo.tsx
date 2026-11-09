@@ -10,7 +10,7 @@ export function BrandLogo({
   className = "",
 }: BrandLogoProps) {
   return (
-    <span className={`inline-flex items-center gap-space-sm ${className}`}>
+    <span className={`inline-flex items-center gap-2.5 ${className}`}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 105 84"
@@ -28,11 +28,11 @@ export function BrandLogo({
         </g>
       </svg>
       <span className="flex flex-col leading-tight">
-        <span className="font-headline-sm text-headline-sm text-primary tracking-tight font-semibold">
+        <span className="text-xs sm:text-sm uppercase tracking-[0.18em] text-primary font-semibold">
           Cerámica El Almacén
         </span>
         {showTagline ? (
-          <span className="font-label-caps text-label-caps uppercase text-secondary mt-0.5">
+          <span className="text-[10px] uppercase tracking-[0.18em] text-secondary mt-0.5">
             La Perfección en Cerámica
           </span>
         ) : null}

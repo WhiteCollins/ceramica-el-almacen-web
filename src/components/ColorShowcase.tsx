@@ -72,14 +72,14 @@ export function ColorShowcase() {
       />
 
       <div className="relative z-10 max-w-7xl mx-auto px-margin-mobile lg:px-margin-desktop flex flex-col gap-10 lg:gap-14">
-        <div className="scroll-reveal flex flex-col items-center text-center space-y-2">
+        <div className="scroll-reveal flex flex-col items-center text-center space-y-2.5">
           <span className="text-[11px] uppercase tracking-[0.28em] text-[#6b1d22] font-semibold">
             Curaduría Europea
           </span>
-          <h2 className="font-serif text-3xl sm:text-4xl text-on-surface tracking-tight">
+          <h2 className="text-xl sm:text-2xl uppercase tracking-[0.18em] font-semibold text-on-surface">
             Materiales y superficies
           </h2>
-          <p className="text-sm sm:text-base text-secondary max-w-2xl">
+          <p className="text-xs sm:text-sm tracking-wide text-secondary max-w-2xl">
             Explora nuestras líneas de cerámica, porcelanato y piedra natural
             seleccionadas para proyectos residenciales y comerciales.
           </p>
@@ -123,18 +123,18 @@ export function ColorShowcase() {
                   "
                 />
 
-                {/* Título superpuesto y descripción breve con animación fluida al pasar el puntero */}
+                {/* Título superpuesto con la misma fuente y estilo de Inicio / Catálogo / Proyectos / Contacto */}
                 <div className="absolute inset-x-0 bottom-0 p-6 flex flex-col items-center text-center justify-end text-white">
-                  <span className="text-[10px] uppercase tracking-[0.22em] text-white/75 mb-1">
+                  <span className="text-[10px] uppercase tracking-[0.22em] text-white/75 mb-1.5">
                     {item.subtitle}
                   </span>
-                  <h3 className="font-serif text-2xl sm:text-[26px] text-white tracking-tight transition-transform duration-300 ease-out group-hover:-translate-y-0.5">
+                  <h3 className="text-sm sm:text-base uppercase tracking-[0.22em] font-semibold text-white transition-transform duration-300 ease-out group-hover:-translate-y-0.5">
                     {item.title}
                   </h3>
 
                   <div className="grid grid-rows-[0fr] opacity-0 group-hover:grid-rows-[1fr] group-hover:opacity-100 group-focus-visible:grid-rows-[1fr] group-focus-visible:opacity-100 transition-all duration-300 ease-out">
                     <div className="overflow-hidden">
-                      <p className="pt-2.5 text-xs sm:text-sm text-white/90 leading-relaxed">
+                      <p className="pt-2.5 text-xs text-white/90 leading-relaxed">
                         {item.description}
                       </p>
                     </div>

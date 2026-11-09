@@ -35,7 +35,7 @@ export default function ContactoPage() {
           <span className="text-[11px] font-semibold uppercase tracking-[0.28em] text-white/80">
             Atención Personalizada &amp; Proyectos
           </span>
-          <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-normal tracking-tight text-white">
+          <h1 className="text-2xl sm:text-3xl uppercase tracking-[0.22em] font-semibold text-white">
             Contacto
           </h1>
         </div>
@@ -50,7 +50,7 @@ export default function ContactoPage() {
               <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#6b1d22] block">
                 Presupuesto &amp; Muestras
               </span>
-              <h2 className="font-serif text-2xl sm:text-3xl text-on-surface">
+              <h2 className="text-lg sm:text-xl uppercase tracking-[0.16em] font-semibold text-on-surface">
                 Solicitar cotización
               </h2>
               <p className="text-sm text-secondary leading-relaxed">
@@ -94,10 +94,10 @@ export default function ContactoPage() {
                       </a>
                     </div>
 
-                    <h2 className="font-serif text-xl text-on-surface">
+                    <h2 className="text-sm sm:text-base uppercase tracking-[0.16em] font-semibold text-on-surface">
                       {loc.name}
                     </h2>
-                    <p className="text-sm text-secondary leading-relaxed">
+                    <p className="text-xs sm:text-sm text-secondary leading-relaxed">
                       {loc.address}
                     </p>
                   </div>
@@ -133,7 +133,7 @@ export default function ContactoPage() {
             {/* Bloque horizontal compacto de Asesoras comerciales */}
             <div className="bg-white rounded-sm border border-outline/60 p-6 space-y-4">
               <div className="flex items-center justify-between gap-2">
-                <h2 className="font-serif text-lg text-on-surface">
+                <h2 className="text-xs sm:text-sm uppercase tracking-[0.16em] font-semibold text-on-surface">
                   Asesoría directa por WhatsApp
                 </h2>
                 <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#6b1d22]">
@@ -190,10 +190,10 @@ export default function ContactoPage() {
             <span className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#6b1d22] block">
               Consultas &amp; Garantías
             </span>
-            <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl text-on-surface">
+            <h2 className="text-xl sm:text-2xl uppercase tracking-[0.18em] font-semibold text-on-surface">
               Preguntas frecuentes
             </h2>
-            <p className="text-sm text-secondary">
+            <p className="text-xs sm:text-sm tracking-wide text-secondary">
               Respuestas rápidas sobre despachos a obra, reservas de lote,
               muestras físicas y garantías.
             </p>
@@ -206,7 +206,7 @@ export default function ContactoPage() {
                 className="group bg-white rounded-sm border border-outline/60 px-6 py-4 transition-all open:border-[#6b1d22]/45 open:shadow-sm"
               >
                 <summary className="flex items-center justify-between gap-4 min-h-[44px] cursor-pointer select-none">
-                  <span className="font-serif text-base sm:text-lg text-on-surface group-hover:text-[#6b1d22] transition-colors">
+                  <span className="text-xs sm:text-sm uppercase tracking-[0.14em] font-semibold text-on-surface group-hover:text-[#6b1d22] transition-colors">
                     {faq.question}
                   </span>
                   <span className="h-7 w-7 bg-surface inline-flex items-center justify-center text-secondary text-lg transition-transform duration-200 group-open:rotate-45 group-open:bg-[#6b1d22] group-open:text-white shrink-0">

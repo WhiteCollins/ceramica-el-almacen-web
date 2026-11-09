@@ -22,13 +22,6 @@ const SLIDES = SPACES.map((space) => ({
   imagePosition: space.imagePosition,
 }));
 
-/**
- * Hero Banner de lujo editorial inspirado en Manolo Blahnik:
- * - Proporción inmersiva de galería (`h-[520px] sm:h-[620px] lg:h-[calc(100svh-74px)] lg:max-h-[780px]`)
- * - Autoplay continuo sin pausarse por hover del ratón
- * - Indicadores inferiores con barras de progreso lineales (`h-0.5`) que se llenan en tiempo real
- * - Botones rectangulares con tipografía `uppercase tracking-[0.22em]`
- */
 export function HeroBanner() {
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -42,7 +35,6 @@ export function HeroBanner() {
     setActiveIndex((prev) => (prev - 1 + slideCount) % slideCount);
   }, [slideCount]);
 
-  // Autoplay continuo sin pausarse por hover del ratón
   useEffect(() => {
     const timer = window.setInterval(nextSlide, SLIDE_INTERVAL_MS);
     return () => window.clearInterval(timer);
@@ -100,13 +92,13 @@ export function HeroBanner() {
 
               <div className="absolute inset-x-0 bottom-0 pb-20 sm:pb-24">
                 <div className="max-w-7xl mx-auto px-margin-mobile sm:px-20 flex flex-col items-center text-center gap-3.5 text-white">
-                  <span className="text-[11px] sm:text-xs uppercase tracking-[0.28em] font-medium text-white/90">
+                  <span className="text-[11px] sm:text-xs uppercase tracking-[0.28em] font-semibold text-white/90">
                     Colección · {slide.eyebrow}
                   </span>
-                  <h2 className="max-w-3xl font-serif text-4xl sm:text-5xl lg:text-6xl font-normal tracking-tight text-white">
+                  <h2 className="max-w-3xl text-2xl sm:text-4xl uppercase tracking-[0.18em] font-semibold text-white">
                     {slide.title}
                   </h2>
-                  <p className="max-w-xl text-sm sm:text-base text-white/85 leading-relaxed">
+                  <p className="max-w-xl text-xs sm:text-sm tracking-wide text-white/85 leading-relaxed">
                     {slide.description}
                   </p>
                   <div className="flex flex-wrap items-center justify-center gap-3.5 pt-3">

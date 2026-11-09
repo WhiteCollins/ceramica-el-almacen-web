@@ -27,10 +27,10 @@ export default function ShowroomPage() {
             <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#6b1d22] block">
               Especificación &amp; Showroom
             </span>
-            <h2 className="font-serif text-2xl sm:text-3xl text-on-surface">
+            <h2 className="text-lg sm:text-xl uppercase tracking-[0.16em] font-semibold text-on-surface">
               ¿Trabajas en una obra o remodelación?
             </h2>
-            <p className="text-sm sm:text-base text-secondary">
+            <p className="text-xs sm:text-sm tracking-wide text-secondary">
               Trae tus planos al showroom o solicítanos muestras físicas y
               reserva de lote sin costo.
             </p>

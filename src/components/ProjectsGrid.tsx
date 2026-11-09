@@ -34,20 +34,12 @@ function productsFor(project: ShowroomProject) {
     .filter((p): p is (typeof CATALOG_PRODUCTS)[number] => Boolean(p));
 }
 
-/**
- * Tarjeta Featured tipo Split Hero equilibrada con estética editorial de galería:
- * - Bordes rectos (rounded-sm) y tipografía en mayúsculas con espaciado amplio
- * - Badge de ubicación superpuesto en la imagen principal (ej. Juan Dolio, Rep. Dominicana)
- * - Badge de tipología (ej. Residencial de Lujo)
- * - Columna de datos con KPI grande en color vino (#6b1d22) para los m² suministrados
- * - Chips / pills interactivos de producto con enlace directo al catálogo
- */
 function FeaturedProject({ project }: { project: ShowroomProject }) {
   const href = `/showroom/${project.id}`;
 
   return (
     <article className="grid grid-cols-1 lg:grid-cols-12 rounded-sm bg-white border border-outline/60 overflow-hidden transition-all duration-300 ease-out hover:border-[#6b1d22]/45 hover:shadow-[0_14px_34px_-10px_rgba(107,29,34,0.22)]">
-      {/* Columna Imagen (50% en desktop para equilibrar pesos con la columna de datos) */}
+      {/* Columna Imagen (50% en desktop) */}
       <Link
         href={href}
         className="group relative block lg:col-span-6 aspect-[4/3] lg:aspect-auto lg:min-h-[460px] overflow-hidden bg-surface-container-low"
@@ -62,15 +54,12 @@ function FeaturedProject({ project }: { project: ShowroomProject }) {
           className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
         />
 
-        {/* Gradiente sutil para legibilidad de los badges */}
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/20" />
 
-        {/* Badge de tipología superior izquierdo */}
         <span className="absolute top-4 left-4 z-10 bg-white/95 backdrop-blur-sm px-3.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-on-surface shadow-sm">
           {project.spaceBadge}
         </span>
 
-        {/* Badge de ubicación superpuesto en la esquina inferior izquierda */}
         <span className="absolute bottom-4 left-4 z-10 inline-flex items-center gap-1.5 bg-inverse-surface/85 backdrop-blur-sm px-3.5 py-1.5 text-[11px] font-medium uppercase tracking-[0.14em] text-white shadow-sm">
           <Icon name="location_on" className="text-[14px] text-white/90" />
           <span>{project.fullLocation}</span>
@@ -80,7 +69,6 @@ function FeaturedProject({ project }: { project: ShowroomProject }) {
       {/* Columna de Datos Equilibrada (50% en desktop) */}
       <div className="lg:col-span-6 p-6 sm:p-9 lg:p-12 flex flex-col justify-between gap-6">
         <div className="space-y-4">
-          {/* Metadatos claros y jerarquizados */}
           <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-secondary">
             <span className="text-[#6b1d22]">{project.category}</span>
             <span aria-hidden="true">·</span>
@@ -89,7 +77,7 @@ function FeaturedProject({ project }: { project: ShowroomProject }) {
             <span>Entrega {project.year}</span>
           </div>
 
-          <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl text-on-surface leading-tight tracking-tight">
+          <h2 className="text-lg sm:text-xl uppercase tracking-[0.16em] font-semibold text-on-surface leading-snug">
             <Link
               href={href}
               className="hover:text-[#6b1d22] transition-colors"
@@ -98,14 +86,14 @@ function FeaturedProject({ project }: { project: ShowroomProject }) {
             </Link>
           </h2>
 
-          <p className="text-sm sm:text-base text-secondary leading-relaxed">
+          <p className="text-sm text-secondary leading-relaxed">
             {project.summary}
           </p>
         </div>
 
         {/* KPI Grande de Capacidad de Suministro con acento en color vino (#6b1d22) */}
         <div className="flex items-baseline gap-3.5 rounded-sm bg-surface-container-low px-5 py-4 border-l-2 border-[#6b1d22]">
-          <span className="font-serif text-3xl sm:text-4xl font-semibold text-[#6b1d22] tracking-tight">
+          <span className="text-2xl sm:text-3xl font-semibold uppercase tracking-[0.08em] text-[#6b1d22]">
             {project.areaValue}
           </span>
           <span className="text-xs font-medium uppercase tracking-[0.14em] text-secondary">
@@ -113,7 +101,7 @@ function FeaturedProject({ project }: { project: ShowroomProject }) {
           </span>
         </div>
 
-        {/* Chips / Pills interactivos de producto con enlace directo al catálogo */}
+        {/* Chips interactivos de producto con enlace directo al catálogo */}
         {project.materials.length > 0 ? (
           <div className="space-y-2.5">
             <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-secondary block">
@@ -124,7 +112,7 @@ function FeaturedProject({ project }: { project: ShowroomProject }) {
                 <Link
                   key={material.href + material.label}
                   href={material.href}
-                  className="inline-flex items-center gap-1.5 bg-surface hover:bg-[#6b1d22] text-on-surface hover:text-white border border-outline px-3.5 py-1.5 text-[11px] font-medium uppercase tracking-[0.12em] transition-colors"
+                  className="inline-flex items-center gap-1.5 bg-surface hover:bg-[#6b1d22] text-on-surface hover:text-white border border-outline px-3.5 py-1.5 text-[11px] font-medium uppercase tracking-[0.14em] transition-colors"
                 >
                   <span>{material.label}</span>
                   <Icon name="arrow_forward" className="text-[13px]" />
@@ -149,14 +137,6 @@ function FeaturedProject({ project }: { project: ShowroomProject }) {
   );
 }
 
-/**
- * Tarjeta de proyecto enriquecida en el grid con estética editorial:
- * - Proporción uniforme aspect-[4/3] con zoom suave al hover y brillo vino (#6b1d22)
- * - Badge con el tipo de espacio (Residencial de Lujo, Comercial / Hotelería, Penthouse)
- * - Tag de ciudad (La Romana, San Pedro, Bávaro, Santo Domingo) directamente sobre la foto
- * - Avatares circulares superpuestos en la esquina inferior con tooltip del material al pasar el ratón
- * - KPI de suministro destacado en color vino (#6b1d22)
- */
 export function ProjectCard({ project }: { project: ShowroomProject }) {
   const products = productsFor(project);
   const href = `/showroom/${project.id}`;
@@ -187,7 +167,7 @@ export function ProjectCard({ project }: { project: ShowroomProject }) {
           <span>{project.location}</span>
         </span>
 
-        {/* Avatares circulares superpuestos en la esquina inferior de la foto con tooltip al pasar el ratón */}
+        {/* Avatares circulares superpuestos en la esquina inferior de la foto */}
         {products.length > 0 ? (
           <ul
             role="list"
@@ -210,8 +190,7 @@ export function ProjectCard({ project }: { project: ShowroomProject }) {
                     className="object-cover"
                   />
                 </Link>
-                {/* Tooltip del material al pasar el ratón */}
-                <span className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2 whitespace-nowrap rounded-sm bg-inverse-surface px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.12em] text-white opacity-0 translate-y-1 group-hover/avatar:opacity-100 group-hover/avatar:translate-y-0 transition-all shadow-md z-30">
+                <span className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2 whitespace-nowrap rounded-sm bg-inverse-surface px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.14em] text-white opacity-0 translate-y-1 group-hover/avatar:opacity-100 group-hover/avatar:translate-y-0 transition-all shadow-md z-30">
                   {product.name}
                 </span>
               </li>
@@ -230,11 +209,11 @@ export function ProjectCard({ project }: { project: ShowroomProject }) {
             <span className="font-semibold text-[#6b1d22]">{project.area}</span>
           </div>
 
-          <h3 className="font-serif text-xl text-on-surface group-hover:text-[#6b1d22] transition-colors">
+          <h3 className="text-sm sm:text-base uppercase tracking-[0.16em] font-semibold text-on-surface group-hover:text-[#6b1d22] transition-colors">
             <Link href={href}>{project.title}</Link>
           </h3>
 
-          <p className="text-sm text-secondary line-clamp-2 leading-relaxed">
+          <p className="text-xs sm:text-sm text-secondary line-clamp-2 leading-relaxed">
             {project.summary}
           </p>
         </div>
@@ -246,7 +225,7 @@ export function ProjectCard({ project }: { project: ShowroomProject }) {
               <Link
                 key={mat.href + mat.label}
                 href={mat.href}
-                className="bg-surface-container-low hover:bg-surface-container px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.12em] text-on-surface transition-colors"
+                className="bg-surface-container-low hover:bg-surface-container px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.14em] text-on-surface transition-colors"
               >
                 {mat.label}
               </Link>
@@ -266,11 +245,6 @@ export function ProjectCard({ project }: { project: ShowroomProject }) {
   );
 }
 
-/**
- * Tarjeta CTA de captación ("Tu obra puede ser la próxima"):
- * Card con fondo cálido sutil y borde sólido editorial con botón de acción directo:
- * "Enviar planos para cubicación".
- */
 function NextProjectCard() {
   const whatsappPlanesHref = buildWhatsAppUrl(
     "Hola, deseo enviar los planos de mi proyecto para cubicación y reserva de lote."
@@ -284,11 +258,11 @@ function NextProjectCard() {
           <span>Departamento Técnico &amp; Obras</span>
         </span>
 
-        <h3 className="font-serif text-2xl text-on-surface leading-snug">
+        <h3 className="text-base sm:text-lg uppercase tracking-[0.16em] font-semibold text-on-surface leading-snug">
           Tu obra puede ser la próxima
         </h3>
 
-        <p className="text-sm text-secondary leading-relaxed">
+        <p className="text-xs sm:text-sm text-secondary leading-relaxed">
           Cubicamos tus planos DWG o PDF sin costo, garantizamos reserva de un
           solo lote para evitar variaciones de tono y programamos despachos a
           pie de obra en todo el país.
@@ -344,22 +318,22 @@ export function ProjectsGrid() {
 
   return (
     <div className="flex flex-col gap-10 lg:gap-14">
-      {/* Encabezado Centrado Editorial + Barra de Filtros por Tipología y Ubicación */}
+      {/* Encabezado Centrado Editorial + Barra de Filtros */}
       <div className="flex flex-col items-center text-center gap-6 border-b border-outline/60 pb-8">
         <header className="max-w-2xl space-y-3">
           <span className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#6b1d22] block">
             Portafolio de Suministro &amp; Especificación
           </span>
-          <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-on-surface tracking-tight">
+          <h1 className="text-2xl sm:text-3xl uppercase tracking-[0.18em] font-semibold text-on-surface">
             Proyectos y obras equipadas
           </h1>
-          <p className="text-sm sm:text-base text-secondary leading-relaxed">
+          <p className="text-xs sm:text-sm tracking-wide text-secondary leading-relaxed">
             Residencias privadas, desarrollos turísticos y espacios comerciales
             suministrados con reserva de lote en toda la República Dominicana.
           </p>
         </header>
 
-        {/* Selector de filtros por tipología y ubicación con estilo editorial */}
+        {/* Selector de filtros por tipología y ubicación */}
         <div
           role="tablist"
           aria-label="Filtrar proyectos por tipología o ubicación"

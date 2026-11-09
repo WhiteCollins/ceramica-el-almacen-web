@@ -108,7 +108,10 @@ export default async function TypePage({ params }: TypePageProps) {
           ) : null}
 
           <div className="flex flex-wrap items-end justify-between gap-3 pt-2">
-            <h2 id="piezas" className="font-serif text-3xl text-on-surface">
+            <h2
+              id="piezas"
+              className="text-xl sm:text-2xl uppercase tracking-[0.18em] font-semibold text-on-surface"
+            >
               Piezas
             </h2>
             <p className="text-[11px] uppercase tracking-[0.18em] text-secondary">
@@ -124,7 +127,10 @@ export default async function TypePage({ params }: TypePageProps) {
             className="flex flex-col gap-6 pt-6 border-t border-outline/60"
           >
             <div className="flex flex-wrap items-end justify-between gap-3">
-              <h2 id="mas" className="font-serif text-3xl text-on-surface">
+              <h2
+                id="mas"
+                className="text-xl sm:text-2xl uppercase tracking-[0.18em] font-semibold text-on-surface"
+              >
                 Más en {space.label.toLowerCase()}
               </h2>
               <Link

@@ -55,7 +55,7 @@ export function Footer() {
                   className="text-[17px] text-[#6b1d22] shrink-0 mt-0.5"
                 />
                 <div>
-                  <p className="font-serif text-base text-on-surface font-medium">
+                  <p className="text-xs uppercase tracking-[0.16em] text-on-surface font-semibold">
                     San Pedro de Macorís
                   </p>
                   <p>Av. Rolando Martínez 33</p>
@@ -74,7 +74,7 @@ export function Footer() {
                   className="text-[17px] text-[#6b1d22] shrink-0 mt-0.5"
                 />
                 <div>
-                  <p className="font-serif text-base text-on-surface font-medium">
+                  <p className="text-xs uppercase tracking-[0.16em] text-on-surface font-semibold">
                     La Romana
                   </p>
                   <p>Av. Profesor Juan Bosch (antigua Av. Padre Abreu)</p>

@@ -1,19 +1,11 @@
 import type { Metadata } from "next";
-import { Noto_Serif, Plus_Jakarta_Sans } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ICON_FONT_URL } from "@/components/Icon";
 import { ScrollRevealObserver } from "@/components/ScrollRevealObserver";
 import { SITE_INFO } from "@/data/site";
 import "./globals.css";
-
-const notoSerif = Noto_Serif({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  style: ["normal", "italic"],
-  variable: "--font-noto-serif",
-  display: "swap",
-});
 
 const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -102,10 +94,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="es"
-      className={`${notoSerif.variable} ${plusJakarta.variable}`}
-    >
+    <html lang="es" className={plusJakarta.variable}>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
@@ -121,7 +110,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="bg-surface font-body-md text-on-surface antialiased selection:bg-primary selection:text-on-primary">
+      <body className="bg-surface font-sans font-body-md text-on-surface antialiased selection:bg-primary selection:text-on-primary">
         <a
           href="#contenido-principal"
           className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:bg-primary focus:text-on-primary focus:px-4 focus:py-3 focus:min-h-[44px] focus:inline-flex focus:items-center focus:rounded font-label-md text-label-md shadow-md"

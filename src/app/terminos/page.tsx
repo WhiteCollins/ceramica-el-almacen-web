@@ -118,10 +118,10 @@ export default function TerminosGarantiaPage() {
               <Icon name="verified" className="text-[14px]" />
               <span>Respaldo Oficial · {SITE_INFO.legalName}</span>
             </span>
-            <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-on-surface tracking-tight">
+            <h1 className="text-2xl sm:text-3xl uppercase tracking-[0.18em] font-semibold text-on-surface">
               Términos de Garantía y Condiciones Comerciales
             </h1>
-            <p className="text-sm sm:text-base text-secondary max-w-2xl mx-auto leading-relaxed">
+            <p className="text-xs sm:text-sm tracking-wide text-secondary max-w-2xl mx-auto leading-relaxed">
               En {SITE_INFO.name} respaldamos la calidad de cada porcelanato,
               revestimiento cerámico, pieza sanitaria y grifería que importamos.
               A continuación detallamos nuestras políticas de garantía,
@@ -140,7 +140,7 @@ export default function TerminosGarantiaPage() {
               className="bg-white rounded-sm border border-outline/60 p-6 sm:p-9 space-y-6 transition-all duration-300 hover:border-[#6b1d22]/40"
             >
               <div className="flex items-center gap-3.5 border-b border-outline/50 pb-4">
-                <span className="h-10 w-10 bg-on-surface text-white inline-flex items-center justify-center font-serif font-semibold text-sm shrink-0">
+                <span className="h-10 w-10 bg-on-surface text-white inline-flex items-center justify-center font-semibold text-xs tracking-wider shrink-0">
                   {section.number}
                 </span>
                 <div className="flex items-center gap-2">
@@ -148,7 +148,7 @@ export default function TerminosGarantiaPage() {
                     name={section.icon}
                     className="text-[19px] text-[#6b1d22] shrink-0"
                   />
-                  <h2 className="font-serif text-xl sm:text-2xl text-on-surface">
+                  <h2 className="text-sm sm:text-base uppercase tracking-[0.16em] font-semibold text-on-surface">
                     {section.title}
                   </h2>
                 </div>
@@ -175,7 +175,7 @@ export default function TerminosGarantiaPage() {
               <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#6b1d22] block">
                 Atención Postventa &amp; Repuestos
               </span>
-              <h2 className="font-serif text-2xl text-on-surface">
+              <h2 className="text-base sm:text-lg uppercase tracking-[0.16em] font-semibold text-on-surface">
                 ¿Necesitas tramitar una garantía o solicitar un repuesto?
               </h2>
               <p className="text-sm text-secondary leading-relaxed">

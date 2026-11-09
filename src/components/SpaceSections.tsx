@@ -84,7 +84,9 @@ export function RelatedProjects({
           <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#6b1d22] block">
             Proyectos Reales
           </span>
-          <h2 className="font-serif text-3xl text-on-surface">{title}</h2>
+          <h2 className="text-xl sm:text-2xl uppercase tracking-[0.18em] font-semibold text-on-surface">
+            {title}
+          </h2>
         </div>
         <Link
           href="/showroom"

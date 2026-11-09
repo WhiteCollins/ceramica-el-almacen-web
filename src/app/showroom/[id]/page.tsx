@@ -122,7 +122,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
                 <span>{project.fullLocation}</span>
               </span>
 
-              <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-on-surface font-normal tracking-tight">
+              <h1 className="text-2xl sm:text-3xl uppercase tracking-[0.16em] font-semibold text-on-surface">
                 {project.title}
               </h1>
             </div>
@@ -133,7 +133,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
                 <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-secondary block">
                   Ubicación
                 </span>
-                <p className="font-serif text-lg text-on-surface mt-1">
+                <p className="text-xs sm:text-sm uppercase tracking-[0.14em] font-semibold text-on-surface mt-1">
                   {project.location}
                 </p>
               </div>
@@ -141,7 +141,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
                 <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-secondary block">
                   Tipología
                 </span>
-                <p className="font-serif text-lg text-on-surface mt-1">
+                <p className="text-xs sm:text-sm uppercase tracking-[0.14em] font-semibold text-on-surface mt-1">
                   {project.category}
                 </p>
               </div>
@@ -149,7 +149,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
                 <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-secondary block">
                   Suministro
                 </span>
-                <p className="font-serif text-lg text-[#6b1d22] font-semibold mt-1">
+                <p className="text-xs sm:text-sm uppercase tracking-[0.14em] font-semibold text-[#6b1d22] mt-1">
                   {project.area}
                 </p>
               </div>
@@ -216,7 +216,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
             <span className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#6b1d22]">
               Acabados Utilizados en Obra
             </span>
-            <h2 className="font-serif text-2xl sm:text-3xl text-on-surface">
+            <h2 className="text-xl sm:text-2xl uppercase tracking-[0.18em] font-semibold text-on-surface">
               Materiales especificados en {project.title}
             </h2>
           </div>
@@ -235,7 +235,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
               <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#6b1d22] block">
                 Portafolio
               </span>
-              <h2 className="font-serif text-2xl sm:text-3xl text-on-surface">
+              <h2 className="text-xl sm:text-2xl uppercase tracking-[0.18em] font-semibold text-on-surface">
                 Otros proyectos destacados
               </h2>
             </div>
@@ -270,7 +270,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
                     <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#6b1d22]">
                       {item.location} · {item.category}
                     </span>
-                    <h3 className="font-serif text-xl text-on-surface group-hover:text-[#6b1d22] transition-colors mt-1">
+                    <h3 className="text-sm sm:text-base uppercase tracking-[0.16em] font-semibold text-on-surface group-hover:text-[#6b1d22] transition-colors mt-1">
                       {item.title}
                     </h3>
                     <p className="text-xs text-secondary line-clamp-2 mt-1.5 leading-relaxed">

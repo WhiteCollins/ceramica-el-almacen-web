@@ -290,7 +290,7 @@ export function CatalogExplorer() {
         <span className="text-[11px] uppercase tracking-[0.28em] text-[#6b1d22] font-semibold block">
           Colección Permanente · Importación Directa
         </span>
-        <h1 className="font-serif text-3xl sm:text-5xl text-on-surface tracking-tight">
+        <h1 className="text-2xl sm:text-3xl uppercase tracking-[0.18em] font-semibold text-on-surface">
           {activeCategory === "all"
             ? "Catálogo de Superficies & Baños"
             : activeCategoryMeta.label}

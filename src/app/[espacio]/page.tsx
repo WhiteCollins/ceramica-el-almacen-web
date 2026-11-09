@@ -74,7 +74,10 @@ export default async function SpacePage({ params }: SpacePageProps) {
             <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#6b1d22] block">
               Subcategorías
             </span>
-            <h2 id="tipos" className="font-serif text-3xl text-on-surface">
+            <h2
+              id="tipos"
+              className="text-xl sm:text-2xl uppercase tracking-[0.18em] font-semibold text-on-surface"
+            >
               ¿Qué buscas para {space.label.toLowerCase()}?
             </h2>
           </div>
@@ -105,7 +108,7 @@ export default async function SpacePage({ params }: SpacePageProps) {
                     />
                   </span>
                   <span className="flex items-baseline justify-between gap-3">
-                    <span className="font-serif text-xl text-on-surface group-hover:text-[#6b1d22] transition-colors">
+                    <span className="text-xs sm:text-sm uppercase tracking-[0.16em] font-semibold text-on-surface group-hover:text-[#6b1d22] transition-colors">
                       {type.title}
                     </span>
                     <span className="text-[11px] uppercase tracking-[0.16em] text-secondary shrink-0">
@@ -119,13 +122,19 @@ export default async function SpacePage({ params }: SpacePageProps) {
         </section>
 
         {/* Todas las piezas del espacio */}
-        <section aria-labelledby="piezas" className="flex flex-col gap-6 pt-6 border-t border-outline/60">
+        <section
+          aria-labelledby="piezas"
+          className="flex flex-col gap-6 pt-6 border-t border-outline/60"
+        >
           <div className="flex flex-wrap items-end justify-between gap-3">
             <div className="space-y-1">
               <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#6b1d22] block">
                 Selección Curada
               </span>
-              <h2 id="piezas" className="font-serif text-3xl text-on-surface">
+              <h2
+                id="piezas"
+                className="text-xl sm:text-2xl uppercase tracking-[0.18em] font-semibold text-on-surface"
+              >
                 Todas las piezas
               </h2>
             </div>

@@ -146,7 +146,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                 <span>SKU: {product.sku}</span>
               </div>
 
-              <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-on-surface font-normal tracking-tight">
+              <h1 className="text-2xl sm:text-3xl uppercase tracking-[0.16em] font-semibold text-on-surface">
                 {product.name}
               </h1>
 
@@ -156,7 +156,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
               </div>
             </div>
 
-            {/* Botones de Acción Directa (arriba como en Manolo Blahnik PDP) */}
+            {/* Botones de Acción Directa */}
             <div className="flex flex-col sm:flex-row gap-3">
               <a
                 href={buildWhatsAppUrl(product.whatsappText)}
@@ -192,7 +192,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                 <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-secondary block">
                   Dimensiones y Formato
                 </span>
-                <p className="font-serif text-base text-on-surface font-medium mt-1">
+                <p className="text-xs sm:text-sm uppercase tracking-[0.14em] font-semibold text-on-surface mt-1">
                   {product.detailedDimensions}
                 </p>
               </div>
@@ -201,7 +201,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                 <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-secondary block">
                   Material Base
                 </span>
-                <p className="font-serif text-base text-on-surface font-medium mt-1">
+                <p className="text-xs sm:text-sm uppercase tracking-[0.14em] font-semibold text-on-surface mt-1">
                   {product.materialBase}
                 </p>
               </div>
@@ -210,7 +210,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                 <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-secondary block">
                   Acabado Superficial
                 </span>
-                <p className="font-serif text-base text-on-surface font-medium mt-1">
+                <p className="text-xs sm:text-sm uppercase tracking-[0.14em] font-semibold text-on-surface mt-1">
                   {product.finish}
                 </p>
               </div>
@@ -219,7 +219,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                 <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-secondary block">
                   País de Origen
                 </span>
-                <p className="font-serif text-base text-on-surface font-medium mt-1">
+                <p className="text-xs sm:text-sm uppercase tracking-[0.14em] font-semibold text-on-surface mt-1">
                   {product.originCountry} ({product.originBadge})
                 </p>
               </div>
@@ -242,10 +242,10 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                     key={spec.label}
                     className="px-5 py-3 grid grid-cols-1 sm:grid-cols-12 gap-1 sm:gap-4 items-baseline"
                   >
-                    <dt className="sm:col-span-5 text-xs uppercase tracking-[0.12em] text-secondary">
+                    <dt className="sm:col-span-5 text-xs uppercase tracking-[0.14em] text-secondary">
                       {spec.label}
                     </dt>
-                    <dd className="sm:col-span-7 text-sm text-on-surface font-medium">
+                    <dd className="sm:col-span-7 text-xs sm:text-sm uppercase tracking-[0.1em] text-on-surface font-semibold">
                       {spec.value}
                     </dd>
                   </div>
@@ -278,7 +278,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
               <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#6b1d22] block">
                 Explorar Más Opciones
               </span>
-              <h2 className="font-serif text-2xl sm:text-3xl text-on-surface">
+              <h2 className="text-xl sm:text-2xl uppercase tracking-[0.18em] font-semibold text-on-surface">
                 Otras piezas de la colección
               </h2>
             </div>

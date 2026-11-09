@@ -15,7 +15,7 @@ interface CoverBannerProps {
 }
 
 /**
- * Banner de portada fijo (sin carrusel) con composición editorial centrada.
+ * Banner de portada fijo (sin carrusel) con composición editorial centrada y la misma fuente de navegación.
  */
 export function CoverBanner({
   eyebrow,
@@ -43,11 +43,11 @@ export function CoverBanner({
         <p className="text-[11px] sm:text-xs font-semibold uppercase tracking-[0.28em] text-white/85">
           {eyebrow}
         </p>
-        <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-normal tracking-tight text-white">
+        <h1 className="text-2xl sm:text-4xl uppercase tracking-[0.18em] font-semibold text-white">
           {title}
         </h1>
         {description ? (
-          <p className="max-w-2xl text-sm sm:text-base text-white/90 leading-relaxed">
+          <p className="max-w-2xl text-xs sm:text-sm tracking-wide text-white/90 leading-relaxed">
             {description}
           </p>
         ) : null}

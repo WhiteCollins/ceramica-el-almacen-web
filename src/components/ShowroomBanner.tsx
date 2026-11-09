@@ -29,7 +29,7 @@ export function ShowroomBanner({ topic }: { topic?: string }) {
           <span className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#6b1d22]">
             Atelier &amp; Exhibición
           </span>
-          <h2 className="font-serif text-3xl lg:text-4xl text-on-surface tracking-tight">
+          <h2 className="text-xl sm:text-2xl uppercase tracking-[0.16em] font-semibold text-on-surface">
             Míralo y tócalo en el showroom
           </h2>
           <p className="text-sm lg:text-base text-secondary max-w-xl leading-relaxed">
