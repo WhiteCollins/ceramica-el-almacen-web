@@ -35,7 +35,8 @@ function productsFor(project: ShowroomProject) {
 }
 
 /**
- * Tarjeta Featured tipo Split Hero equilibrada:
+ * Tarjeta Featured tipo Split Hero equilibrada con estética editorial de galería:
+ * - Bordes rectos (rounded-sm) y tipografía en mayúsculas con espaciado amplio
  * - Badge de ubicación superpuesto en la imagen principal (ej. Juan Dolio, Rep. Dominicana)
  * - Badge de tipología (ej. Residencial de Lujo)
  * - Columna de datos con KPI grande en color vino (#6b1d22) para los m² suministrados
@@ -45,11 +46,11 @@ function FeaturedProject({ project }: { project: ShowroomProject }) {
   const href = `/showroom/${project.id}`;
 
   return (
-    <article className="grid grid-cols-1 lg:grid-cols-12 rounded-2xl bg-white border border-outline/80 shadow-sm overflow-hidden">
+    <article className="grid grid-cols-1 lg:grid-cols-12 rounded-sm bg-white border border-outline/60 overflow-hidden transition-all duration-300 ease-out hover:border-[#6b1d22]/45 hover:shadow-[0_14px_34px_-10px_rgba(107,29,34,0.22)]">
       {/* Columna Imagen (50% en desktop para equilibrar pesos con la columna de datos) */}
       <Link
         href={href}
-        className="group relative block lg:col-span-6 aspect-[4/3] lg:aspect-auto lg:min-h-[440px] overflow-hidden bg-surface-container-low"
+        className="group relative block lg:col-span-6 aspect-[4/3] lg:aspect-auto lg:min-h-[460px] overflow-hidden bg-surface-container-low"
       >
         <Image
           src={project.image}
@@ -62,34 +63,37 @@ function FeaturedProject({ project }: { project: ShowroomProject }) {
         />
 
         {/* Gradiente sutil para legibilidad de los badges */}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/20" />
 
         {/* Badge de tipología superior izquierdo */}
-        <span className="absolute top-4 left-4 z-10 rounded-full bg-white/95 backdrop-blur-sm px-3.5 py-1.5 text-xs font-semibold text-on-surface shadow-sm">
+        <span className="absolute top-4 left-4 z-10 bg-white/95 backdrop-blur-sm px-3.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-on-surface shadow-sm">
           {project.spaceBadge}
         </span>
 
         {/* Badge de ubicación superpuesto en la esquina inferior izquierda */}
-        <span className="absolute bottom-4 left-4 z-10 inline-flex items-center gap-1.5 rounded-full bg-inverse-surface/85 backdrop-blur-sm px-3.5 py-1.5 text-xs font-medium text-white shadow-sm">
-          <Icon name="location_on" className="text-[15px] text-white/90" />
+        <span className="absolute bottom-4 left-4 z-10 inline-flex items-center gap-1.5 bg-inverse-surface/85 backdrop-blur-sm px-3.5 py-1.5 text-[11px] font-medium uppercase tracking-[0.14em] text-white shadow-sm">
+          <Icon name="location_on" className="text-[14px] text-white/90" />
           <span>{project.fullLocation}</span>
         </span>
       </Link>
 
       {/* Columna de Datos Equilibrada (50% en desktop) */}
-      <div className="lg:col-span-6 p-6 sm:p-8 lg:p-10 flex flex-col justify-between gap-6">
+      <div className="lg:col-span-6 p-6 sm:p-9 lg:p-12 flex flex-col justify-between gap-6">
         <div className="space-y-4">
           {/* Metadatos claros y jerarquizados */}
-          <div className="flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-wider text-secondary">
-            <span className="text-primary">{project.category}</span>
-            <span aria-hidden="true">•</span>
+          <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-secondary">
+            <span className="text-[#6b1d22]">{project.category}</span>
+            <span aria-hidden="true">·</span>
             <span>{project.location}</span>
-            <span aria-hidden="true">•</span>
+            <span aria-hidden="true">·</span>
             <span>Entrega {project.year}</span>
           </div>
 
-          <h2 className="font-serif text-2xl sm:text-3xl lg:text-[34px] text-on-surface leading-tight">
-            <Link href={href} className="hover:text-primary transition-colors">
+          <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl text-on-surface leading-tight tracking-tight">
+            <Link
+              href={href}
+              className="hover:text-[#6b1d22] transition-colors"
+            >
               {project.title}
             </Link>
           </h2>
@@ -100,11 +104,11 @@ function FeaturedProject({ project }: { project: ShowroomProject }) {
         </div>
 
         {/* KPI Grande de Capacidad de Suministro con acento en color vino (#6b1d22) */}
-        <div className="flex items-baseline gap-3 rounded-xl bg-surface-container-low px-5 py-4 border border-outline/60">
+        <div className="flex items-baseline gap-3.5 rounded-sm bg-surface-container-low px-5 py-4 border-l-2 border-[#6b1d22]">
           <span className="font-serif text-3xl sm:text-4xl font-semibold text-[#6b1d22] tracking-tight">
             {project.areaValue}
           </span>
-          <span className="text-xs sm:text-sm font-medium text-secondary">
+          <span className="text-xs font-medium uppercase tracking-[0.14em] text-secondary">
             {project.areaUnit} · Lote único garantizado
           </span>
         </div>
@@ -112,7 +116,7 @@ function FeaturedProject({ project }: { project: ShowroomProject }) {
         {/* Chips / Pills interactivos de producto con enlace directo al catálogo */}
         {project.materials.length > 0 ? (
           <div className="space-y-2.5">
-            <span className="text-xs font-semibold uppercase tracking-wider text-secondary block">
+            <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-secondary block">
               Materiales especificados
             </span>
             <div className="flex flex-wrap gap-2">
@@ -120,7 +124,7 @@ function FeaturedProject({ project }: { project: ShowroomProject }) {
                 <Link
                   key={material.href + material.label}
                   href={material.href}
-                  className="inline-flex items-center gap-1.5 rounded-full bg-surface hover:bg-[#6b1d22] text-on-surface hover:text-white border border-outline px-3.5 py-1.5 text-xs font-medium transition-colors"
+                  className="inline-flex items-center gap-1.5 bg-surface hover:bg-[#6b1d22] text-on-surface hover:text-white border border-outline px-3.5 py-1.5 text-[11px] font-medium uppercase tracking-[0.12em] transition-colors"
                 >
                   <span>{material.label}</span>
                   <Icon name="arrow_forward" className="text-[13px]" />
@@ -134,10 +138,10 @@ function FeaturedProject({ project }: { project: ShowroomProject }) {
         <div className="pt-1 flex flex-wrap items-center gap-3">
           <Link
             href={href}
-            className="min-h-[44px] inline-flex items-center gap-2 rounded-lg bg-primary hover:bg-primary-container px-5 py-2.5 text-sm font-semibold text-white transition-colors"
+            className="min-h-[46px] inline-flex items-center gap-2.5 bg-on-surface hover:bg-[#6b1d22] px-6 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-white transition-colors"
           >
             <span>Ver proyecto completo</span>
-            <Icon name="arrow_forward" className="text-[17px]" />
+            <Icon name="arrow_forward" className="text-[15px]" />
           </Link>
         </div>
       </div>
@@ -146,9 +150,9 @@ function FeaturedProject({ project }: { project: ShowroomProject }) {
 }
 
 /**
- * Tarjeta de proyecto enriquecida en el grid:
- * - Proporción uniforme aspect-[4/3] con zoom suave al hover
- * - Badge con el tipo de espacio (Residencial de Lujo, Comercial / Hotelería, Penthouse) en lugar de "Ejemplo"
+ * Tarjeta de proyecto enriquecida en el grid con estética editorial:
+ * - Proporción uniforme aspect-[4/3] con zoom suave al hover y brillo vino (#6b1d22)
+ * - Badge con el tipo de espacio (Residencial de Lujo, Comercial / Hotelería, Penthouse)
  * - Tag de ciudad (La Romana, San Pedro, Bávaro, Santo Domingo) directamente sobre la foto
  * - Avatares circulares superpuestos en la esquina inferior con tooltip del material al pasar el ratón
  * - KPI de suministro destacado en color vino (#6b1d22)
@@ -158,7 +162,7 @@ export function ProjectCard({ project }: { project: ShowroomProject }) {
   const href = `/showroom/${project.id}`;
 
   return (
-    <article className="group flex flex-col rounded-2xl bg-white border border-outline/75 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300">
+    <article className="group flex flex-col rounded-sm bg-white border border-outline/60 overflow-hidden transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-[#6b1d22]/45 hover:shadow-[0_14px_34px_-10px_rgba(107,29,34,0.22)]">
       <div className="relative aspect-[4/3] w-full overflow-hidden bg-surface-container-low">
         <Link href={href} className="block w-full h-full">
           <Image
@@ -172,14 +176,14 @@ export function ProjectCard({ project }: { project: ShowroomProject }) {
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent" />
         </Link>
 
-        {/* Tipo de espacio (reemplaza el antiguo badge "Ejemplo") */}
-        <span className="pointer-events-none absolute top-3.5 left-3.5 z-10 rounded-full bg-white/95 backdrop-blur-sm px-3 py-1 text-xs font-semibold text-on-surface shadow-sm">
+        {/* Tipo de espacio */}
+        <span className="pointer-events-none absolute top-3.5 left-3.5 z-10 bg-white/95 backdrop-blur-sm px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-on-surface shadow-sm">
           {project.spaceBadge}
         </span>
 
         {/* Tag de ciudad directamente sobre la foto */}
-        <span className="pointer-events-none absolute top-3.5 right-3.5 z-10 inline-flex items-center gap-1 rounded-full bg-inverse-surface/85 backdrop-blur-sm px-3 py-1 text-xs font-medium text-white">
-          <Icon name="location_on" className="text-[13px]" />
+        <span className="pointer-events-none absolute top-3.5 right-3.5 z-10 inline-flex items-center gap-1 bg-inverse-surface/85 backdrop-blur-sm px-3 py-1 text-[10px] font-medium uppercase tracking-[0.14em] text-white">
+          <Icon name="location_on" className="text-[12px]" />
           <span>{project.location}</span>
         </span>
 
@@ -207,7 +211,7 @@ export function ProjectCard({ project }: { project: ShowroomProject }) {
                   />
                 </Link>
                 {/* Tooltip del material al pasar el ratón */}
-                <span className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2 whitespace-nowrap rounded-md bg-inverse-surface px-2.5 py-1 text-[11px] font-medium text-white opacity-0 translate-y-1 group-hover/avatar:opacity-100 group-hover/avatar:translate-y-0 transition-all shadow-md z-30">
+                <span className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2 whitespace-nowrap rounded-sm bg-inverse-surface px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.12em] text-white opacity-0 translate-y-1 group-hover/avatar:opacity-100 group-hover/avatar:translate-y-0 transition-all shadow-md z-30">
                   {product.name}
                 </span>
               </li>
@@ -217,16 +221,16 @@ export function ProjectCard({ project }: { project: ShowroomProject }) {
       </div>
 
       {/* Cuerpo de la tarjeta */}
-      <div className="p-5 flex flex-col justify-between flex-1 gap-4">
-        <div className="space-y-1.5">
-          <div className="flex items-center justify-between gap-2 text-xs font-medium text-secondary">
+      <div className="p-5 sm:p-6 flex flex-col justify-between flex-1 gap-4">
+        <div className="space-y-2">
+          <div className="flex items-center justify-between gap-2 text-[11px] font-medium uppercase tracking-[0.16em] text-secondary">
             <span>
               {project.location} · {project.year}
             </span>
             <span className="font-semibold text-[#6b1d22]">{project.area}</span>
           </div>
 
-          <h3 className="font-serif text-xl text-on-surface group-hover:text-primary transition-colors">
+          <h3 className="font-serif text-xl text-on-surface group-hover:text-[#6b1d22] transition-colors">
             <Link href={href}>{project.title}</Link>
           </h3>
 
@@ -236,13 +240,13 @@ export function ProjectCard({ project }: { project: ShowroomProject }) {
         </div>
 
         {/* Chips compactos de productos + enlace al proyecto */}
-        <div className="pt-3 border-t border-outline/60 flex items-center justify-between gap-2">
+        <div className="pt-3.5 border-t border-outline/50 flex items-center justify-between gap-2">
           <div className="flex flex-wrap gap-1.5">
             {project.materials.slice(0, 2).map((mat) => (
               <Link
                 key={mat.href + mat.label}
                 href={mat.href}
-                className="rounded-full bg-surface-container-low hover:bg-surface-container px-2.5 py-1 text-[11px] font-medium text-on-surface transition-colors"
+                className="bg-surface-container-low hover:bg-surface-container px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.12em] text-on-surface transition-colors"
               >
                 {mat.label}
               </Link>
@@ -251,10 +255,10 @@ export function ProjectCard({ project }: { project: ShowroomProject }) {
 
           <Link
             href={href}
-            className="inline-flex items-center gap-1 text-xs font-semibold text-primary group-hover:translate-x-0.5 transition-transform shrink-0"
+            className="inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#6b1d22] group-hover:translate-x-0.5 transition-transform shrink-0"
           >
             <span>Ver obra</span>
-            <Icon name="arrow_forward" className="text-[14px]" />
+            <Icon name="arrow_forward" className="text-[13px]" />
           </Link>
         </div>
       </div>
@@ -264,7 +268,7 @@ export function ProjectCard({ project }: { project: ShowroomProject }) {
 
 /**
  * Tarjeta CTA de captación ("Tu obra puede ser la próxima"):
- * Card con fondo cálido sutil y borde sólido premium con botón de acción directo:
+ * Card con fondo cálido sutil y borde sólido editorial con botón de acción directo:
  * "Enviar planos para cubicación".
  */
 function NextProjectCard() {
@@ -273,10 +277,10 @@ function NextProjectCard() {
   );
 
   return (
-    <article className="flex flex-col justify-between rounded-2xl border border-[#6b1d22]/25 bg-gradient-to-br from-[#FAF6F2] via-surface-container-low to-[#F3ECE4] p-7 lg:p-8 shadow-sm">
+    <article className="flex flex-col justify-between rounded-sm border border-[#6b1d22]/30 bg-gradient-to-br from-[#FAF6F2] via-surface-container-low to-[#F3ECE4] p-7 lg:p-8 transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-[#6b1d22]/55 hover:shadow-[0_14px_34px_-10px_rgba(107,29,34,0.22)]">
       <div className="space-y-4">
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-[#6b1d22]/10 text-[#6b1d22] px-3 py-1 text-xs font-semibold">
-          <Icon name="architecture" className="text-[15px]" />
+        <span className="inline-flex items-center gap-1.5 bg-[#6b1d22]/10 text-[#6b1d22] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em]">
+          <Icon name="architecture" className="text-[14px]" />
           <span>Departamento Técnico &amp; Obras</span>
         </span>
 
@@ -305,19 +309,19 @@ function NextProjectCard() {
       <div className="pt-6 flex flex-col gap-2.5">
         <Link
           href="/contacto"
-          className="w-full min-h-[44px] inline-flex items-center justify-center gap-2 rounded-lg bg-[#6b1d22] hover:bg-primary-container text-white px-5 py-3 text-sm font-semibold shadow-sm transition-colors"
+          className="w-full min-h-[46px] inline-flex items-center justify-center gap-2 bg-[#6b1d22] hover:bg-primary-container text-white px-5 py-3 text-xs font-semibold uppercase tracking-[0.2em] transition-colors"
         >
-          <Icon name="assignment" className="text-[17px]" />
+          <Icon name="assignment" className="text-[16px]" />
           <span>Enviar planos para cubicación</span>
         </Link>
         <a
           href={whatsappPlanesHref}
           target="_blank"
           rel="noopener noreferrer"
-          className="w-full min-h-[40px] inline-flex items-center justify-center gap-1.5 rounded-lg bg-white hover:bg-surface text-on-surface border border-outline px-4 py-2 text-xs font-semibold transition-colors"
+          className="w-full min-h-[42px] inline-flex items-center justify-center gap-1.5 bg-white hover:border-on-surface text-on-surface border border-outline px-4 py-2.5 text-[11px] font-semibold uppercase tracking-[0.18em] transition-colors"
         >
           <Icon name="chat" className="text-[15px] text-[#6b1d22]" />
-          <span>Hablar con especialista de obras</span>
+          <span>Hablar con especialista</span>
         </a>
       </div>
     </article>
@@ -339,27 +343,27 @@ export function ProjectsGrid() {
   const gridProjects = activeFilter === "all" ? rest : filteredProjects;
 
   return (
-    <div className="flex flex-col gap-10 lg:gap-12">
-      {/* Encabezado + Barra de Filtros por Tipología y Ubicación */}
-      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 border-b border-outline/70 pb-6">
-        <header className="max-w-2xl space-y-2.5">
-          <span className="text-xs font-semibold uppercase tracking-wider text-primary">
+    <div className="flex flex-col gap-10 lg:gap-14">
+      {/* Encabezado Centrado Editorial + Barra de Filtros por Tipología y Ubicación */}
+      <div className="flex flex-col items-center text-center gap-6 border-b border-outline/60 pb-8">
+        <header className="max-w-2xl space-y-3">
+          <span className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#6b1d22] block">
             Portafolio de Suministro &amp; Especificación
           </span>
-          <h1 className="font-serif text-3xl sm:text-4xl text-on-surface">
+          <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-on-surface tracking-tight">
             Proyectos y obras equipadas
           </h1>
-          <p className="text-sm sm:text-base text-secondary">
+          <p className="text-sm sm:text-base text-secondary leading-relaxed">
             Residencias privadas, desarrollos turísticos y espacios comerciales
             suministrados con reserva de lote en toda la República Dominicana.
           </p>
         </header>
 
-        {/* Selector de filtros por tipología y ubicación */}
+        {/* Selector de filtros por tipología y ubicación con estilo editorial */}
         <div
           role="tablist"
           aria-label="Filtrar proyectos por tipología o ubicación"
-          className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar"
+          className="flex flex-wrap items-center justify-center gap-2 pt-1"
         >
           {PROJECT_FILTERS.map((filter) => {
             const isSelected = activeFilter === filter.id;
@@ -372,8 +376,8 @@ export function ProjectsGrid() {
                 onClick={() => setActiveFilter(filter.id)}
                 className={
                   isSelected
-                    ? "shrink-0 inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#6b1d22] text-white text-xs sm:text-sm font-semibold shadow-sm transition-all"
-                    : "shrink-0 inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white hover:bg-surface-container-low text-on-surface border border-outline/80 text-xs sm:text-sm font-medium transition-all"
+                    ? "inline-flex items-center gap-1.5 px-4 py-2.5 bg-on-surface text-white text-[11px] font-semibold uppercase tracking-[0.18em] transition-all"
+                    : "inline-flex items-center gap-1.5 px-4 py-2.5 bg-white hover:border-on-surface text-on-surface border border-outline/80 text-[11px] font-medium uppercase tracking-[0.18em] transition-all"
                 }
               >
                 <span>{filter.label}</span>

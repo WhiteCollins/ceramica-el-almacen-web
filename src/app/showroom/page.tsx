@@ -22,21 +22,24 @@ export default function ShowroomPage() {
 
       {/* SECCIÓN 2: LLAMADA A LA ACCIÓN JUSTO DESPUÉS DE LAS OBRAS */}
       <section className="w-full px-margin-mobile lg:px-margin-desktop pb-16 lg:pb-24">
-        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row lg:items-center justify-between gap-6 rounded-lg bg-surface-container-low px-6 py-8 lg:px-10 lg:py-10">
+        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row lg:items-center justify-between gap-6 rounded-sm border border-outline/60 bg-surface-container-low px-6 py-8 lg:px-10 lg:py-10">
           <div className="max-w-xl space-y-2">
-            <h2 className="font-serif text-2xl text-on-surface">
+            <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#6b1d22] block">
+              Especificación &amp; Showroom
+            </span>
+            <h2 className="font-serif text-2xl sm:text-3xl text-on-surface">
               ¿Trabajas en una obra o remodelación?
             </h2>
-            <p className="text-base text-secondary">
+            <p className="text-sm sm:text-base text-secondary">
               Trae tus planos al showroom o solicítanos muestras físicas y
               reserva de lote sin costo.
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3.5">
             <Link
               href="/contacto"
-              className="min-h-[44px] inline-flex items-center justify-center bg-primary hover:bg-primary-container text-white px-6 py-2.5 rounded-lg text-sm font-semibold transition-colors"
+              className="min-h-[46px] inline-flex items-center justify-center bg-on-surface hover:bg-[#6b1d22] text-white px-6 py-3 text-xs font-semibold uppercase tracking-[0.2em] transition-colors"
             >
               Solicitar presupuesto
             </Link>
@@ -44,9 +47,9 @@ export default function ShowroomPage() {
               href={SITE_INFO.mapsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="min-h-[44px] inline-flex items-center justify-center gap-1.5 border border-outline bg-white hover:bg-surface text-on-surface px-5 py-2.5 rounded-lg text-sm font-medium transition-colors"
+              className="min-h-[46px] inline-flex items-center justify-center gap-2 border border-outline bg-white hover:border-on-surface text-on-surface px-6 py-3 text-xs font-semibold uppercase tracking-[0.2em] transition-colors"
             >
-              <Icon name="location_on" className="text-[16px] text-primary" />
+              <Icon name="location_on" className="text-[16px] text-[#6b1d22]" />
               <span>Cómo llegar</span>
             </a>
           </div>

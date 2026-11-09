@@ -71,7 +71,7 @@ export default async function TypePage({ params }: TypePageProps) {
         imagePosition={type.imagePosition}
       />
 
-      <div className="max-w-7xl w-full mx-auto px-margin-mobile lg:px-margin-desktop py-8 lg:py-12 flex flex-col gap-14 lg:gap-20">
+      <div className="max-w-7xl w-full mx-auto px-margin-mobile lg:px-margin-desktop py-8 lg:py-14 flex flex-col gap-14 lg:gap-20">
         <section aria-labelledby="piezas" className="flex flex-col gap-6">
           <Breadcrumbs
             items={[
@@ -94,8 +94,8 @@ export default async function TypePage({ params }: TypePageProps) {
                         aria-current={current ? "page" : undefined}
                         className={
                           current
-                            ? "inline-flex items-center min-h-[44px] px-4 rounded-full bg-on-surface text-surface text-sm font-medium"
-                            : "inline-flex items-center min-h-[44px] px-4 rounded-full border border-outline text-on-surface text-sm font-medium hover:border-on-surface transition-colors"
+                            ? "inline-flex items-center min-h-[40px] px-4 py-2 bg-on-surface text-white text-[11px] font-semibold uppercase tracking-[0.18em]"
+                            : "inline-flex items-center min-h-[40px] px-4 py-2 border border-outline bg-white text-on-surface text-[11px] font-medium uppercase tracking-[0.18em] hover:border-on-surface transition-colors"
                         }
                       >
                         {t.label}
@@ -111,7 +111,7 @@ export default async function TypePage({ params }: TypePageProps) {
             <h2 id="piezas" className="font-serif text-3xl text-on-surface">
               Piezas
             </h2>
-            <p className="text-sm text-secondary">
+            <p className="text-[11px] uppercase tracking-[0.18em] text-secondary">
               {pieceCount(products.length)}
             </p>
           </div>
@@ -119,14 +119,17 @@ export default async function TypePage({ params }: TypePageProps) {
         </section>
 
         {moreInSpace.length > 0 ? (
-          <section aria-labelledby="mas" className="flex flex-col gap-6">
+          <section
+            aria-labelledby="mas"
+            className="flex flex-col gap-6 pt-6 border-t border-outline/60"
+          >
             <div className="flex flex-wrap items-end justify-between gap-3">
               <h2 id="mas" className="font-serif text-3xl text-on-surface">
                 Más en {space.label.toLowerCase()}
               </h2>
               <Link
                 href={`/${space.slug}`}
-                className="inline-flex items-center min-h-[44px] text-sm font-semibold text-primary hover:underline"
+                className="inline-flex items-center min-h-[44px] text-xs font-semibold uppercase tracking-[0.18em] text-[#6b1d22] hover:underline"
               >
                 Ver todo {space.label.toLowerCase()}
               </Link>

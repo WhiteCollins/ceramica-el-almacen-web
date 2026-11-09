@@ -20,9 +20,9 @@ const PRODUCT_INTERESTS = [
 ] as const;
 
 const PRIMARY_LINK =
-  "flex-1 min-h-[44px] inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary-container text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition-colors";
+  "flex-1 min-h-[46px] inline-flex items-center justify-center gap-2 bg-on-surface hover:bg-[#6b1d22] text-white px-5 py-3 text-xs font-semibold uppercase tracking-[0.18em] transition-colors";
 const SECONDARY_LINK =
-  "flex-1 min-h-[44px] inline-flex items-center justify-center gap-2 border border-outline bg-white hover:bg-surface text-on-surface px-5 py-2.5 rounded-lg text-sm font-medium transition-colors";
+  "flex-1 min-h-[46px] inline-flex items-center justify-center gap-2 border border-outline bg-white hover:border-on-surface text-on-surface px-5 py-3 text-xs font-semibold uppercase tracking-[0.18em] transition-colors";
 
 function syncAriaInvalid(el: EventTarget | null) {
   if (
@@ -58,7 +58,6 @@ export function QuoteForm() {
   ]);
   const [details, setDetails] = useState("");
   const [submitted, setSubmitted] = useState(false);
-  // Canal elegido al enviar: cambia el mensaje de confirmación.
   const [channel, setChannel] = useState<"whatsapp" | "email">("whatsapp");
 
   const toggleLine = (label: string) => {
@@ -92,10 +91,6 @@ export function QuoteForm() {
     `Solicitud de cotización (${projectType}) - ${fullName}`
   )}&body=${encodeURIComponent(buildSummaryText())}`;
 
-  // El sitio no tiene backend de correo: la solicitud se entrega abriendo
-  // WhatsApp o el programa de correo con el mensaje ya redactado, dentro del
-  // mismo gesto del usuario. El botón pulsado decide el canal; con Enter se
-  // usa el primero (WhatsApp).
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const submitter = (e.nativeEvent as SubmitEvent).submitter as
@@ -123,7 +118,7 @@ export function QuoteForm() {
         <div className="space-y-1.5">
           <label
             htmlFor={nameId}
-            className="text-sm font-medium text-on-surface block"
+            className="text-[11px] font-semibold uppercase tracking-[0.18em] text-on-surface block"
           >
             Nombre *
           </label>
@@ -139,7 +134,7 @@ export function QuoteForm() {
               if (submitted) setSubmitted(false);
             }}
             placeholder="Tu nombre o estudio"
-            className="atelier-input w-full min-h-[44px] bg-white text-base text-on-surface px-3.5 py-2.5 rounded-lg border border-outline focus:outline-none focus:border-primary placeholder:text-secondary/70 transition-colors"
+            className="atelier-input w-full min-h-[44px] bg-white text-sm text-on-surface px-3.5 py-2.5 rounded-sm border border-outline focus:outline-none focus:border-on-surface placeholder:text-secondary/70 transition-colors"
           />
           <p className="field-error hidden items-center gap-1 text-error text-xs">
             <span>Ingresa tu nombre.</span>
@@ -149,7 +144,7 @@ export function QuoteForm() {
         <div className="space-y-1.5">
           <label
             htmlFor={phoneId}
-            className="text-sm font-medium text-on-surface block"
+            className="text-[11px] font-semibold uppercase tracking-[0.18em] text-on-surface block"
           >
             WhatsApp / Teléfono *
           </label>
@@ -166,7 +161,7 @@ export function QuoteForm() {
               if (submitted) setSubmitted(false);
             }}
             placeholder="809-000-0000"
-            className="atelier-input w-full min-h-[44px] bg-white text-base text-on-surface px-3.5 py-2.5 rounded-lg border border-outline focus:outline-none focus:border-primary placeholder:text-secondary/70 transition-colors"
+            className="atelier-input w-full min-h-[44px] bg-white text-sm text-on-surface px-3.5 py-2.5 rounded-sm border border-outline focus:outline-none focus:border-on-surface placeholder:text-secondary/70 transition-colors"
           />
           <p className="field-error hidden items-center gap-1 text-error text-xs">
             <span>Ingresa un número de contacto.</span>
@@ -179,10 +174,12 @@ export function QuoteForm() {
         <div className="space-y-1.5">
           <label
             htmlFor={emailId}
-            className="text-sm font-medium text-on-surface block"
+            className="text-[11px] font-semibold uppercase tracking-[0.18em] text-on-surface block"
           >
             Correo electrónico{" "}
-            <span className="text-secondary font-normal">(opcional)</span>
+            <span className="text-secondary font-normal lowercase tracking-normal">
+              (opcional)
+            </span>
           </label>
           <input
             id={emailId}
@@ -199,17 +196,19 @@ export function QuoteForm() {
               if (submitted) setSubmitted(false);
             }}
             placeholder="correo@ejemplo.com"
-            className="w-full min-h-[44px] bg-white text-base text-on-surface px-3.5 py-2.5 rounded-lg border border-outline focus:outline-none focus:border-primary placeholder:text-secondary/70 transition-colors"
+            className="w-full min-h-[44px] bg-white text-sm text-on-surface px-3.5 py-2.5 rounded-sm border border-outline focus:outline-none focus:border-on-surface placeholder:text-secondary/70 transition-colors"
           />
         </div>
 
         <div className="space-y-1.5">
           <label
             htmlFor={sqmId}
-            className="text-sm font-medium text-on-surface block"
+            className="text-[11px] font-semibold uppercase tracking-[0.18em] text-on-surface block"
           >
             Metros cuadrados{" "}
-            <span className="text-secondary font-normal">(opcional)</span>
+            <span className="text-secondary font-normal lowercase tracking-normal">
+              (opcional)
+            </span>
           </label>
           <input
             id={sqmId}
@@ -222,14 +221,14 @@ export function QuoteForm() {
               if (submitted) setSubmitted(false);
             }}
             placeholder="Ej. 180 m²"
-            className="w-full min-h-[44px] bg-white text-base text-on-surface px-3.5 py-2.5 rounded-lg border border-outline focus:outline-none focus:border-primary placeholder:text-secondary/70 transition-colors"
+            className="w-full min-h-[44px] bg-white text-sm text-on-surface px-3.5 py-2.5 rounded-sm border border-outline focus:outline-none focus:border-on-surface placeholder:text-secondary/70 transition-colors"
           />
         </div>
       </div>
 
-      {/* Fila 3: Tipo de proyecto (pills con el mismo estilo de seleccionado) */}
-      <fieldset className="space-y-2">
-        <legend className="text-sm font-medium text-on-surface block">
+      {/* Fila 3: Tipo de proyecto */}
+      <fieldset className="space-y-2.5">
+        <legend className="text-[11px] font-semibold uppercase tracking-[0.18em] text-on-surface block">
           Tipo de proyecto
         </legend>
         <div className="flex flex-wrap gap-2">
@@ -243,7 +242,7 @@ export function QuoteForm() {
                 onChange={() => setProjectType(type)}
                 className="peer sr-only"
               />
-              <span className="inline-flex items-center justify-center min-h-[40px] px-4 py-2 rounded-full border border-outline bg-white text-sm font-medium text-on-surface peer-checked:bg-primary peer-checked:text-white peer-checked:border-primary peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-primary transition-colors">
+              <span className="inline-flex items-center justify-center min-h-[38px] px-4 py-2 border border-outline bg-white text-[11px] font-semibold uppercase tracking-[0.16em] text-on-surface peer-checked:bg-on-surface peer-checked:text-white peer-checked:border-on-surface peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-primary transition-colors">
                 {type}
               </span>
             </label>
@@ -251,9 +250,9 @@ export function QuoteForm() {
         </div>
       </fieldset>
 
-      {/* Fila 4: Productos de interés (pills con el mismo estilo vino #6A020A) */}
-      <fieldset className="space-y-2">
-        <legend className="text-sm font-medium text-on-surface block">
+      {/* Fila 4: Productos de interés */}
+      <fieldset className="space-y-2.5">
+        <legend className="text-[11px] font-semibold uppercase tracking-[0.18em] text-on-surface block">
           Productos de interés
         </legend>
         <div className="flex flex-wrap gap-2">
@@ -269,7 +268,7 @@ export function QuoteForm() {
                   onChange={() => toggleLine(label)}
                   className="peer sr-only"
                 />
-                <span className="inline-flex items-center justify-center min-h-[40px] px-4 py-2 rounded-full border border-outline bg-white text-sm font-medium text-on-surface peer-checked:bg-primary peer-checked:text-white peer-checked:border-primary peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-primary transition-colors">
+                <span className="inline-flex items-center justify-center min-h-[38px] px-4 py-2 border border-outline bg-white text-[11px] font-semibold uppercase tracking-[0.16em] text-on-surface peer-checked:bg-[#6b1d22] peer-checked:text-white peer-checked:border-[#6b1d22] peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-primary transition-colors">
                   {label}
                 </span>
               </label>
@@ -282,10 +281,12 @@ export function QuoteForm() {
       <div className="space-y-1.5">
         <label
           htmlFor={detailsId}
-          className="text-sm font-medium text-on-surface block"
+          className="text-[11px] font-semibold uppercase tracking-[0.18em] text-on-surface block"
         >
           Mensaje{" "}
-          <span className="text-secondary font-normal">(opcional)</span>
+          <span className="text-secondary font-normal lowercase tracking-normal">
+            (opcional)
+          </span>
         </label>
         <textarea
           id={detailsId}
@@ -294,13 +295,13 @@ export function QuoteForm() {
           value={details}
           onChange={(e) => setDetails(e.target.value)}
           placeholder="Cuéntanos medidas, acabados o ubicación de la obra..."
-          className="w-full bg-white text-base text-on-surface p-3.5 rounded-lg border border-outline focus:outline-none focus:border-primary placeholder:text-secondary/70 transition-colors"
+          className="w-full bg-white text-sm text-on-surface p-3.5 rounded-sm border border-outline focus:outline-none focus:border-on-surface placeholder:text-secondary/70 transition-colors"
         />
       </div>
 
-      {/* Fila 6: Envío por WhatsApp o por correo (los planos se adjuntan allí) */}
-      <div className="flex flex-col gap-3 pt-1">
-        <p className="text-sm text-secondary">
+      {/* Fila 6: Envío por WhatsApp o por correo */}
+      <div className="flex flex-col gap-3.5 pt-2">
+        <p className="text-xs text-secondary">
           ¿Tienes planos? Adjúntalos en el chat o en el correo que se abrirá
           con tu solicitud.
         </p>
@@ -310,7 +311,7 @@ export function QuoteForm() {
             type="submit"
             name="via"
             value="whatsapp"
-            className="w-full sm:w-auto min-h-[44px] inline-flex items-center justify-center gap-2 bg-primary hover:bg-primary-container text-white px-6 py-2.5 rounded-lg text-sm font-semibold transition-colors"
+            className="w-full sm:w-auto min-h-[46px] inline-flex items-center justify-center gap-2 bg-on-surface hover:bg-[#6b1d22] text-white px-6 py-3 text-xs font-semibold uppercase tracking-[0.2em] transition-colors"
           >
             <Icon name="chat" className="text-[16px]" />
             <span>Enviar por WhatsApp</span>
@@ -319,18 +320,18 @@ export function QuoteForm() {
             type="submit"
             name="via"
             value="email"
-            className="w-full sm:w-auto min-h-[44px] inline-flex items-center justify-center gap-2 border border-outline bg-white hover:bg-surface-container-low text-on-surface px-6 py-2.5 rounded-lg text-sm font-semibold transition-colors"
+            className="w-full sm:w-auto min-h-[46px] inline-flex items-center justify-center gap-2 border border-outline bg-white hover:border-on-surface text-on-surface px-6 py-3 text-xs font-semibold uppercase tracking-[0.2em] transition-colors"
           >
-            <Icon name="mail" className="text-[16px] text-primary" />
+            <Icon name="mail" className="text-[16px] text-[#6b1d22]" />
             <span>Enviar por correo</span>
           </button>
         </div>
       </div>
 
-      {/* Confirmación sobria sin colores extra (región viva siempre montada) */}
+      {/* Confirmación sobria */}
       <div aria-live="polite">
         {submitted ? (
-          <div className="p-5 bg-surface-container-low rounded-lg space-y-4">
+          <div className="p-5 bg-surface-container-low rounded-sm border border-outline/60 space-y-4">
             {channel === "whatsapp" ? (
               <p className="text-sm text-on-surface">
                 Abrimos WhatsApp con tu solicitud redactada. Pulsa{" "}
@@ -350,7 +351,9 @@ export function QuoteForm() {
                 href={whatsappQuoteHref}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={channel === "whatsapp" ? PRIMARY_LINK : SECONDARY_LINK}
+                className={
+                  channel === "whatsapp" ? PRIMARY_LINK : SECONDARY_LINK
+                }
               >
                 <Icon name="chat" className="text-[16px]" />
                 <span>

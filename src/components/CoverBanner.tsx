@@ -15,8 +15,7 @@ interface CoverBannerProps {
 }
 
 /**
- * Banner de portada fijo (sin carrusel): foto a todo el ancho con el espacio
- * en pequeño y el tipo en grande, como en las páginas de categoría.
+ * Banner de portada fijo (sin carrusel) con composición editorial centrada.
  */
 export function CoverBanner({
   eyebrow,
@@ -28,7 +27,7 @@ export function CoverBanner({
   children,
 }: CoverBannerProps) {
   return (
-    <section className="relative w-full overflow-hidden bg-inverse-surface h-[300px] sm:h-[380px] lg:h-[460px]">
+    <section className="relative w-full overflow-hidden bg-inverse-surface h-[320px] sm:h-[400px] lg:h-[480px]">
       <Image
         src={image}
         alt={imageAlt}
@@ -39,22 +38,20 @@ export function CoverBanner({
         className="object-cover"
         style={imagePosition ? { objectPosition: imagePosition } : undefined}
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-black/5" />
-      <div className="absolute inset-x-0 bottom-0 pb-8 sm:pb-12">
-        <div className="max-w-7xl mx-auto px-margin-mobile lg:px-margin-desktop flex flex-col gap-2 text-white">
-          <p className="text-sm sm:text-base font-medium text-white/85">
-            {eyebrow}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/40 to-black/20" />
+      <div className="relative z-10 h-full max-w-5xl mx-auto px-margin-mobile lg:px-margin-desktop flex flex-col items-center justify-center text-center gap-3 text-white">
+        <p className="text-[11px] sm:text-xs font-semibold uppercase tracking-[0.28em] text-white/85">
+          {eyebrow}
+        </p>
+        <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-normal tracking-tight text-white">
+          {title}
+        </h1>
+        {description ? (
+          <p className="max-w-2xl text-sm sm:text-base text-white/90 leading-relaxed">
+            {description}
           </p>
-          <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-normal tracking-tight text-white">
-            {title}
-          </h1>
-          {description ? (
-            <p className="max-w-2xl text-base sm:text-lg text-white/90">
-              {description}
-            </p>
-          ) : null}
-          {children}
-        </div>
+        ) : null}
+        {children}
       </div>
     </section>
   );

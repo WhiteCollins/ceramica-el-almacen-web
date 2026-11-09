@@ -12,22 +12,26 @@ export function Breadcrumbs({
   items: { label: string; href?: string }[];
 }) {
   return (
-    <nav aria-label="Ruta de navegación" className="text-sm text-secondary">
-      <ol className="flex flex-wrap items-center gap-1">
+    <nav
+      aria-label="Ruta de navegación"
+      className="text-[11px] uppercase tracking-[0.18em] text-secondary"
+    >
+      <ol className="flex flex-wrap items-center gap-2">
         {items.map((item, idx) => (
-          <li key={item.label} className="inline-flex items-center gap-1">
-            {idx > 0 ? (
-              <Icon name="chevron_right" className="text-[16px]" />
-            ) : null}
+          <li key={item.label} className="inline-flex items-center gap-2">
+            {idx > 0 ? <span aria-hidden="true">/</span> : null}
             {item.href ? (
               <Link
                 href={item.href}
-                className="inline-flex items-center min-h-[44px] hover:text-primary transition-colors"
+                className="inline-flex items-center min-h-[44px] hover:text-on-surface transition-colors"
               >
                 {item.label}
               </Link>
             ) : (
-              <span aria-current="page" className="text-on-surface font-medium">
+              <span
+                aria-current="page"
+                className="text-on-surface font-semibold"
+              >
                 {item.label}
               </span>
             )}
@@ -43,7 +47,7 @@ export function SwatchGrid({ products }: { products: CatalogProduct[] }) {
   return (
     <ul
       role="list"
-      className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-8 sm:gap-x-6"
+      className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-10 sm:gap-x-6"
     >
       {products.map((product, idx) => (
         <li key={product.id}>
@@ -74,15 +78,20 @@ export function RelatedProjects({
   if (projects.length === 0) return null;
 
   return (
-    <section className="flex flex-col gap-8">
+    <section className="flex flex-col gap-8 pt-6 border-t border-outline/60">
       <div className="flex flex-wrap items-end justify-between gap-3">
-        <h2 className="font-serif text-3xl text-on-surface">{title}</h2>
+        <div className="space-y-1">
+          <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#6b1d22] block">
+            Proyectos Reales
+          </span>
+          <h2 className="font-serif text-3xl text-on-surface">{title}</h2>
+        </div>
         <Link
           href="/showroom"
-          className="inline-flex items-center gap-1.5 min-h-[44px] text-sm font-semibold text-primary hover:underline"
+          className="inline-flex items-center gap-1.5 min-h-[44px] text-xs font-semibold uppercase tracking-[0.18em] text-[#6b1d22] hover:underline"
         >
           <span>Ver todos los proyectos</span>
-          <Icon name="arrow_forward" className="text-[18px]" />
+          <Icon name="arrow_forward" className="text-[15px]" />
         </Link>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">

@@ -94,31 +94,34 @@ const WARRANTY_SECTIONS = [
 export default function TerminosGarantiaPage() {
   return (
     <div className="flex flex-col w-full bg-surface">
-      {/* Encabezado Editorial */}
-      <section className="w-full bg-surface-container-low border-b border-outline/60 py-12 lg:py-16 px-margin-mobile lg:px-margin-desktop">
-        <div className="max-w-5xl mx-auto space-y-4">
+      {/* Encabezado Editorial Centrado */}
+      <section className="w-full bg-surface-container-low border-b border-outline/60 py-14 lg:py-20 px-margin-mobile lg:px-margin-desktop">
+        <div className="max-w-5xl mx-auto flex flex-col items-center text-center space-y-4">
           <nav
             aria-label="Ruta de navegación"
-            className="flex items-center gap-1.5 text-xs text-secondary"
+            className="flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-secondary"
           >
-            <Link href="/" className="hover:text-primary transition-colors">
+            <Link
+              href="/"
+              className="hover:text-on-surface transition-colors"
+            >
               Inicio
             </Link>
-            <Icon name="chevron_right" className="text-[14px]" />
-            <span className="text-on-surface font-medium">
+            <span aria-hidden="true">/</span>
+            <span className="text-on-surface font-semibold">
               Términos de Garantía y Condiciones
             </span>
           </nav>
 
-          <div className="space-y-2.5">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 text-primary px-3 py-1 text-xs font-semibold">
-              <Icon name="verified" className="text-[15px]" />
+          <div className="space-y-3 pt-2">
+            <span className="inline-flex items-center gap-1.5 bg-[#6b1d22]/10 text-[#6b1d22] px-3.5 py-1 text-[10px] font-semibold uppercase tracking-[0.22em]">
+              <Icon name="verified" className="text-[14px]" />
               <span>Respaldo Oficial · {SITE_INFO.legalName}</span>
             </span>
             <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-on-surface tracking-tight">
               Términos de Garantía y Condiciones Comerciales
             </h1>
-            <p className="text-sm sm:text-base text-secondary max-w-3xl leading-relaxed">
+            <p className="text-sm sm:text-base text-secondary max-w-2xl mx-auto leading-relaxed">
               En {SITE_INFO.name} respaldamos la calidad de cada porcelanato,
               revestimiento cerámico, pieza sanitaria y grifería que importamos.
               A continuación detallamos nuestras políticas de garantía,
@@ -129,21 +132,21 @@ export default function TerminosGarantiaPage() {
       </section>
 
       {/* Bloques de Políticas y Condiciones */}
-      <section className="w-full py-12 lg:py-16 px-margin-mobile lg:px-margin-desktop">
+      <section className="w-full py-14 lg:py-20 px-margin-mobile lg:px-margin-desktop">
         <div className="max-w-5xl mx-auto space-y-6">
           {WARRANTY_SECTIONS.map((section) => (
             <article
               key={section.number}
-              className="bg-white rounded-2xl border border-outline/80 shadow-sm p-6 sm:p-8 space-y-5"
+              className="bg-white rounded-sm border border-outline/60 p-6 sm:p-9 space-y-6 transition-all duration-300 hover:border-[#6b1d22]/40"
             >
-              <div className="flex items-center gap-3 border-b border-outline/50 pb-4">
-                <span className="h-10 w-10 rounded-xl bg-primary/10 text-primary inline-flex items-center justify-center font-serif font-semibold text-sm shrink-0">
+              <div className="flex items-center gap-3.5 border-b border-outline/50 pb-4">
+                <span className="h-10 w-10 bg-on-surface text-white inline-flex items-center justify-center font-serif font-semibold text-sm shrink-0">
                   {section.number}
                 </span>
                 <div className="flex items-center gap-2">
                   <Icon
                     name={section.icon}
-                    className="text-[20px] text-primary shrink-0"
+                    className="text-[19px] text-[#6b1d22] shrink-0"
                   />
                   <h2 className="font-serif text-xl sm:text-2xl text-on-surface">
                     {section.title}
@@ -154,7 +157,7 @@ export default function TerminosGarantiaPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {section.items.map((item) => (
                   <div key={item.subtitle} className="space-y-1.5">
-                    <h3 className="text-sm sm:text-base font-semibold text-on-surface">
+                    <h3 className="text-xs font-semibold uppercase tracking-[0.16em] text-on-surface">
                       {item.subtitle}
                     </h3>
                     <p className="text-sm text-secondary leading-relaxed">
@@ -167,13 +170,19 @@ export default function TerminosGarantiaPage() {
           ))}
 
           {/* Bloque de Soporte de Garantía y Contacto Directo */}
-          <div className="rounded-2xl border border-[#6b1d22]/25 bg-gradient-to-br from-[#FAF6F2] via-surface-container-low to-[#F3ECE4] p-6 sm:p-8 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-            <div className="space-y-1.5 max-w-xl">
+          <div className="rounded-sm border border-[#6b1d22]/30 bg-gradient-to-br from-[#FAF6F2] via-surface-container-low to-[#F3ECE4] p-7 sm:p-9 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+            <div className="space-y-2 max-w-xl">
+              <span className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#6b1d22] block">
+                Atención Postventa &amp; Repuestos
+              </span>
               <h2 className="font-serif text-2xl text-on-surface">
                 ¿Necesitas tramitar una garantía o solicitar un repuesto?
               </h2>
               <p className="text-sm text-secondary leading-relaxed">
-                Nuestro equipo técnico en San Pedro de Macorís ({SITE_INFO.phoneDisplay}) y La Romana ({SITE_INFO.locations[1].phoneDisplay}) está disponible con tu número de factura o conduce de despacho.
+                Nuestro equipo técnico en San Pedro de Macorís (
+                {SITE_INFO.phoneDisplay}) y La Romana (
+                {SITE_INFO.locations[1].phoneDisplay}) está disponible con tu
+                número de factura o conduce de despacho.
               </p>
             </div>
 
@@ -184,17 +193,17 @@ export default function TerminosGarantiaPage() {
                 )}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="min-h-[44px] inline-flex items-center justify-center gap-2 rounded-lg bg-primary hover:bg-primary-container text-white px-5 py-2.5 text-sm font-semibold transition-colors"
+                className="min-h-[46px] inline-flex items-center justify-center gap-2 bg-on-surface hover:bg-[#6b1d22] text-white px-6 py-3 text-xs font-semibold uppercase tracking-[0.2em] transition-colors"
               >
-                <Icon name="chat" className="text-[18px]" />
+                <Icon name="chat" className="text-[16px]" />
                 <span>Soporte por WhatsApp</span>
               </a>
               <Link
                 href="/contacto"
-                className="min-h-[44px] inline-flex items-center justify-center gap-1.5 rounded-lg bg-white hover:bg-surface text-on-surface border border-outline px-5 py-2.5 text-sm font-medium transition-colors"
+                className="min-h-[46px] inline-flex items-center justify-center gap-1.5 bg-white hover:border-on-surface text-on-surface border border-outline px-6 py-3 text-xs font-semibold uppercase tracking-[0.2em] transition-colors"
               >
-                <span>Ir a Contacto</span>
-                <Icon name="arrow_forward" className="text-[16px]" />
+                <span>Ir a contacto</span>
+                <Icon name="arrow_forward" className="text-[15px]" />
               </Link>
             </div>
           </div>

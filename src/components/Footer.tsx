@@ -6,11 +6,11 @@ import { SITE_INFO, buildWhatsAppUrl } from "@/data/site";
 
 export function Footer() {
   return (
-    <footer className="w-full bg-surface-container-low text-on-surface shadow-[0_-1px_8px_rgba(0,0,0,0.03)] border-t border-surface-container-highest">
-      <div className="scroll-reveal max-w-7xl mx-auto px-margin-mobile lg:px-margin-desktop py-10 lg:py-14">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-gutter-lg">
-          {/* Columna 1: Marca e Instagram (sin el texto institucional eliminado) */}
-          <div className="flex flex-col gap-space-sm">
+    <footer className="w-full bg-surface-container-low text-on-surface border-t border-outline/60">
+      <div className="scroll-reveal max-w-7xl mx-auto px-margin-mobile lg:px-margin-desktop py-12 lg:py-16">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-12">
+          {/* Columna 1: Marca e Instagram */}
+          <div className="flex flex-col gap-4">
             <Link
               href="/"
               className="w-fit min-h-[44px] inline-flex items-center py-1"
@@ -22,7 +22,7 @@ export function Footer() {
                 href={SITE_INFO.instagramUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 min-h-[44px] py-2 text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md"
+                className="inline-flex items-center gap-2 min-h-[44px] py-2 text-xs uppercase tracking-[0.18em] font-semibold text-on-surface hover:text-[#6b1d22] transition-colors"
               >
                 <svg
                   aria-hidden="true"
@@ -32,7 +32,7 @@ export function Footer() {
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  className="w-[18px] h-[18px] text-primary shrink-0"
+                  className="w-[17px] h-[17px] text-[#6b1d22] shrink-0"
                 >
                   <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
                   <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
@@ -44,51 +44,53 @@ export function Footer() {
           </div>
 
           {/* Columna 2: Sucursales & Horarios */}
-          <div className="flex flex-col gap-space-sm">
-            <h2 className="font-headline-sm text-headline-sm text-on-surface font-semibold">
+          <div className="flex flex-col gap-4">
+            <h2 className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#6b1d22]">
               Atelier &amp; Sucursales
             </h2>
-            <address className="not-italic flex flex-col gap-3 font-body-md text-body-md text-on-surface-variant">
-              <div className="flex items-start gap-2">
+            <address className="not-italic flex flex-col gap-3.5 text-sm text-secondary">
+              <div className="flex items-start gap-2.5">
                 <Icon
                   name="location_on"
-                  className="text-[18px] text-primary shrink-0 mt-1"
+                  className="text-[17px] text-[#6b1d22] shrink-0 mt-0.5"
                 />
                 <div>
-                  <p className="font-semibold text-on-surface">
+                  <p className="font-serif text-base text-on-surface font-medium">
                     San Pedro de Macorís
                   </p>
                   <p>Av. Rolando Martínez 33</p>
                   <a
                     href="tel:+18092462221"
-                    className="text-primary hover:underline font-medium"
+                    className="text-xs font-semibold uppercase tracking-[0.12em] text-[#6b1d22] hover:underline"
                   >
                     +1 809-246-2221
                   </a>
                 </div>
               </div>
 
-              <div className="flex items-start gap-2">
+              <div className="flex items-start gap-2.5">
                 <Icon
                   name="location_on"
-                  className="text-[18px] text-primary shrink-0 mt-1"
+                  className="text-[17px] text-[#6b1d22] shrink-0 mt-0.5"
                 />
                 <div>
-                  <p className="font-semibold text-on-surface">La Romana</p>
+                  <p className="font-serif text-base text-on-surface font-medium">
+                    La Romana
+                  </p>
                   <p>Av. Profesor Juan Bosch (antigua Av. Padre Abreu)</p>
                   <a
                     href="tel:+18095564116"
-                    className="text-primary hover:underline font-medium"
+                    className="text-xs font-semibold uppercase tracking-[0.12em] text-[#6b1d22] hover:underline"
                   >
                     +1 809-556-4116
                   </a>
                 </div>
               </div>
 
-              <div className="flex items-start gap-2">
+              <div className="flex items-start gap-2.5">
                 <Icon
                   name="schedule"
-                  className="text-[18px] text-primary shrink-0 mt-1"
+                  className="text-[17px] text-[#6b1d22] shrink-0 mt-0.5"
                 />
                 <div>
                   <p>Lun – Vie: 8:00 AM – 6:00 PM</p>
@@ -99,39 +101,39 @@ export function Footer() {
           </div>
 
           {/* Columna 3: Facilidades */}
-          <div className="flex flex-col gap-space-sm">
-            <h2 className="font-headline-sm text-headline-sm text-on-surface font-semibold">
+          <div className="flex flex-col gap-4">
+            <h2 className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#6b1d22]">
               Facilidades &amp; Servicios
             </h2>
             <ul
               role="list"
-              className="flex flex-col gap-2.5 font-body-md text-body-md text-on-surface-variant"
+              className="flex flex-col gap-3 text-sm text-secondary"
             >
-              <li className="flex items-center gap-2">
+              <li className="flex items-center gap-2.5">
                 <Icon
                   name="accessible"
-                  className="text-[18px] text-primary shrink-0"
+                  className="text-[17px] text-[#6b1d22] shrink-0"
                 />
                 <span>Showroom accesible para sillas de ruedas</span>
               </li>
-              <li className="flex items-center gap-2">
+              <li className="flex items-center gap-2.5">
                 <Icon
                   name="local_parking"
-                  className="text-[18px] text-primary shrink-0"
+                  className="text-[17px] text-[#6b1d22] shrink-0"
                 />
                 <span>Estacionamiento privado para clientes</span>
               </li>
-              <li className="flex items-center gap-2">
+              <li className="flex items-center gap-2.5">
                 <Icon
                   name="local_shipping"
-                  className="text-[18px] text-primary shrink-0"
+                  className="text-[17px] text-[#6b1d22] shrink-0"
                 />
                 <span>Despacho directo a obras en todo el país</span>
               </li>
-              <li className="flex items-center gap-2">
+              <li className="flex items-center gap-2.5">
                 <Icon
                   name="architecture"
-                  className="text-[18px] text-primary shrink-0"
+                  className="text-[17px] text-[#6b1d22] shrink-0"
                 />
                 <span>Asesoría técnica para arquitectos</span>
               </li>
@@ -139,27 +141,27 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-8 pt-6 border-t border-surface-container-highest flex flex-col sm:flex-row items-center justify-between gap-4 font-body-sm text-body-sm text-on-surface-variant">
-          <p className="text-center sm:text-left">
+        <div className="mt-10 pt-6 border-t border-outline/50 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-secondary">
+          <p className="text-center sm:text-left uppercase tracking-[0.14em] text-[11px]">
             © {new Date().getFullYear()} {SITE_INFO.legalName}. Todos los
             derechos reservados.
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-1 font-label-md text-label-md">
+          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-1 text-[11px] uppercase tracking-[0.18em] font-semibold">
             <Link
               href="/terminos"
-              className="inline-flex items-center min-h-[44px] py-2 px-1 hover:text-primary transition-colors"
+              className="inline-flex items-center min-h-[44px] py-2 px-1 text-on-surface hover:text-[#6b1d22] transition-colors"
             >
               Términos de Garantía
             </Link>
             <Link
               href="/contacto"
-              className="inline-flex items-center min-h-[44px] py-2 px-1 hover:text-primary transition-colors"
+              className="inline-flex items-center min-h-[44px] py-2 px-1 text-on-surface hover:text-[#6b1d22] transition-colors"
             >
               Atención al Cliente
             </Link>
             <Link
               href="/catalogo"
-              className="inline-flex items-center min-h-[44px] py-2 px-1 hover:text-primary transition-colors"
+              className="inline-flex items-center min-h-[44px] py-2 px-1 text-on-surface hover:text-[#6b1d22] transition-colors"
             >
               Fichas Técnicas
             </Link>
