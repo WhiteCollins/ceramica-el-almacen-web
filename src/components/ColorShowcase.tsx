@@ -108,7 +108,6 @@ export function ColorShowcase() {
                   src={item.image}
                   alt={item.imageAlt}
                   fill
-                  unoptimized
                   sizes="(max-width: 768px) 100vw, 33vw"
                   className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
                 />
