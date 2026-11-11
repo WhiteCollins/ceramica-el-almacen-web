@@ -15,7 +15,7 @@ const plusJakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://ceramicaelalmacen.com"),
+  metadataBase: new URL(SITE_INFO.url),
   title: {
     default: `${SITE_INFO.name} | Porcelanatos, Griferías & Baños en San Pedro de Macorís`,
     template: `%s | ${SITE_INFO.name}`,
@@ -58,7 +58,7 @@ const localBusinessSchema = {
   description: SITE_INFO.description,
   telephone: SITE_INFO.phoneDisplay,
   email: SITE_INFO.email,
-  url: "https://ceramicaelalmacen.com",
+  url: SITE_INFO.url,
   sameAs: [SITE_INFO.instagramUrl],
   address: {
     "@type": "PostalAddress",

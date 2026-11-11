@@ -6,6 +6,8 @@
 export const SITE_INFO = {
   name: "Cerámica El Almacén",
   legalName: "Cerámica El Almacén SRL",
+  /** Dominio de producción: base de las URL canónicas, del sitemap y de robots.txt. */
+  url: "https://ceramicaelalmacen.com",
   tagline: "La Perfección en Cerámica",
   description:
     "Importadores directos de porcelanatos europeos de gran formato, revestimientos cerámicos, griferías de autor, bañeras exentas y lavamanos escultóricos en República Dominicana.",
