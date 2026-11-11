@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { DraftBadge } from "@/components/DraftBadge";
 import { Icon } from "@/components/Icon";
 import { ProductSwatchCard } from "@/components/ProductSwatchCard";
 import { CATALOG_PRODUCTS } from "@/data/catalog";
@@ -124,6 +125,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
               <h1 className="text-2xl sm:text-3xl uppercase tracking-[0.16em] font-semibold text-on-surface">
                 {project.title}
               </h1>
+              {project.draft ? <DraftBadge /> : null}
             </div>
 
             {/* Datos Clave del Proyecto */}
