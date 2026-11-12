@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { DraftBadge } from "@/components/DraftBadge";
 import { Icon } from "@/components/Icon";
 import { CATALOG_PRODUCTS } from "@/data/catalog";
 import {
@@ -49,7 +50,6 @@ function FeaturedProject({ project }: { project: ShowroomProject }) {
           alt={project.alt}
           fill
           priority
-          unoptimized
           sizes="(max-width: 1024px) 100vw, 50vw"
           className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
         />
@@ -149,7 +149,6 @@ export function ProjectCard({ project }: { project: ShowroomProject }) {
             src={project.image}
             alt={project.alt}
             fill
-            unoptimized
             sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
             className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
           />
@@ -160,6 +159,9 @@ export function ProjectCard({ project }: { project: ShowroomProject }) {
         <span className="pointer-events-none absolute top-3.5 left-3.5 z-10 bg-white/95 backdrop-blur-sm px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-on-surface shadow-sm">
           {project.spaceBadge}
         </span>
+
+        {/* Solo visible en desarrollo: los borradores no se publican en producción */}
+        {project.draft ? <DraftBadge className="absolute top-12 left-3.5 z-10" /> : null}
 
         {/* Tag de ciudad directamente sobre la foto */}
         <span className="pointer-events-none absolute top-3.5 right-3.5 z-10 inline-flex items-center gap-1 bg-inverse-surface/85 backdrop-blur-sm px-3 py-1 text-[10px] font-medium uppercase tracking-[0.14em] text-white">
@@ -185,7 +187,6 @@ export function ProjectCard({ project }: { project: ShowroomProject }) {
                     src={product.image}
                     alt={product.name}
                     fill
-                    unoptimized
                     sizes="40px"
                     className="object-cover"
                   />

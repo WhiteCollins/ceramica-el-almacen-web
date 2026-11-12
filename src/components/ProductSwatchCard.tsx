@@ -41,7 +41,6 @@ export function ProductSwatchCard({
             src={product.image}
             alt={product.imageAlt}
             fill
-            unoptimized
             priority={priority}
             sizes={
               isGallery

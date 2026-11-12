@@ -20,7 +20,6 @@ export function ShowroomBanner({ topic }: { topic?: string }) {
             src="/images/banners/showroom-islas-marmol.jpg"
             alt="Exhibición de islas de porcelanato, mármol y grifería a escala real en el showroom de Cerámica El Almacén"
             fill
-            unoptimized
             sizes="(max-width: 1024px) 100vw, 50vw"
             className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
           />

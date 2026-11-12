@@ -6,6 +6,8 @@
 export const SITE_INFO = {
   name: "Cerámica El Almacén",
   legalName: "Cerámica El Almacén SRL",
+  /** Dominio de producción: base de las URL canónicas, del sitemap y de robots.txt. */
+  url: "https://ceramicaelalmacen.com",
   tagline: "La Perfección en Cerámica",
   description:
     "Importadores directos de porcelanatos europeos de gran formato, revestimientos cerámicos, griferías de autor, bañeras exentas y lavamanos escultóricos en República Dominicana.",
@@ -287,8 +289,21 @@ export interface ShowroomProject {
   productIds: string[];
   image: string;
   alt: string;
+  /**
+   * Proyecto de ejemplo (datos y fotos ilustrativos). Se muestra en desarrollo
+   * con la etiqueta "Ejemplo" y se oculta en la build de producción.
+   * Reemplázalo por una obra real y quita `draft` para publicarlo.
+   */
   draft?: boolean;
 }
+
+/**
+ * Los borradores se ven con `npm run dev`. En producción solo se publican si
+ * se compila con NEXT_PUBLIC_SHOW_DRAFTS=1 (útil para revisar el diseño).
+ */
+export const SHOW_DRAFT_PROJECTS =
+  process.env.NODE_ENV !== "production" ||
+  process.env.NEXT_PUBLIC_SHOW_DRAFTS === "1";
 
 export const SHOWROOM_PROJECTS: ShowroomProject[] = [
   {
@@ -429,8 +444,12 @@ export const SHOWROOM_PROJECTS: ShowroomProject[] = [
     image: "/images/hero/editorial-color-backsplash.jpg",
     alt: "Salpicadero artesanal con baldosas vidriadas en tonos terracota y detalles en latón cepillado",
   },
+  // PROYECTOS DE EJEMPLO (draft: true). Datos ilustrativos y fotos de
+  // Unsplash para revisar el diseño con más de tres obras.
+  // Se ocultan en producción. Sustitúyelos por obras reales y quita `draft`.
   {
     id: "ejemplo-apartamento-bavaro",
+    draft: true,
     location: "Bávaro",
     fullLocation: "Bávaro · Punta Cana, Rep. Dominicana",
     regionFilter: "Punta Cana / Bávaro",
@@ -477,6 +496,7 @@ export const SHOWROOM_PROJECTS: ShowroomProject[] = [
   },
   {
     id: "ejemplo-hotel-bayahibe",
+    draft: true,
     location: "Bayahíbe",
     fullLocation: "Bayahíbe · La Romana, Rep. Dominicana",
     regionFilter: "La Romana",
@@ -523,6 +543,7 @@ export const SHOWROOM_PROJECTS: ShowroomProject[] = [
   },
   {
     id: "ejemplo-lobby-santo-domingo",
+    draft: true,
     location: "Santo Domingo",
     fullLocation: "Piantini · Santo Domingo, Rep. Dominicana",
     regionFilter: "Santo Domingo",
@@ -569,7 +590,10 @@ export const SHOWROOM_PROJECTS: ShowroomProject[] = [
   },
 ];
 
-export const VISIBLE_PROJECTS = SHOWROOM_PROJECTS;
+/** Proyectos que se publican (sin borradores en producción). */
+export const VISIBLE_PROJECTS = SHOWROOM_PROJECTS.filter(
+  (project) => SHOW_DRAFT_PROJECTS || !project.draft
+);
 
 export const SHOWROOM_ZONES = [
   {

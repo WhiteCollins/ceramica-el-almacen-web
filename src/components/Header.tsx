@@ -357,7 +357,6 @@ export function Header() {
                                 alt={product.imageAlt}
                                 width={42}
                                 height={42}
-                                unoptimized
                                 className="w-10 h-10 object-cover bg-surface-container shrink-0"
                               />
                               <div className="flex-1 min-w-0">
@@ -488,7 +487,6 @@ export function Header() {
                           src={space.image}
                           alt={space.imageAlt}
                           fill
-                          unoptimized
                           sizes="20vw"
                           className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                           style={
@@ -571,7 +569,6 @@ export function Header() {
                             src={space.image}
                             alt={space.imageAlt}
                             fill
-                            unoptimized
                             sizes="45vw"
                             className="object-cover"
                           />

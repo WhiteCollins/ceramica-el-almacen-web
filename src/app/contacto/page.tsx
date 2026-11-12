@@ -24,7 +24,6 @@ export default function ContactoPage() {
           src="/images/banners/contacto-banner.jpg"
           alt="Ambiente de baño revestido en piedra natural travertino con grifería dorada en Cerámica El Almacén"
           fill
-          unoptimized
           priority
           fetchPriority="high"
           sizes="100vw"
