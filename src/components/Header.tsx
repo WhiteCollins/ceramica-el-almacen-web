@@ -43,8 +43,27 @@ export function Header() {
   const searchContainerRef = useRef<HTMLDivElement>(null);
   const closeMenuTimerRef = useRef<number | null>(null);
 
-  useEffect(() => {
+  // Al navegar, el megamenú se cierra sin animación para no desvanecerse
+  // encima de la página nueva.
+  const [closingInstantly, setClosingInstantly] = useState(false);
+
+  const closeMegaMenuNow = () => {
+    if (closeMenuTimerRef.current !== null) {
+      window.clearTimeout(closeMenuTimerRef.current);
+      closeMenuTimerRef.current = null;
+    }
+    setClosingInstantly(true);
     setCatalogMenuOpen(false);
+  };
+
+  useEffect(() => {
+    if (!closingInstantly) return;
+    const id = window.setTimeout(() => setClosingInstantly(false), 60);
+    return () => window.clearTimeout(id);
+  }, [closingInstantly]);
+
+  useEffect(() => {
+    closeMegaMenuNow();
     setSearchOpen(false);
   }, [pathname]);
 
@@ -136,7 +155,11 @@ export function Header() {
       <div
         aria-hidden="true"
         onClick={() => setCatalogMenuOpen(false)}
-        className={`hidden lg:block fixed inset-0 z-30 bg-black/25 backdrop-blur-[1px] transition-opacity duration-300 ${
+        className={`hidden lg:block fixed inset-0 z-30 bg-black/25 ${
+          closingInstantly
+            ? ""
+            : "transition-opacity duration-200 ease-out motion-reduce:transition-none"
+        } ${
           catalogMenuOpen
             ? "opacity-100 pointer-events-auto"
             : "opacity-0 pointer-events-none"
@@ -394,17 +417,23 @@ export function Header() {
             </div>
           </div>
 
-          {/* Megamenú Editorial Desplegable estilo Manolo Blahnik (Columnas con guion "–" + 4 Tarjetas Visuales de Espacio) */}
+          {/* Megamenú Editorial Desplegable estilo Manolo Blahnik (Columnas con guion "–" + 4 Tarjetas Visuales de Espacio).
+              Se superpone a la página (absolute) en lugar de empujarla, y se anima solo con
+              opacidad y desplazamiento, que el navegador compone sin recalcular el diseño. */}
           <div
             id={megaMenuId}
             onMouseEnter={openMegaMenu}
             onMouseLeave={scheduleCloseMegaMenu}
             aria-hidden={!catalogMenuOpen}
             inert={!catalogMenuOpen}
-            className={`hidden lg:grid bg-white transition-[grid-template-rows,opacity] duration-300 ease-out ${
+            className={`hidden lg:block absolute inset-x-0 top-full bg-white border-t border-outline/60 shadow-xl ${
+              closingInstantly
+                ? ""
+                : "transition-[opacity,transform,visibility] duration-200 ease-out motion-reduce:transition-none"
+            } ${
               catalogMenuOpen
-                ? "grid-rows-[1fr] opacity-100 border-t border-outline/60 shadow-xl"
-                : "grid-rows-[0fr] opacity-0 pointer-events-none"
+                ? "visible opacity-100 translate-y-0"
+                : "invisible opacity-0 -translate-y-2 pointer-events-none"
             }`}
           >
             <div className="overflow-hidden">
@@ -420,7 +449,7 @@ export function Header() {
                         <li key={cat.id}>
                           <Link
                             href={`/catalogo?categoria=${cat.id}`}
-                            onClick={() => setCatalogMenuOpen(false)}
+                            onClick={closeMegaMenuNow}
                             className="group/item flex items-center text-xs tracking-wider text-secondary hover:text-on-surface py-1 transition-colors"
                           >
                             <span className="inline-block w-0 overflow-hidden opacity-0 group-hover/item:w-3.5 group-hover/item:opacity-100 text-[#6b1d22] transition-all duration-200">
@@ -433,7 +462,7 @@ export function Header() {
                       <li className="pt-2">
                         <Link
                           href="/catalogo"
-                          onClick={() => setCatalogMenuOpen(false)}
+                          onClick={closeMegaMenuNow}
                           className="inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#6b1d22] hover:underline"
                         >
                           <span>Ver todo el catálogo</span>
@@ -454,7 +483,7 @@ export function Header() {
                             href={`/catalogo?acabado=${encodeURIComponent(
                               finish
                             )}`}
-                            onClick={() => setCatalogMenuOpen(false)}
+                            onClick={closeMegaMenuNow}
                             className="group/item flex items-center text-xs tracking-wider text-secondary hover:text-on-surface py-1 transition-colors"
                           >
                             <span className="inline-block w-0 overflow-hidden opacity-0 group-hover/item:w-3.5 group-hover/item:opacity-100 text-[#6b1d22] transition-all duration-200">
@@ -480,7 +509,7 @@ export function Header() {
                       <Link
                         key={space.slug}
                         href={space.catalogHref}
-                        onClick={() => setCatalogMenuOpen(false)}
+                        onClick={closeMegaMenuNow}
                         className="group relative block aspect-[4/5] w-full overflow-hidden bg-surface-container-low"
                       >
                         <Image

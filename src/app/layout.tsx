@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
+import localFont from "next/font/local";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { ICON_FONT_URL } from "@/components/Icon";
-import { ScrollRevealObserver } from "@/components/ScrollRevealObserver";
 import { SITE_INFO } from "@/data/site";
 import "./globals.css";
 
@@ -12,6 +11,19 @@ const plusJakarta = Plus_Jakarta_Sans({
   weight: ["400", "500", "600", "700"],
   variable: "--font-plus-jakarta",
   display: "swap",
+});
+
+/**
+ * Íconos Material Symbols alojados en el sitio, con solo los glifos de
+ * ICON_NAMES (src/components/Icon.tsx). Regenerar con `npm run icons`.
+ */
+const materialSymbols = localFont({
+  src: "./fonts/material-symbols-subset.woff2",
+  variable: "--font-icons",
+  weight: "400",
+  style: "normal",
+  display: "block",
+  adjustFontFallback: false,
 });
 
 export const metadata: Metadata = {
@@ -94,15 +106,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" className={plusJakarta.variable}>
+    <html
+      lang="es"
+      className={`${plusJakarta.variable} ${materialSymbols.variable}`}
+    >
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-        <link rel="stylesheet" href={ICON_FONT_URL} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -118,7 +126,6 @@ export default function RootLayout({
           Saltar al contenido principal
         </a>
         <Header />
-        <ScrollRevealObserver />
         <main
           id="contenido-principal"
           className="w-full bg-surface min-h-[calc(100vh-20rem)]"
