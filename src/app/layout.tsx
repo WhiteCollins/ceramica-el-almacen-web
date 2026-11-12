@@ -3,7 +3,6 @@ import { Plus_Jakarta_Sans } from "next/font/google";
 import localFont from "next/font/local";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { ScrollRevealObserver } from "@/components/ScrollRevealObserver";
 import { SITE_INFO } from "@/data/site";
 import "./globals.css";
 
@@ -127,7 +126,6 @@ export default function RootLayout({
           Saltar al contenido principal
         </a>
         <Header />
-        <ScrollRevealObserver />
         <main
           id="contenido-principal"
           className="w-full bg-surface min-h-[calc(100vh-20rem)]"

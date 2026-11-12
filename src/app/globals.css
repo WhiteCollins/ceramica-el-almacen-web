@@ -182,20 +182,44 @@ details > summary::-webkit-details-marker {
   border-color: #8b716e;
 }
 
-/* Animación de aparición gradual al hacer scroll (Scroll Reveal con soporte escalonado) */
-@media (prefers-reduced-motion: no-preference) {
-  .scroll-reveal {
+/*
+ * Aparición gradual al hacer scroll, solo con CSS (scroll-driven animations).
+ * El contenido es visible por defecto: no espera a que cargue JavaScript, y lo
+ * que ya está en pantalla al abrir la página se ve completo desde el inicio.
+ * Los navegadores sin animation-timeline (hoy Firefox) lo muestran sin animar.
+ */
+@keyframes scroll-reveal-in {
+  from {
     opacity: 0;
-    transform: translateY(28px) scale(0.985);
-    transition:
-      opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms),
-      transform 0.65s cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms);
-    will-change: opacity, transform;
+    transform: translateY(24px);
   }
-
-  .scroll-reveal.is-revealed {
+  to {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: none;
+  }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .scroll-reveal {
+      animation: scroll-reveal-in linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 55%;
+    }
+
+    /* Escalonado de tarjetas (data-reveal-delay = índice × 110–130 ms) */
+    .scroll-reveal[data-reveal-delay="110"],
+    .scroll-reveal[data-reveal-delay="130"] {
+      animation-range: entry 6% entry 61%;
+    }
+    .scroll-reveal[data-reveal-delay="220"],
+    .scroll-reveal[data-reveal-delay="260"] {
+      animation-range: entry 12% entry 67%;
+    }
+    .scroll-reveal[data-reveal-delay="330"],
+    .scroll-reveal[data-reveal-delay="390"] {
+      animation-range: entry 18% entry 73%;
+    }
   }
 }
 
