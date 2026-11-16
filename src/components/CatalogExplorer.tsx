@@ -25,6 +25,76 @@ import { SITE_INFO, buildWhatsAppUrl } from "@/data/site";
 type SortOption = "featured" | "stock" | "alpha";
 type ViewMode = "gallery" | "grid";
 
+const SORT_OPTIONS: { value: SortOption; label: string }[] = [
+  { value: "featured", label: "Destacados" },
+  { value: "stock", label: "En stock primero" },
+  { value: "alpha", label: "Nombre (A–Z)" },
+];
+
+/**
+ * Grupo de opciones táctiles para el panel de filtros móvil. Son radios
+ * nativos con apariencia de botón, así funcionan con teclado y lector de pantalla.
+ */
+function ChoiceGroup({
+  legend,
+  name,
+  value,
+  options,
+  onChange,
+}: {
+  legend: string;
+  name: string;
+  value: string;
+  options: { value: string; label: string }[];
+  onChange: (value: string) => void;
+}) {
+  return (
+    <fieldset className="flex flex-col gap-3">
+      <legend className="mb-3 text-[11px] uppercase tracking-[0.2em] font-semibold text-secondary">
+        {legend}
+      </legend>
+      <div className="flex flex-wrap gap-2">
+        {options.map((option) => (
+          <label key={option.value || "todos"} className="relative">
+            <input
+              type="radio"
+              name={name}
+              value={option.value}
+              checked={value === option.value}
+              onChange={() => onChange(option.value)}
+              className="peer sr-only"
+            />
+            <span className="inline-flex items-center min-h-[44px] px-4 border border-outline bg-white text-sm text-on-surface cursor-pointer transition-colors peer-checked:bg-on-surface peer-checked:border-on-surface peer-checked:text-white peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-[#6b1d22]">
+              {option.label}
+            </span>
+          </label>
+        ))}
+      </div>
+    </fieldset>
+  );
+}
+
+/** Filtro activo que se quita con un toque (móvil). */
+function ActiveFilterChip({
+  label,
+  onRemove,
+}: {
+  label: string;
+  onRemove: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onRemove}
+      aria-label={`Quitar filtro: ${label}`}
+      className="min-h-[36px] inline-flex items-center gap-1.5 pl-3 pr-2 bg-surface-container text-on-surface text-xs"
+    >
+      <span>{label}</span>
+      <Icon name="close" className="text-[15px]" />
+    </button>
+  );
+}
+
 interface FilterState {
   category: "all" | ProductCategory;
   finish: string | null;
@@ -132,6 +202,7 @@ export function CatalogExplorer() {
   const [sortBy, setSortBy] = useState<SortOption>(initial.sort);
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
   const [descExpanded, setDescExpanded] = useState(false);
+  const [filtersSheetOpen, setFiltersSheetOpen] = useState(false);
 
   const [sampleModalOpen, setSampleModalOpen] = useState(false);
   const [sampleSubmitted, setSampleSubmitted] = useState(false);
@@ -148,6 +219,7 @@ export function CatalogExplorer() {
   const formatSelectId = useId();
   const sortSelectId = useId();
   const sampleTitleId = useId();
+  const filtersTitleId = useId();
   const sampleProfId = useId();
   const sampleCityId = useId();
   const sampleItemsId = useId();
@@ -264,6 +336,13 @@ export function CatalogExplorer() {
     searchQuery.trim().length > 0 ||
     sortBy !== "featured";
 
+  /** Filtros que viven en el panel móvil (formato, acabado y orden). */
+  const sheetFilterCount =
+    (activeFormat ? 1 : 0) + (activeFinish ? 1 : 0) + (sortBy !== "featured" ? 1 : 0);
+
+  const activeFormatLabel =
+    FORMAT_FILTERS.find((f) => f.value === activeFormat)?.label ?? null;
+
   const activeCategoryMeta =
     CATEGORY_FILTERS.find((c) => c.id === activeCategory) ??
     CATEGORY_FILTERS[0];
@@ -284,19 +363,20 @@ export function CatalogExplorer() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-5 sm:space-y-8">
       {/* Cabecera Editorial Centrada estilo Manolo Blahnik con "Leer más" */}
-      <header className="text-center max-w-3xl mx-auto space-y-3 pt-2">
+      <header className="text-center max-w-3xl mx-auto space-y-2 sm:space-y-3 sm:pt-2">
         <span className="text-[11px] uppercase tracking-[0.28em] text-[#6b1d22] font-semibold block">
           Colección Permanente · Importación Directa
         </span>
-        <h1 className="text-2xl sm:text-3xl uppercase tracking-[0.18em] font-semibold text-on-surface">
+        <h1 className="text-xl sm:text-3xl uppercase tracking-[0.12em] sm:tracking-[0.18em] font-semibold text-on-surface">
           {activeCategory === "all"
             ? "Catálogo de Superficies & Baños"
             : activeCategoryMeta.label}
         </h1>
         <div className="text-xs sm:text-sm tracking-wider text-secondary leading-relaxed max-w-2xl mx-auto">
-          <p className="inline">
+          {/* En móvil la descripción se ve con "Leer más", para mostrar antes los productos */}
+          <p className={descExpanded ? "inline" : "hidden sm:inline"}>
             Explora nuestra selección curada de porcelanatos rectificados,
             revestimientos artesanales, griferías en acabado PVD y equipamiento
             sanitario con disponibilidad en almacén.
@@ -313,7 +393,8 @@ export function CatalogExplorer() {
           <button
             type="button"
             onClick={() => setDescExpanded((prev) => !prev)}
-            className="block mx-auto mt-2 text-[11px] uppercase tracking-[0.2em] text-on-surface underline hover:text-[#6b1d22] transition-colors"
+            aria-expanded={descExpanded}
+            className="block mx-auto mt-1 sm:mt-2 min-h-[32px] text-[11px] uppercase tracking-[0.2em] text-on-surface underline hover:text-[#6b1d22] transition-colors"
           >
             {descExpanded ? "Leer menos" : "Leer más"}
           </button>
@@ -365,8 +446,8 @@ export function CatalogExplorer() {
       <search className="sticky top-[64px] lg:top-[74px] z-20 bg-surface/95 backdrop-blur-md py-3 border-b border-outline/70">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
           {/* Izquierda: Buscador + Selectores de Formato y Acabado */}
-          <div className="flex flex-wrap items-center gap-2.5 flex-1">
-            <div className="relative w-full sm:w-[260px]">
+          <div className="flex items-center gap-2 lg:gap-2.5 lg:flex-wrap flex-1">
+            <div className="relative flex-1 min-w-0 lg:flex-none lg:w-[260px]">
               <label htmlFor={searchInputId} className="sr-only">
                 Buscar por nombre, medida, acabado o código SKU
               </label>
@@ -385,23 +466,23 @@ export function CatalogExplorer() {
                 autoCorrect="off"
                 autoCapitalize="off"
                 spellCheck={false}
-                placeholder="Buscar acabado, 60×120, SKU..."
-                className="w-full h-10 bg-white text-xs tracking-wider text-on-surface placeholder:text-secondary pl-9 pr-8 border border-outline focus:border-on-surface focus:outline-none transition-colors"
+                placeholder="Buscar piezas…"
+                className="w-full h-11 lg:h-10 bg-white text-base lg:text-xs tracking-wide lg:tracking-wider text-on-surface placeholder:text-secondary placeholder:text-sm lg:placeholder:text-xs pl-9 pr-9 border border-outline focus:border-on-surface focus:outline-none transition-colors"
               />
               {searchQuery ? (
                 <button
                   type="button"
                   onClick={() => updateDiscreteFilters({ q: "" })}
                   aria-label="Limpiar búsqueda"
-                  className="absolute right-1.5 top-1/2 -translate-y-1/2 h-7 w-7 inline-flex items-center justify-center text-secondary hover:text-on-surface"
+                  className="absolute right-1 top-1/2 -translate-y-1/2 h-9 w-9 lg:h-7 lg:w-7 inline-flex items-center justify-center text-secondary hover:text-on-surface"
                 >
                   <Icon name="close" className="text-[15px]" />
                 </button>
               ) : null}
             </div>
 
-            {/* Formato */}
-            <div>
+            {/* Formato (en móvil está en el panel de filtros) */}
+            <div className="hidden lg:block">
               <label htmlFor={formatSelectId} className="sr-only">
                 Filtrar por formato
               </label>
@@ -424,8 +505,8 @@ export function CatalogExplorer() {
               </select>
             </div>
 
-            {/* Acabado */}
-            <div>
+            {/* Acabado (en móvil está en el panel de filtros) */}
+            <div className="hidden lg:block">
               <label htmlFor={finishSelectId} className="sr-only">
                 Filtrar por acabado
               </label>
@@ -452,16 +533,33 @@ export function CatalogExplorer() {
               <button
                 type="button"
                 onClick={resetFilters}
-                className="h-10 px-3 inline-flex items-center gap-1 text-[11px] uppercase tracking-[0.16em] font-semibold text-[#6b1d22] hover:underline"
+                className="hidden lg:inline-flex h-10 px-3 items-center gap-1 text-[11px] uppercase tracking-[0.16em] font-semibold text-[#6b1d22] hover:underline"
               >
                 <Icon name="close" className="text-[14px]" />
                 <span>Limpiar</span>
               </button>
             ) : null}
+
+            {/* Móvil: un solo botón abre formato, acabado y orden en un panel inferior */}
+            <button
+              type="button"
+              onClick={() => setFiltersSheetOpen(true)}
+              aria-haspopup="dialog"
+              className="lg:hidden relative h-11 shrink-0 px-4 inline-flex items-center gap-2 border border-on-surface bg-white text-on-surface text-[11px] uppercase tracking-[0.16em] font-semibold"
+            >
+              <Icon name="tune" className="text-[18px]" />
+              <span>Filtros</span>
+              {sheetFilterCount > 0 ? (
+                <span className="inline-flex items-center justify-center min-w-[20px] h-5 px-1 rounded-full bg-[#6b1d22] text-white text-[11px] tracking-normal">
+                  {sheetFilterCount}
+                  <span className="sr-only"> activos</span>
+                </span>
+              ) : null}
+            </button>
           </div>
 
           {/* Derecha: Contador + Orden + Conmutador Vista Galería (2 cols) / Grid (4 cols) + Muestrario */}
-          <div className="flex flex-wrap items-center justify-between lg:justify-end gap-4">
+          <div className="hidden lg:flex flex-wrap items-center justify-end gap-4">
             <span className="text-[11px] uppercase tracking-[0.16em] text-secondary">
               <strong className="text-on-surface font-semibold">
                 {filteredProducts.length}
@@ -552,6 +650,75 @@ export function CatalogExplorer() {
         </div>
       </search>
 
+      {/* Móvil: resultados, filtros activos removibles y muestrario */}
+      <div className="lg:hidden -mt-1 sm:-mt-4 flex flex-col gap-3">
+        <div className="flex items-center justify-between gap-3">
+          <p className="text-[11px] uppercase tracking-[0.16em] text-secondary" aria-live="polite">
+            <strong className="text-on-surface font-semibold">
+              {filteredProducts.length}
+            </strong>{" "}
+            {filteredProducts.length === 1 ? "resultado" : "resultados"}
+          </p>
+          <button
+            type="button"
+            onClick={() => {
+              setSampleSubmitted(false);
+              setSampleModalOpen(true);
+            }}
+            className="min-h-[40px] inline-flex items-center gap-1.5 text-[11px] uppercase tracking-[0.16em] font-semibold text-on-surface underline underline-offset-4"
+          >
+            <Icon name="layers" className="text-[15px]" />
+            <span>Pedir muestrario</span>
+          </button>
+        </div>
+
+        {sheetFilterCount > 0 || searchQuery.trim() ? (
+          <ul role="list" aria-label="Filtros activos" className="flex flex-wrap gap-2">
+            {activeFormatLabel ? (
+              <li>
+                <ActiveFilterChip
+                  label={activeFormatLabel}
+                  onRemove={() => updateDiscreteFilters({ format: null })}
+                />
+              </li>
+            ) : null}
+            {activeFinish ? (
+              <li>
+                <ActiveFilterChip
+                  label={activeFinish}
+                  onRemove={() => updateDiscreteFilters({ finish: null })}
+                />
+              </li>
+            ) : null}
+            {sortBy !== "featured" ? (
+              <li>
+                <ActiveFilterChip
+                  label={SORT_OPTIONS.find((o) => o.value === sortBy)?.label ?? ""}
+                  onRemove={() => updateDiscreteFilters({ sort: "featured" })}
+                />
+              </li>
+            ) : null}
+            {searchQuery.trim() ? (
+              <li>
+                <ActiveFilterChip
+                  label={`“${searchQuery.trim()}”`}
+                  onRemove={() => updateDiscreteFilters({ q: "" })}
+                />
+              </li>
+            ) : null}
+            <li>
+              <button
+                type="button"
+                onClick={resetFilters}
+                className="min-h-[36px] px-2 text-[11px] uppercase tracking-[0.16em] font-semibold text-[#6b1d22] underline underline-offset-4"
+              >
+                Limpiar todo
+              </button>
+            </li>
+          </ul>
+        ) : null}
+      </div>
+
       {/* Grilla de Productos: 2 columnas gigantes en modo Galería o 4 columnas en modo Cuadrícula */}
       <section aria-label="Listado de piezas">
         {filteredProducts.length === 0 ? (
@@ -581,7 +748,7 @@ export function CatalogExplorer() {
             className={
               viewMode === "gallery"
                 ? "grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-12"
-                : "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-5 gap-y-10"
+                : "grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-3 sm:gap-x-5 gap-y-8 sm:gap-y-10"
             }
           >
             {filteredProducts.map((product, index) => (
@@ -596,6 +763,87 @@ export function CatalogExplorer() {
           </ul>
         )}
       </section>
+
+      {/* Panel inferior de filtros (solo móvil) */}
+      <ModalDialog
+        open={filtersSheetOpen}
+        onClose={() => setFiltersSheetOpen(false)}
+        labelledBy={filtersTitleId}
+        variant="sheet"
+      >
+        <div className="flex flex-col max-h-[88svh]">
+          <div className="flex items-center justify-between px-5 pt-4 pb-3 border-b border-outline/60">
+            <h2
+              id={filtersTitleId}
+              className="text-sm uppercase tracking-[0.2em] font-semibold text-on-surface"
+            >
+              Filtrar y ordenar
+            </h2>
+            <button
+              type="button"
+              onClick={() => setFiltersSheetOpen(false)}
+              aria-label="Cerrar filtros"
+              className="min-h-[44px] min-w-[44px] -mr-2 inline-flex items-center justify-center text-on-surface"
+            >
+              <Icon name="close" className="text-[22px]" />
+            </button>
+          </div>
+
+          <div className="flex-1 overflow-y-auto overscroll-contain px-5 py-5 flex flex-col gap-6">
+            <ChoiceGroup
+              legend="Formato"
+              name="formato-movil"
+              value={activeFormat ?? ""}
+              options={[
+                { value: "", label: "Todos" },
+                ...FORMAT_FILTERS.map((f) => ({ value: f.value, label: f.label })),
+              ]}
+              onChange={(v) => updateDiscreteFilters({ format: v || null })}
+            />
+            <ChoiceGroup
+              legend="Acabado"
+              name="acabado-movil"
+              value={activeFinish ?? ""}
+              options={[
+                { value: "", label: "Todos" },
+                ...FINISH_FILTERS.map((f) => ({ value: f, label: f })),
+              ]}
+              onChange={(v) => updateDiscreteFilters({ finish: v || null })}
+            />
+            <ChoiceGroup
+              legend="Ordenar por"
+              name="orden-movil"
+              value={sortBy}
+              options={SORT_OPTIONS.map((o) => ({ value: o.value, label: o.label }))}
+              onChange={(v) => updateDiscreteFilters({ sort: v as SortOption })}
+            />
+          </div>
+
+          <div className="flex items-center gap-3 px-5 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))] border-t border-outline/60 bg-surface-container-lowest">
+            <button
+              type="button"
+              onClick={() =>
+                updateDiscreteFilters({ format: null, finish: null, sort: "featured" })
+              }
+              disabled={sheetFilterCount === 0}
+              className="min-h-[48px] px-4 text-[11px] uppercase tracking-[0.18em] font-semibold text-on-surface underline underline-offset-4 disabled:opacity-40 disabled:no-underline"
+            >
+              Limpiar
+            </button>
+            <button
+              type="button"
+              onClick={() => setFiltersSheetOpen(false)}
+              className="flex-1 min-h-[48px] bg-on-surface text-white text-xs uppercase tracking-[0.2em] font-semibold"
+            >
+              {filteredProducts.length === 0
+                ? "Sin resultados"
+                : `Ver ${filteredProducts.length} ${
+                    filteredProducts.length === 1 ? "pieza" : "piezas"
+                  }`}
+            </button>
+          </div>
+        </div>
+      </ModalDialog>
 
       {/* Modal de Solicitud de Muestrario Físico (<dialog> nativo) */}
       <ModalDialog

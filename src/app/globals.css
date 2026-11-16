@@ -158,6 +158,59 @@ dialog.dialog-drawer[open]:where(:not([data-closing]))::backdrop {
   }
 }
 
+/* Panel inferior (bottom sheet) para móvil: misma técnica que el drawer, deslizando desde abajo */
+dialog.dialog-sheet {
+  opacity: 0;
+  transform: translateY(100%);
+  transition-property: opacity, transform, display, overlay;
+  transition-duration: 0.25s;
+  transition-timing-function: ease-out;
+  transition-behavior: allow-discrete;
+}
+
+dialog.dialog-sheet[open]:where(:not([data-closing])) {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@starting-style {
+  dialog.dialog-sheet[open]:where(:not([data-closing])) {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+}
+
+dialog.dialog-sheet::backdrop {
+  background-color: rgba(26, 28, 26, 0);
+  transition-property: background-color, display, overlay;
+  transition-duration: 0.25s;
+  transition-timing-function: ease-out;
+  transition-behavior: allow-discrete;
+}
+
+dialog.dialog-sheet[open]:where(:not([data-closing]))::backdrop {
+  background-color: rgba(26, 28, 26, 0.5);
+}
+
+@starting-style {
+  dialog.dialog-sheet[open]:where(:not([data-closing]))::backdrop {
+    background-color: rgba(26, 28, 26, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  dialog.dialog-sheet {
+    transform: none;
+    transition-duration: 0.1s;
+  }
+
+  @starting-style {
+    dialog.dialog-sheet[open]:where(:not([data-closing])) {
+      transform: none;
+    }
+  }
+}
+
 /* Native <details> summary marker reset (paired with explicit chevron icon) */
 details > summary {
   list-style: none;

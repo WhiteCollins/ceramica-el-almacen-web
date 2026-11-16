@@ -224,7 +224,11 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {specifiedProducts.map((product) => (
-              <ProductSwatchCard key={product.id} product={product} />
+              <ProductSwatchCard
+                key={product.id}
+                product={product}
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              />
             ))}
           </div>
         </section>
