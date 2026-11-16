@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
+import localFont from "next/font/local";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { ICON_FONT_URL } from "@/components/Icon";
-import { ScrollRevealObserver } from "@/components/ScrollRevealObserver";
 import { SITE_INFO } from "@/data/site";
 import "./globals.css";
 
@@ -14,8 +13,21 @@ const plusJakarta = Plus_Jakarta_Sans({
   display: "swap",
 });
 
+/**
+ * Íconos Material Symbols alojados en el sitio, con solo los glifos de
+ * ICON_NAMES (src/components/Icon.tsx). Regenerar con `npm run icons`.
+ */
+const materialSymbols = localFont({
+  src: "./fonts/material-symbols-subset.woff2",
+  variable: "--font-icons",
+  weight: "400",
+  style: "normal",
+  display: "block",
+  adjustFontFallback: false,
+});
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://ceramicaelalmacen.com"),
+  metadataBase: new URL(SITE_INFO.url),
   title: {
     default: `${SITE_INFO.name} | Porcelanatos, Griferías & Baños en San Pedro de Macorís`,
     template: `%s | ${SITE_INFO.name}`,
@@ -58,7 +70,7 @@ const localBusinessSchema = {
   description: SITE_INFO.description,
   telephone: SITE_INFO.phoneDisplay,
   email: SITE_INFO.email,
-  url: "https://ceramicaelalmacen.com",
+  url: SITE_INFO.url,
   sameAs: [SITE_INFO.instagramUrl],
   address: {
     "@type": "PostalAddress",
@@ -94,15 +106,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" className={plusJakarta.variable}>
+    <html
+      lang="es"
+      className={`${plusJakarta.variable} ${materialSymbols.variable}`}
+    >
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-        <link rel="stylesheet" href={ICON_FONT_URL} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -118,7 +126,6 @@ export default function RootLayout({
           Saltar al contenido principal
         </a>
         <Header />
-        <ScrollRevealObserver />
         <main
           id="contenido-principal"
           className="w-full bg-surface min-h-[calc(100vh-20rem)]"

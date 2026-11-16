@@ -1,10 +1,10 @@
 import React from "react";
 
 /**
- * Íconos de Material Symbols que usa el sitio. La hoja de Google Fonts se pide
- * solo con estos nombres (parámetro `icon_names`), así la fuente pesa unos KB
- * en lugar de 4 MB. Si usas un ícono nuevo (también en src/data), agrégalo aquí
- * o se verá como texto.
+ * Íconos de Material Symbols que usa el sitio. La fuente se genera solo con
+ * estos nombres y se aloja en src/app/fonts (pesa unos 7 KB en lugar de 4 MB).
+ * Si usas un ícono nuevo (también en src/data), agrégalo aquí y ejecuta
+ * `npm run icons`, o se verá como texto.
  */
 export const ICON_NAMES = [
   "accessible",
@@ -49,12 +49,6 @@ export const ICON_NAMES = [
   "water_drop",
 ] as const;
 
-/** URL de Google Fonts con ejes fijos (opsz 24, wght 400, GRAD 0) y relleno 0..1. */
-export const ICON_FONT_URL = `https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0..1,0&icon_names=${[
-  ...ICON_NAMES,
-]
-  .sort()
-  .join(",")}&display=block`;
 
 interface IconProps {
   name: string;

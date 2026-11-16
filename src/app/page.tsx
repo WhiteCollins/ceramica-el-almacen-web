@@ -64,7 +64,7 @@ export default function HomePage() {
             {EXPLORE_DUO.map((item, idx) => (
               <article
                 key={item.id}
-                data-reveal-delay={String(idx * 120)}
+                data-reveal-delay={idx > 0 ? "110" : undefined}
                 className="scroll-reveal group flex flex-col"
               >
                 <Link
@@ -75,7 +75,6 @@ export default function HomePage() {
                     src={item.image}
                     alt={item.imageAlt}
                     fill
-                    unoptimized
                     sizes="(max-width: 768px) 100vw, 50vw"
                     className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
                   />

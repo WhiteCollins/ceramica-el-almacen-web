@@ -25,6 +25,8 @@ const STAGGER_OFFSETS = [
   "lg:mt-0",
 ];
 
+const REVEAL_DELAYS = [undefined, "110", "220", "110", "330"] as const;
+
 export function HomeNewCollection() {
   const showcaseProducts = SHOWCASE_IDS.map((id) =>
     CATALOG_PRODUCTS.find((p) => p.id === id)
@@ -60,6 +62,7 @@ export function HomeNewCollection() {
         >
           {showcaseProducts.map((product, idx) => {
             const staggerClass = STAGGER_OFFSETS[idx] ?? "";
+            const revealDelay = REVEAL_DELAYS[idx];
             const spanLastOnMobile =
               idx === showcaseProducts.length - 1
                 ? "col-span-2 sm:col-span-1 max-w-[260px] sm:max-w-none mx-auto w-full"
@@ -68,7 +71,7 @@ export function HomeNewCollection() {
             return (
               <li
                 key={product.id}
-                data-reveal-delay={String(idx * 90)}
+                data-reveal-delay={revealDelay}
                 className={`scroll-reveal ${staggerClass} ${spanLastOnMobile}`}
               >
                 <article className="group flex flex-col">
@@ -87,7 +90,6 @@ export function HomeNewCollection() {
                       src={product.image}
                       alt={product.imageAlt}
                       fill
-                      unoptimized
                       sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
                       className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
                     />
