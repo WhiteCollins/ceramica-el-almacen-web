@@ -16,10 +16,13 @@ export function ProductSwatchCard({
   product,
   priority = false,
   viewMode = "grid",
+  sizes,
 }: {
   product: CatalogProduct;
   priority?: boolean;
   viewMode?: "gallery" | "grid";
+  /** Ancho de la imagen según la cuadrícula que la contiene (atributo `sizes`). */
+  sizes?: string;
 }) {
   const whatsappHref = buildWhatsAppUrl(product.whatsappText);
   const isGallery = viewMode === "gallery";
@@ -43,16 +46,20 @@ export function ProductSwatchCard({
             fill
             priority={priority}
             sizes={
-              isGallery
+              sizes ??
+              (isGallery
                 ? "(max-width: 768px) 100vw, 50vw"
-                : "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                : "(max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw")
             }
             className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
           />
         </Link>
 
         {/* Barra de acción inferior sutil al hacer hover (Cotizar / Ver ficha) */}
-        <div className="absolute inset-x-0 bottom-0 p-3 flex items-center justify-center gap-2 bg-gradient-to-t from-black/65 via-black/25 to-transparent lg:opacity-0 lg:translate-y-2 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 focus-within:opacity-100 focus-within:translate-y-0 transition-all duration-300">
+        {/* En la cuadrícula móvil (2 columnas) no caben: la tarjeta entera abre la ficha, que tiene Cotizar */}
+        <div className={`absolute inset-x-0 bottom-0 p-3 items-center justify-center gap-2 ${
+          isGallery ? "flex" : "hidden sm:flex"
+        } bg-gradient-to-t from-black/65 via-black/25 to-transparent lg:opacity-0 lg:translate-y-2 lg:group-hover:opacity-100 lg:group-hover:translate-y-0 focus-within:opacity-100 focus-within:translate-y-0 transition-all duration-300`}>
           <a
             href={whatsappHref}
             target="_blank"
@@ -75,16 +82,16 @@ export function ProductSwatchCard({
       {/* Información centrada con tracking editorial (Estilo Manolo Blahnik) */}
       <Link
         href={`/catalogo/${product.id}`}
-        className="pt-4 pb-2 px-2 flex flex-col items-center text-center gap-1"
+        className="pt-3 sm:pt-4 pb-2 px-1 sm:px-2 flex flex-col items-center text-center gap-1"
       >
         <h3
-          className={`uppercase tracking-[0.16em] font-semibold text-on-surface group-hover:text-[#6b1d22] transition-colors leading-snug ${
-            isGallery ? "text-sm sm:text-base" : "text-xs sm:text-[13px]"
+          className={`uppercase tracking-[0.1em] sm:tracking-[0.16em] font-semibold text-on-surface group-hover:text-[#6b1d22] transition-colors leading-snug ${
+            isGallery ? "text-sm sm:text-base" : "text-[11px] sm:text-[13px]"
           }`}
         >
           {product.name}
         </h3>
-        <p className="text-[11px] uppercase tracking-[0.14em] text-secondary">
+        <p className="text-[10px] sm:text-[11px] uppercase tracking-[0.08em] sm:tracking-[0.14em] text-secondary">
           {product.dimensionsLabel} · {product.finish}
         </p>
       </Link>

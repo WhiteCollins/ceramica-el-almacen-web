@@ -6,7 +6,8 @@ interface ModalDialogProps {
   open: boolean;
   onClose: () => void;
   labelledBy: string;
-  variant?: "modal" | "drawer";
+  /** "drawer": panel lateral; "sheet": panel inferior para móvil. */
+  variant?: "modal" | "drawer" | "sheet";
   className?: string;
   children: React.ReactNode;
 }
@@ -54,7 +55,7 @@ export function ModalDialog({
   const closeTopLayer = useCallback(async (dialog: HTMLDialogElement) => {
     if (!dialog.open) return;
 
-    if (variant === "drawer" && !supportsTopLayerExit()) {
+    if (variant !== "modal" && !supportsTopLayerExit()) {
       dialog.setAttribute("data-closing", "");
       const animations = dialog.getAnimations({ subtree: true });
       if (animations.length > 0) {
@@ -89,7 +90,7 @@ export function ModalDialog({
   // Route native cancel requests (Esc) through closeTopLayer so exit animations run
   useEffect(() => {
     const dialog = dialogRef.current;
-    if (!dialog || variant !== "drawer") return;
+    if (!dialog || variant === "modal") return;
 
     const handleCancel = (event: Event) => {
       event.preventDefault();
@@ -145,6 +146,8 @@ export function ModalDialog({
   const baseClass =
     variant === "drawer"
       ? "dialog-drawer ml-auto mr-0 my-0 h-[100svh] max-h-[100svh] w-[min(23rem,88dvw)] p-0 bg-surface-container-lowest text-on-surface rounded-l-xl rounded-r-none shadow-2xl border-l border-outline-variant/40"
+      : variant === "sheet"
+      ? "dialog-sheet mx-0 mb-0 mt-auto w-full max-w-none max-h-[88svh] p-0 bg-surface-container-lowest text-on-surface rounded-t-xl shadow-2xl border-t border-outline-variant/40"
       : "m-auto p-0 bg-surface-container-lowest text-on-surface rounded-xl shadow-2xl border border-outline-variant/40 w-[calc(100%-2rem)]";
 
   return (
