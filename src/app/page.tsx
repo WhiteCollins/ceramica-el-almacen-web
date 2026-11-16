@@ -2,8 +2,36 @@ import Image from "next/image";
 import Link from "next/link";
 import { ColorShowcase } from "@/components/ColorShowcase";
 import { HeroBanner } from "@/components/HeroBanner";
+import { HomeCatalogCarousel } from "@/components/HomeCatalogCarousel";
+import { HomeNewCollection } from "@/components/HomeNewCollection";
 import { ShowroomBanner } from "@/components/ShowroomBanner";
-import { SPACES } from "@/data/spaces";
+
+const EXPLORE_DUO = [
+  {
+    id: "porcelanatos-superficies",
+    eyebrow: "Pisos & Muros de Gran Formato",
+    title: "Porcelanatos & Mármol",
+    description:
+      "Losas rectificadas 60 × 120 cm y listones en acabado madera natural con baja absorción y reserva de lote único para proyectos.",
+    ctaLabel: "Explorar pisos",
+    href: "/catalogo?categoria=porcelanato",
+    image: "/images/categories/porcelanatos-calacatta.jpg",
+    imageAlt:
+      "Sala residencial contemporánea con pisos de porcelanato blanco veteado tipo Calacatta",
+  },
+  {
+    id: "banos-griferia-pvd",
+    eyebrow: "Equipamiento & Acabados PVD",
+    title: "Baños & Grifería",
+    description:
+      "Tinas exentas Sottovento, lavamanos escultóricos y columnas termostáticas IMEX en latón macizo y acabado PVD resistente.",
+    ctaLabel: "Explorar grifería",
+    href: "/catalogo?categoria=griferia",
+    image: "/images/categories/griferia-vanguardia.jpg",
+    imageAlt:
+      "Exhibición de grifería arquitectónica de vanguardia en acabados PVD dorado cepillado y negro mate",
+  },
+] as const;
 
 export default function HomePage() {
   return (
@@ -11,80 +39,79 @@ export default function HomePage() {
       {/* SECCIÓN 1: BANNER PRINCIPAL CON AUTOPLAY Y BARRAS DE PROGRESO LINEALES */}
       <HeroBanner />
 
-      {/* SECCIÓN 2: ELIGE POR ESPACIO (ESTÉTICA DE GALERÍA EDITORIAL) */}
-      <section className="w-full bg-surface py-16 lg:py-24">
+      {/* SECCIÓN 2: EXHIBICIÓN ASIMÉTRICA DE 5 PIEZAS DE AUTOR (ESTILO MANOLO BLAHNIK "NEW COLLECTION") */}
+      <HomeNewCollection />
+
+      {/* SECCIÓN 3: DÚO EDITORIAL 50 / 50 (ESTILO "EXPLORE MORE") */}
+      <section
+        aria-labelledby="explora-colecciones-titulo"
+        className="w-full bg-surface py-16 lg:py-24"
+      >
         <div className="max-w-7xl mx-auto px-margin-mobile lg:px-margin-desktop flex flex-col gap-10 lg:gap-14">
           <div className="scroll-reveal flex flex-col items-center text-center space-y-2.5">
             <span className="text-[11px] uppercase tracking-[0.28em] text-[#6b1d22] font-semibold">
-              Arquitectura Interior
+              Universos de Diseño
             </span>
-            <h2 className="text-xl sm:text-2xl uppercase tracking-[0.18em] font-semibold text-on-surface">
-              Elige por espacio
+            <h2
+              id="explora-colecciones-titulo"
+              className="text-xl sm:text-2xl uppercase tracking-[0.18em] font-semibold text-on-surface"
+            >
+              Explora más colecciones
             </h2>
           </div>
 
-          <ul
-            role="list"
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-6"
-          >
-            {SPACES.map((space, idx) => (
-              <li
-                key={space.slug}
-                data-reveal-delay={String(idx * 110)}
-                className="scroll-reveal flex flex-col gap-3"
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+            {EXPLORE_DUO.map((item, idx) => (
+              <article
+                key={item.id}
+                data-reveal-delay={String(idx * 120)}
+                className="scroll-reveal group flex flex-col"
               >
                 <Link
-                  href={space.catalogHref}
-                  className="
-                    card-wine-glow group relative block overflow-hidden
-                    aspect-[4/5] rounded-sm bg-inverse-surface
-                    ring-1 ring-black/5 hover:ring-2 hover:ring-[#6b1d22]/80
-                    transition-all duration-300 ease-out hover:-translate-y-1.5
-                  "
+                  href={item.href}
+                  className="card-wine-glow relative block aspect-[4/5] w-full overflow-hidden rounded-none bg-inverse-surface"
                 >
                   <Image
-                    src={space.image}
-                    alt={space.imageAlt}
+                    src={item.image}
+                    alt={item.imageAlt}
                     fill
                     unoptimized
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                    sizes="(max-width: 768px) 100vw, 50vw"
                     className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
-                    style={
-                      space.imagePosition
-                        ? { objectPosition: space.imagePosition }
-                        : undefined
-                    }
                   />
-
-                  {/* Gradiente para garantizar contraste del título y descripción dentro de la imagen */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent transition-all duration-500 group-hover:from-[#2b090c]/90 group-hover:via-black/50" />
-
-                  {/* Contenido superpuesto dentro de la imagen */}
-                  <div className="absolute inset-x-0 bottom-0 p-6 flex flex-col items-center text-center justify-end text-white">
-                    <h3 className="text-sm sm:text-base uppercase tracking-[0.22em] font-semibold text-white transition-transform duration-300 ease-out group-hover:-translate-y-0.5">
-                      {space.label}
-                    </h3>
-
-                    {/* Detalle/descripción que se despliega suavemente al pasar el cursor (hover / focus) */}
-                    <div className="grid grid-rows-[0fr] opacity-0 group-hover:grid-rows-[1fr] group-hover:opacity-100 group-focus-visible:grid-rows-[1fr] group-focus-visible:opacity-100 transition-all duration-300 ease-out">
-                      <div className="overflow-hidden">
-                        <p className="pt-2.5 text-xs text-white/90 leading-relaxed">
-                          {space.cardDetail}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent opacity-80 group-hover:opacity-95 transition-opacity duration-500" />
+                  <span className="pointer-events-none absolute bottom-5 left-5 text-[10px] uppercase tracking-[0.26em] text-white/90 font-semibold">
+                    {item.eyebrow}
+                  </span>
                 </Link>
-              </li>
+
+                <div className="pt-6 flex flex-col items-center text-center gap-3 px-2">
+                  <h3 className="text-base sm:text-lg uppercase tracking-[0.18em] font-semibold text-on-surface">
+                    {item.title}
+                  </h3>
+                  <p className="text-xs sm:text-sm tracking-wide text-secondary max-w-md leading-relaxed">
+                    {item.description}
+                  </p>
+                  <Link
+                    href={item.href}
+                    className="mt-1 min-h-[42px] inline-flex items-center justify-center rounded-none border border-on-surface bg-transparent hover:bg-on-surface text-on-surface hover:text-white px-7 py-2.5 text-[11px] uppercase tracking-[0.22em] font-semibold transition-colors duration-300"
+                  >
+                    {item.ctaLabel}
+                  </Link>
+                </div>
+              </article>
             ))}
-          </ul>
+          </div>
         </div>
       </section>
 
-      {/* SECCIÓN 3: MATERIALES Y SUPERFICIES (CERÁMICA, PORCELANATO Y PIEDRA NATURAL) */}
+      {/* SECCIÓN 4: CARRUSEL CURADO DEL CATÁLOGO POR CATEGORÍA (ESTILO "GET INSPIRED") */}
+      <HomeCatalogCarousel />
+
+      {/* SECCIÓN 5: CURADURÍA EUROPEA — MATERIALES Y SUPERFICIES */}
       <ColorShowcase />
 
-      {/* SECCIÓN 4: INVITACIÓN AL SHOWROOM */}
+      {/* SECCIÓN 6: INVITACIÓN AL SHOWROOM */}
       <ShowroomBanner />
     </div>
   );
