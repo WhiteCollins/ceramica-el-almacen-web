@@ -1,16 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { DraftBadge } from "@/components/DraftBadge";
 import { Icon } from "@/components/Icon";
-import { CATALOG_PRODUCTS } from "@/data/catalog";
-import {
-  VISIBLE_PROJECTS,
-  buildWhatsAppUrl,
-  type ShowroomProject,
-} from "@/data/site";
+import { VISIBLE_PROJECTS, type ShowroomProject } from "@/data/site";
 
 type FilterOption =
   | "all"
@@ -20,7 +15,7 @@ type FilterOption =
   | "La Romana"
   | "Santo Domingo";
 
-const PROJECT_FILTERS: { id: FilterOption; label: string }[] = [
+const ALL_PROJECT_FILTERS: { id: FilterOption; label: string }[] = [
   { id: "all", label: "Todos" },
   { id: "Residencial", label: "Residencial" },
   { id: "Comercial", label: "Hotelería / Comercial" },
@@ -29,21 +24,32 @@ const PROJECT_FILTERS: { id: FilterOption; label: string }[] = [
   { id: "Santo Domingo", label: "Santo Domingo" },
 ];
 
-function productsFor(project: ShowroomProject) {
-  return project.productIds
-    .map((id) => CATALOG_PRODUCTS.find((p) => p.id === id))
-    .filter((p): p is (typeof CATALOG_PRODUCTS)[number] => Boolean(p));
+function matchesProjectFilter(
+  project: ShowroomProject,
+  filter: FilterOption
+): boolean {
+  if (filter === "all") return true;
+  if (filter === "Residencial" || filter === "Comercial") {
+    return project.category === filter;
+  }
+  return project.regionFilter === filter;
 }
 
+/**
+ * Proyecto destacado en formato editorial abierto estilo Manolo Blahnik GB:
+ * - Fotografía arquitectónica 100% limpia sin badges ni overlays que la tapen
+ * - Esquinas rectas de galería (rounded-none)
+ * - Columna editorial con aire, KPI sobre línea lateral fina y enlaces con micro-guion "–"
+ */
 function FeaturedProject({ project }: { project: ShowroomProject }) {
   const href = `/showroom/${project.id}`;
 
   return (
-    <article className="grid grid-cols-1 lg:grid-cols-12 rounded-sm bg-white border border-outline/60 overflow-hidden transition-all duration-300 ease-out hover:border-[#6b1d22]/45 hover:shadow-[0_14px_34px_-10px_rgba(107,29,34,0.22)]">
-      {/* Columna Imagen (50% en desktop) */}
+    <article className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center pb-12 lg:pb-16 border-b border-outline/60">
+      {/* Columna Fotografía limpia sin stickers (58% en desktop) */}
       <Link
         href={href}
-        className="group relative block lg:col-span-6 aspect-[4/3] lg:aspect-auto lg:min-h-[460px] overflow-hidden bg-surface-container-low"
+        className="group relative block lg:col-span-7 aspect-[4/3] w-full overflow-hidden rounded-none bg-surface-container-low shadow-[0_22px_44px_-14px_rgba(26,28,26,0.18)] hover:shadow-[0_28px_52px_-12px_rgba(107,29,34,0.26)] transition-all duration-500"
       >
         <Image
           src={project.image}
@@ -51,34 +57,26 @@ function FeaturedProject({ project }: { project: ShowroomProject }) {
           fill
           quality={95}
           priority
-          sizes="(max-width: 1024px) 100vw, 50vw"
-          className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+          sizes="(max-width: 1024px) 100vw, 58vw"
+          className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
         />
-
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/20" />
-
-        <span className="absolute top-4 left-4 z-10 bg-white/95 backdrop-blur-sm px-3.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-on-surface shadow-sm">
-          {project.spaceBadge}
-        </span>
-
-        <span className="absolute bottom-4 left-4 z-10 inline-flex items-center gap-1.5 bg-inverse-surface/85 backdrop-blur-sm px-3.5 py-1.5 text-[11px] font-medium uppercase tracking-[0.14em] text-white shadow-sm">
-          <Icon name="location_on" className="text-[14px] text-white/90" />
-          <span>{project.fullLocation}</span>
-        </span>
+        {project.draft ? (
+          <DraftBadge className="absolute top-4 left-4 z-10" />
+        ) : null}
       </Link>
 
-      {/* Columna de Datos Equilibrada (50% en desktop) */}
-      <div className="lg:col-span-6 p-6 sm:p-9 lg:p-12 flex flex-col justify-between gap-6">
-        <div className="space-y-4">
-          <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-secondary">
-            <span className="text-[#6b1d22]">{project.category}</span>
+      {/* Columna Editorial abierta (42% en desktop) */}
+      <div className="lg:col-span-5 flex flex-col justify-center gap-6">
+        <div className="space-y-3">
+          <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#6b1d22]">
+            <span>{project.spaceBadge}</span>
             <span aria-hidden="true">·</span>
-            <span>{project.location}</span>
+            <span className="text-secondary">{project.location}</span>
             <span aria-hidden="true">·</span>
-            <span>Entrega {project.year}</span>
+            <span className="text-secondary">{project.year}</span>
           </div>
 
-          <h2 className="text-lg sm:text-xl uppercase tracking-[0.16em] font-semibold text-on-surface leading-snug">
+          <h2 className="text-xl sm:text-2xl uppercase tracking-[0.18em] font-semibold text-on-surface leading-snug">
             <Link
               href={href}
               className="hover:text-[#6b1d22] transition-colors"
@@ -87,47 +85,50 @@ function FeaturedProject({ project }: { project: ShowroomProject }) {
             </Link>
           </h2>
 
-          <p className="text-sm text-secondary leading-relaxed">
+          <p className="text-xs sm:text-sm tracking-wide text-secondary leading-relaxed">
             {project.summary}
           </p>
         </div>
 
-        {/* KPI Grande de Capacidad de Suministro con acento en color vino (#6b1d22) */}
-        <div className="flex items-baseline gap-3.5 rounded-sm bg-surface-container-low px-5 py-4 border-l-2 border-[#6b1d22]">
-          <span className="text-2xl sm:text-3xl font-semibold uppercase tracking-[0.08em] text-[#6b1d22]">
+        {/* KPI limpio sobre línea lateral vino (#6b1d22), sin caja pesada */}
+        <div className="flex items-baseline gap-3.5 border-l-2 border-[#6b1d22] pl-4 py-1">
+          <span className="text-2xl sm:text-3xl font-semibold uppercase tracking-[0.06em] text-[#6b1d22]">
             {project.areaValue}
           </span>
-          <span className="text-xs font-medium uppercase tracking-[0.14em] text-secondary">
-            {project.areaUnit} · Lote único garantizado
+          <span className="text-[11px] font-medium uppercase tracking-[0.16em] text-secondary">
+            {project.areaUnit} · Lote único
           </span>
         </div>
 
-        {/* Chips interactivos de producto con enlace directo al catálogo */}
+        {/* Enlaces de materiales especificados con micro-interacción "–" */}
         {project.materials.length > 0 ? (
-          <div className="space-y-2.5">
-            <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-secondary block">
+          <div className="space-y-2">
+            <span className="text-[10px] font-semibold uppercase tracking-[0.24em] text-secondary block">
               Materiales especificados
             </span>
-            <div className="flex flex-wrap gap-2">
+            <ul role="list" className="space-y-1">
               {project.materials.map((material) => (
-                <Link
-                  key={material.href + material.label}
-                  href={material.href}
-                  className="inline-flex items-center gap-1.5 bg-surface hover:bg-[#6b1d22] text-on-surface hover:text-white border border-outline px-3.5 py-1.5 text-[11px] font-medium uppercase tracking-[0.14em] transition-colors"
-                >
-                  <span>{material.label}</span>
-                  <Icon name="arrow_forward" className="text-[13px]" />
-                </Link>
+                <li key={material.href + material.label}>
+                  <Link
+                    href={material.href}
+                    className="group/item inline-flex items-center text-xs uppercase tracking-[0.14em] text-on-surface hover:text-[#6b1d22] py-0.5 transition-colors"
+                  >
+                    <span className="inline-block w-0 overflow-hidden opacity-0 group-hover/item:w-3.5 group-hover/item:opacity-100 text-[#6b1d22] transition-all duration-200">
+                      –
+                    </span>
+                    <span>{material.label}</span>
+                  </Link>
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
         ) : null}
 
-        {/* Acción principal */}
-        <div className="pt-1 flex flex-wrap items-center gap-3">
+        {/* Acción principal rectangular 1px */}
+        <div className="pt-1">
           <Link
             href={href}
-            className="min-h-[46px] inline-flex items-center gap-2.5 bg-on-surface hover:bg-[#6b1d22] px-6 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-white transition-colors"
+            className="min-h-[46px] inline-flex items-center justify-center gap-2.5 rounded-none border border-on-surface bg-on-surface hover:bg-[#6b1d22] hover:border-[#6b1d22] px-7 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-white transition-colors"
           >
             <span>Ver proyecto completo</span>
             <Icon name="arrow_forward" className="text-[15px]" />
@@ -138,168 +139,79 @@ function FeaturedProject({ project }: { project: ShowroomProject }) {
   );
 }
 
+/**
+ * Ficha editorial de proyecto estilo "Read the Stories" de Manolo Blahnik GB:
+ * - Fotografía limpia (aspect-[4/3], rounded-none) sin bordes ni stickers encima
+ * - Metadatos tipográficos limpios debajo de la foto
+ * - Enlaces discretos a materiales y acción subrayada "Ver obra"
+ */
 export function ProjectCard({ project }: { project: ShowroomProject }) {
-  const products = productsFor(project);
   const href = `/showroom/${project.id}`;
 
   return (
-    <article className="group flex flex-col rounded-sm bg-white border border-outline/60 overflow-hidden transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-[#6b1d22]/45 hover:shadow-[0_14px_34px_-10px_rgba(107,29,34,0.22)]">
-      <div className="relative aspect-[4/3] w-full overflow-hidden bg-surface-container-low">
-        <Link href={href} className="block w-full h-full">
-          <Image
-            src={project.image}
-            alt={project.alt}
-            fill
-            quality={95}
-            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-          />
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent" />
-        </Link>
-
-        {/* Tipo de espacio */}
-        <span className="pointer-events-none absolute top-3.5 left-3.5 z-10 bg-white/95 backdrop-blur-sm px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-on-surface shadow-sm">
-          {project.spaceBadge}
-        </span>
-
-        {/* Solo visible en desarrollo: los borradores no se publican en producción */}
-        {project.draft ? <DraftBadge className="absolute top-12 left-3.5 z-10" /> : null}
-
-        {/* Tag de ciudad directamente sobre la foto */}
-        <span className="pointer-events-none absolute top-3.5 right-3.5 z-10 inline-flex items-center gap-1 bg-inverse-surface/85 backdrop-blur-sm px-3 py-1 text-[10px] font-medium uppercase tracking-[0.14em] text-white">
-          <Icon name="location_on" className="text-[12px]" />
-          <span>{project.location}</span>
-        </span>
-
-        {/* Avatares circulares superpuestos en la esquina inferior de la foto */}
-        {products.length > 0 ? (
-          <ul
-            role="list"
-            aria-label="Materiales utilizados"
-            className="absolute bottom-3 left-3.5 z-10 flex items-center -space-x-2"
-          >
-            {products.map((product) => (
-              <li key={product.id} className="relative group/avatar">
-                <Link
-                  href={`/catalogo/${product.id}`}
-                  aria-label={product.name}
-                  className="relative block h-10 w-10 overflow-hidden rounded-full border-2 border-white bg-surface shadow-md hover:z-20 hover:scale-110 transition-transform"
-                >
-                  <Image
-                    src={product.image}
-                    alt={product.name}
-                    fill
-                    sizes="40px"
-                    className="object-cover"
-                  />
-                </Link>
-                <span className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2 whitespace-nowrap rounded-sm bg-inverse-surface px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.14em] text-white opacity-0 translate-y-1 group-hover/avatar:opacity-100 group-hover/avatar:translate-y-0 transition-all shadow-md z-30">
-                  {product.name}
-                </span>
-              </li>
-            ))}
-          </ul>
+    <article className="group flex flex-col">
+      <Link
+        href={href}
+        className="relative block aspect-[4/3] w-full overflow-hidden rounded-none bg-surface-container-low shadow-[0_16px_34px_-14px_rgba(26,28,26,0.16)] group-hover:shadow-[0_24px_44px_-12px_rgba(107,29,34,0.24)] transition-all duration-500 ease-out group-hover:-translate-y-1"
+      >
+        <Image
+          src={project.image}
+          alt={project.alt}
+          fill
+          quality={95}
+          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+        />
+        {project.draft ? (
+          <DraftBadge className="absolute top-3.5 left-3.5 z-10" />
         ) : null}
-      </div>
+      </Link>
 
-      {/* Cuerpo de la tarjeta */}
-      <div className="p-5 sm:p-6 flex flex-col justify-between flex-1 gap-4">
+      <div className="pt-5 flex flex-col flex-1 justify-between gap-4">
         <div className="space-y-2">
-          <div className="flex items-center justify-between gap-2 text-[11px] font-medium uppercase tracking-[0.16em] text-secondary">
-            <span>
-              {project.location} · {project.year}
+          <div className="flex flex-wrap items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#6b1d22]">
+            <span>{project.spaceBadge}</span>
+            <span aria-hidden="true" className="text-secondary">
+              ·
             </span>
-            <span className="font-semibold text-[#6b1d22]">{project.area}</span>
+            <span className="text-secondary">{project.location}</span>
+            <span aria-hidden="true" className="text-secondary">
+              ·
+            </span>
+            <span className="text-on-surface">{project.areaValue}</span>
           </div>
 
           <h3 className="text-sm sm:text-base uppercase tracking-[0.16em] font-semibold text-on-surface group-hover:text-[#6b1d22] transition-colors">
             <Link href={href}>{project.title}</Link>
           </h3>
 
-          <p className="text-xs sm:text-sm text-secondary line-clamp-2 leading-relaxed">
+          <p className="text-xs sm:text-sm tracking-wide text-secondary line-clamp-2 leading-relaxed">
             {project.summary}
           </p>
         </div>
 
-        {/* Chips compactos de productos + enlace al proyecto */}
-        <div className="pt-3.5 border-t border-outline/50 flex items-center justify-between gap-2">
-          <div className="flex flex-wrap gap-1.5">
-            {project.materials.slice(0, 2).map((mat) => (
-              <Link
-                key={mat.href + mat.label}
-                href={mat.href}
-                className="bg-surface-container-low hover:bg-surface-container px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.14em] text-on-surface transition-colors"
-              >
-                {mat.label}
-              </Link>
+        <div className="pt-3 border-t border-outline/40 flex items-center justify-between gap-3">
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[10px] uppercase tracking-[0.14em] text-secondary truncate">
+            {project.materials.slice(0, 2).map((mat, idx) => (
+              <React.Fragment key={mat.href + mat.label}>
+                {idx > 0 ? <span aria-hidden="true">·</span> : null}
+                <Link
+                  href={mat.href}
+                  className="hover:text-on-surface transition-colors truncate"
+                >
+                  {mat.label}
+                </Link>
+              </React.Fragment>
             ))}
           </div>
 
           <Link
             href={href}
-            className="inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#6b1d22] group-hover:translate-x-0.5 transition-transform shrink-0"
+            className="inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-on-surface underline underline-offset-4 hover:text-[#6b1d22] transition-colors shrink-0"
           >
             <span>Ver obra</span>
-            <Icon name="arrow_forward" className="text-[13px]" />
           </Link>
         </div>
-      </div>
-    </article>
-  );
-}
-
-function NextProjectCard() {
-  const whatsappPlanesHref = buildWhatsAppUrl(
-    "Hola, deseo enviar los planos de mi proyecto para cubicación y reserva de lote."
-  );
-
-  return (
-    <article className="flex flex-col justify-between rounded-sm border border-[#6b1d22]/30 bg-gradient-to-br from-[#FAF6F2] via-surface-container-low to-[#F3ECE4] p-7 lg:p-8 transition-all duration-300 ease-out hover:-translate-y-1.5 hover:border-[#6b1d22]/55 hover:shadow-[0_14px_34px_-10px_rgba(107,29,34,0.22)]">
-      <div className="space-y-4">
-        <span className="inline-flex items-center gap-1.5 bg-[#6b1d22]/10 text-[#6b1d22] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em]">
-          <Icon name="architecture" className="text-[14px]" />
-          <span>Departamento Técnico &amp; Obras</span>
-        </span>
-
-        <h3 className="text-base sm:text-lg uppercase tracking-[0.16em] font-semibold text-on-surface leading-snug">
-          Tu obra puede ser la próxima
-        </h3>
-
-        <p className="text-xs sm:text-sm text-secondary leading-relaxed">
-          Cubicamos tus planos DWG o PDF sin costo, garantizamos reserva de un
-          solo lote para evitar variaciones de tono y programamos despachos a
-          pie de obra en todo el país.
-        </p>
-
-        <ul className="space-y-2 pt-1 text-xs text-on-surface font-medium">
-          <li className="flex items-center gap-2">
-            <Icon name="check_circle" className="text-[16px] text-[#6b1d22]" />
-            <span>Cálculo exacto de m² y porcentaje de desperdicio</span>
-          </li>
-          <li className="flex items-center gap-2">
-            <Icon name="check_circle" className="text-[16px] text-[#6b1d22]" />
-            <span>Muestras físicas para presentación a clientes</span>
-          </li>
-        </ul>
-      </div>
-
-      <div className="pt-6 flex flex-col gap-2.5">
-        <Link
-          href="/contacto"
-          className="w-full min-h-[46px] inline-flex items-center justify-center gap-2 bg-[#6b1d22] hover:bg-primary-container text-white px-5 py-3 text-xs font-semibold uppercase tracking-[0.2em] transition-colors"
-        >
-          <Icon name="assignment" className="text-[16px]" />
-          <span>Enviar planos para cubicación</span>
-        </Link>
-        <a
-          href={whatsappPlanesHref}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="w-full min-h-[42px] inline-flex items-center justify-center gap-1.5 bg-white hover:border-on-surface text-on-surface border border-outline px-4 py-2.5 text-[11px] font-semibold uppercase tracking-[0.18em] transition-colors"
-        >
-          <Icon name="chat" className="text-[15px] text-[#6b1d22]" />
-          <span>Hablar con especialista</span>
-        </a>
       </div>
     </article>
   );
@@ -308,20 +220,32 @@ function NextProjectCard() {
 export function ProjectsGrid() {
   const [activeFilter, setActiveFilter] = useState<FilterOption>("all");
 
-  const filteredProjects = VISIBLE_PROJECTS.filter((project) => {
-    if (activeFilter === "all") return true;
-    if (activeFilter === "Residencial" || activeFilter === "Comercial") {
-      return project.category === activeFilter;
-    }
-    return project.regionFilter === activeFilter;
-  });
+  const availableFilters = useMemo(
+    () =>
+      ALL_PROJECT_FILTERS.filter(
+        (f) =>
+          f.id === "all" ||
+          VISIBLE_PROJECTS.some((project) =>
+            matchesProjectFilter(project, f.id)
+          )
+      ),
+    []
+  );
+
+  const filteredProjects = useMemo(
+    () =>
+      VISIBLE_PROJECTS.filter((project) =>
+        matchesProjectFilter(project, activeFilter)
+      ),
+    [activeFilter]
+  );
 
   const [featured, ...rest] = filteredProjects;
   const gridProjects = activeFilter === "all" ? rest : filteredProjects;
 
   return (
-    <div className="flex flex-col gap-10 lg:gap-14">
-      {/* Encabezado Centrado Editorial + Barra de Filtros */}
+    <div className="flex flex-col gap-12 lg:gap-16">
+      {/* Encabezado Centrado Editorial + Selector de Filtros */}
       <div className="flex flex-col items-center text-center gap-6 border-b border-outline/60 pb-8">
         <header className="max-w-2xl space-y-3">
           <span className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#6b1d22] block">
@@ -336,13 +260,13 @@ export function ProjectsGrid() {
           </p>
         </header>
 
-        {/* Selector de filtros por tipología y ubicación */}
+        {/* Pestañas editoriales limpias */}
         <div
           role="tablist"
           aria-label="Filtrar proyectos por tipología o ubicación"
-          className="flex flex-wrap items-center justify-center gap-2 pt-1"
+          className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 pt-1"
         >
-          {PROJECT_FILTERS.map((filter) => {
+          {availableFilters.map((filter) => {
             const isSelected = activeFilter === filter.id;
             return (
               <button
@@ -353,8 +277,8 @@ export function ProjectsGrid() {
                 onClick={() => setActiveFilter(filter.id)}
                 className={
                   isSelected
-                    ? "inline-flex items-center gap-1.5 px-4 py-2.5 bg-on-surface text-white text-[11px] font-semibold uppercase tracking-[0.18em] transition-all"
-                    : "inline-flex items-center gap-1.5 px-4 py-2.5 bg-white hover:border-on-surface text-on-surface border border-outline/80 text-[11px] font-medium uppercase tracking-[0.18em] transition-all"
+                    ? "px-4 py-2 border-b-2 border-[#6b1d22] text-on-surface text-[11px] font-semibold uppercase tracking-[0.18em] transition-colors"
+                    : "px-4 py-2 border-b-2 border-transparent text-secondary hover:text-on-surface text-[11px] font-medium uppercase tracking-[0.18em] transition-colors"
                 }
               >
                 <span>{filter.label}</span>
@@ -364,18 +288,36 @@ export function ProjectsGrid() {
         </div>
       </div>
 
-      {/* Tarjeta Principal Split Hero (cuando se visualizan "Todos") */}
+      {/* Proyecto Principal Spotlight (cuando se visualizan "Todos") */}
       {activeFilter === "all" && featured ? (
         <FeaturedProject project={featured} />
       ) : null}
 
-      {/* Grid de Proyectos + Tarjeta CTA de Captación */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-        {gridProjects.map((project) => (
-          <ProjectCard key={project.id} project={project} />
-        ))}
-        <NextProjectCard />
-      </div>
+      {/* Grid editorial uniforme estilo "Read the Stories" */}
+      {gridProjects.length > 0 ? (
+        <div
+          className={`grid grid-cols-1 md:grid-cols-2 ${
+            gridProjects.length >= 3 ? "lg:grid-cols-3" : "lg:grid-cols-2"
+          } gap-8 lg:gap-10`}
+        >
+          {gridProjects.map((project) => (
+            <ProjectCard key={project.id} project={project} />
+          ))}
+        </div>
+      ) : activeFilter !== "all" ? (
+        <div className="py-16 text-center space-y-4 bg-white border border-outline/50">
+          <p className="text-sm text-secondary">
+            No hay obras publicadas con ese filtro en este momento.
+          </p>
+          <button
+            type="button"
+            onClick={() => setActiveFilter("all")}
+            className="min-h-[42px] px-6 py-2.5 border border-on-surface text-xs uppercase tracking-[0.2em] font-semibold text-on-surface hover:bg-on-surface hover:text-white transition-colors"
+          >
+            Ver todas las obras
+          </button>
+        </div>
+      ) : null}
     </div>
   );
 }
