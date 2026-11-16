@@ -11,7 +11,10 @@ export default function HomePage() {
       {/* SECCIÓN 1: BANNER PRINCIPAL CON AUTOPLAY Y BARRAS DE PROGRESO LINEALES */}
       <HeroBanner />
 
-      {/* SECCIÓN 2: ELIGE POR ESPACIO (ESTÉTICA DE GALERÍA EDITORIAL) */}
+      {/* SECCIÓN 2: MATERIALES Y SUPERFICIES (CERÁMICA, PORCELANATO Y PIEDRA NATURAL) */}
+      <ColorShowcase />
+
+      {/* SECCIÓN 3: ELIGE POR ESPACIO (ESTÉTICA DE GALERÍA EDITORIAL) */}
       <section className="w-full bg-surface py-16 lg:py-24">
         <div className="max-w-7xl mx-auto px-margin-mobile lg:px-margin-desktop flex flex-col gap-10 lg:gap-14">
           <div className="scroll-reveal flex flex-col items-center text-center space-y-2.5">
@@ -79,9 +82,6 @@ export default function HomePage() {
           </ul>
         </div>
       </section>
-
-      {/* SECCIÓN 3: MATERIALES Y SUPERFICIES (CERÁMICA, PORCELANATO Y PIEDRA NATURAL) */}
-      <ColorShowcase />
 
       {/* SECCIÓN 4: INVITACIÓN AL SHOWROOM */}
       <ShowroomBanner />
