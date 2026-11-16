@@ -53,7 +53,7 @@ export const SPACES: Space[] = [
     cardDetail:
       "Formatos rectificados 60 × 120 y 20 × 120 cm en acabados tipo mármol pulido y madera natural antideslizante.",
     catalogHref: "/catalogo?categoria=porcelanato",
-    image: "/images/banners/espacio-pisos.webp",
+    image: "/images/banners/espacio-pisos.jpg",
     imageAlt:
       "Sala abierta con piso de porcelanato tipo mármol blanco pulido de gran formato y puertas de vidrio hacia una terraza con palmas",
     imagePosition: "55% 60%",
@@ -93,7 +93,7 @@ export const SPACES: Space[] = [
     cardDetail:
       "Cerámica artesanal vidriada 15 × 15 cm en tonos intensos y losas de gran formato para muros con junta mínima.",
     catalogHref: "/catalogo?categoria=revestimiento",
-    image: "/images/banners/espacio-paredes.webp",
+    image: "/images/banners/espacio-paredes.jpg",
     imageAlt:
       "Cocina con pared de azulejos artesanales esmaltados en verde esmeralda, repisa de roble y fregadero blanco",
     imagePosition: "60% 40%",
@@ -116,7 +116,7 @@ export const SPACES: Space[] = [
         title: "Muros de gran formato",
         description:
           "Porcelanato 60 × 120 cm para revestir muros con juntas mínimas y continuidad visual con el piso.",
-        image: "/images/banners/tipo-paredes-gran-formato.webp",
+        image: "/images/banners/tipo-paredes-gran-formato.jpg",
         imageAlt:
           "Baño con muro de porcelanato tipo mármol blanco de gran formato, franja de piezas decorativas en relieve, mueble de madera flotante y espejo redondo con luz",
         imagePosition: "45% 45%",
@@ -134,7 +134,7 @@ export const SPACES: Space[] = [
     cardDetail:
       "Tinas exentas, inodoros one-piece, lavamanos escultóricos, griferías de baño y sistemas de ducha termostáticos.",
     catalogHref: "/catalogo?categoria=sanitarios",
-    image: "/images/banners/espacio-banos.webp",
+    image: "/images/banners/espacio-banos.jpg",
     imageAlt:
       "Baño con tina exenta blanca, grifería de piso dorada y muros de porcelanato tipo travertino de gran formato",
     imagePosition: "60% 65%",
@@ -205,7 +205,7 @@ export const SPACES: Space[] = [
     cardDetail:
       "Monomandos gourmet en acabado PVD oro cepillado y cerámicas esmaltadas impermeables para salpicaderos.",
     catalogHref: "/catalogo?categoria=griferia",
-    image: "/images/banners/espacio-cocinas.webp",
+    image: "/images/banners/espacio-cocinas.jpg",
     imageAlt:
       "Grifería de cocina en oro cepillado con caño extraíble sobre fregadero negro y salpicadero de azulejo terracota",
     imagePosition: "50% 45%",
@@ -228,7 +228,7 @@ export const SPACES: Space[] = [
         title: "Salpicaderos",
         description:
           "Revestimientos esmaltados impermeables a grasas y vapor para el frente de la cocina y la barra.",
-        image: "/images/banners/tipo-cocinas-salpicaderos.webp",
+        image: "/images/banners/tipo-cocinas-salpicaderos.jpg",
         imageAlt:
           "Cocina con salpicadero de azulejos esmaltados artesanales en tonos terracota, ollas de cobre, encimera de madera y fregadero blanco",
         imagePosition: "60% 50%",

@@ -516,6 +516,7 @@ export function Header() {
                           src={space.image}
                           alt={space.imageAlt}
                           fill
+                          quality={95}
                           sizes="20vw"
                           className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                           style={
@@ -598,6 +599,7 @@ export function Header() {
                             src={space.image}
                             alt={space.imageAlt}
                             fill
+                            quality={95}
                             sizes="45vw"
                             className="object-cover"
                           />

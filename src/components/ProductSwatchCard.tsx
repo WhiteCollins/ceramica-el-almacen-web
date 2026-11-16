@@ -44,6 +44,7 @@ export function ProductSwatchCard({
             src={product.image}
             alt={product.imageAlt}
             fill
+            quality={95}
             priority={priority}
             sizes={
               sizes ??

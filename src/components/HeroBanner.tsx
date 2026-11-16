@@ -76,6 +76,7 @@ export function HeroBanner() {
                 src={slide.image}
                 alt={slide.alt}
                 fill
+                quality={95}
                 priority={idx === 0}
                 fetchPriority={idx === 0 ? "high" : "low"}
                 loading={idx === 0 ? "eager" : "lazy"}

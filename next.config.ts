@@ -8,6 +8,7 @@ const nextConfig: NextConfig = {
   htmlLimitedBots: /.*/,
   images: {
     formats: ["image/avif", "image/webp"],
+    qualities: [75, 90, 95, 100],
     // Las imágenes optimizadas se guardan 30 días en el navegador y en el CDN.
     // Al reemplazar una foto, súbela con otro nombre para que se vea al instante.
     minimumCacheTTL: 2592000,

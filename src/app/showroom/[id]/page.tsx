@@ -101,6 +101,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
                 src={project.image}
                 alt={project.alt}
                 fill
+                quality={95}
                 priority
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-cover"
@@ -265,6 +266,7 @@ export default async function ProjectDetailPage({ params }: ProjectPageProps) {
                     src={item.image}
                     alt={item.alt}
                     fill
+                    quality={95}
                     sizes="(max-width: 640px) 100vw, 220px"
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
                   />

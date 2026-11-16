@@ -49,6 +49,7 @@ function FeaturedProject({ project }: { project: ShowroomProject }) {
           src={project.image}
           alt={project.alt}
           fill
+          quality={95}
           priority
           sizes="(max-width: 1024px) 100vw, 50vw"
           className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
@@ -149,6 +150,7 @@ export function ProjectCard({ project }: { project: ShowroomProject }) {
             src={project.image}
             alt={project.alt}
             fill
+            quality={95}
             sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
             className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
           />

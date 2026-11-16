@@ -98,6 +98,7 @@ export default async function SpacePage({ params }: SpacePageProps) {
                       src={type.cardImage ?? type.image}
                       alt=""
                       fill
+                      quality={95}
                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       className="object-cover transition-transform duration-700 group-hover:scale-105"
                       style={

@@ -110,6 +110,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
                 src={product.image}
                 alt={product.imageAlt}
                 fill
+                quality={95}
                 priority
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-cover"

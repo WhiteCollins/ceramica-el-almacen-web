@@ -143,6 +143,7 @@ export function HomeCatalogCarousel() {
                       src={prevProduct.image}
                       alt={prevProduct.imageAlt}
                       fill
+                      quality={95}
                       sizes="20vw"
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
@@ -165,6 +166,7 @@ export function HomeCatalogCarousel() {
                     src={activeProduct.image}
                     alt={activeProduct.imageAlt}
                     fill
+                    quality={95}
                     sizes="(max-width: 768px) 90vw, 35vw"
                     className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
                   />
@@ -224,6 +226,7 @@ export function HomeCatalogCarousel() {
                       src={nextProduct.image}
                       alt={nextProduct.imageAlt}
                       fill
+                      quality={95}
                       sizes="20vw"
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />

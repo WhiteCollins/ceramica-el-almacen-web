@@ -32,6 +32,7 @@ export function CoverBanner({
         src={image}
         alt={imageAlt}
         fill
+        quality={95}
         priority
         fetchPriority="high"
         sizes="100vw"
