@@ -80,7 +80,7 @@ export function HomeNewCollection() {
                     href={`/catalogo/${product.id}`}
                     aria-label={`${product.name} — ${product.dimensionsLabel}`}
                     className="
-                      relative block aspect-[4/5] w-full overflow-hidden rounded-none bg-surface-container-low
+                      relative block aspect-[4/3] w-full overflow-hidden rounded-none bg-surface-container-low
                       shadow-[0_18px_36px_-14px_rgba(26,28,26,0.18)]
                       group-hover:shadow-[0_26px_46px_-12px_rgba(107,29,34,0.28)]
                       transition-all duration-500 ease-out group-hover:-translate-y-1.5
@@ -91,7 +91,7 @@ export function HomeNewCollection() {
                       alt={product.imageAlt}
                       fill
                       quality={95}
-                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 640px"
                       className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
                     />
                     <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />

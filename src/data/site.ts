@@ -349,7 +349,7 @@ export const SHOWROOM_PROJECTS: ShowroomProject[] = [
       "tina-sottovento-blanco-mate",
       "griferia-monomando-gourmet-oro",
     ],
-    image: "/images/hero/tina-sottovento-hero.jpg",
+    image: "/images/products/tina-sottovento-hd.jpg",
     alt: "Baño principal de Villa Brisa Marina con tina exenta Sottovento blanco mate y grifería dorada",
   },
   {
@@ -441,7 +441,7 @@ export const SHOWROOM_PROJECTS: ShowroomProject[] = [
       "griferia-monomando-gourmet-oro",
       "bacha-escultural-mineral-stone",
     ],
-    image: "/images/hero/editorial-color-backsplash.jpg",
+    image: "/images/banners/tipo-cocinas-salpicaderos.jpg",
     alt: "Salpicadero artesanal con baldosas vidriadas en tonos terracota y detalles en latón cepillado",
   },
   // PROYECTOS DE EJEMPLO (draft: true). Datos ilustrativos y fotos de

@@ -136,15 +136,15 @@ export function HomeCatalogCarousel() {
                   type="button"
                   onClick={handlePrev}
                   aria-label={`Ver ${prevProduct.name}`}
-                  className="group w-full max-w-[230px] text-center opacity-55 hover:opacity-90 scale-95 hover:scale-100 transition-all duration-300"
+                  className="group w-full max-w-[260px] text-center opacity-55 hover:opacity-90 scale-95 hover:scale-100 transition-all duration-300"
                 >
-                  <div className="relative aspect-[4/5] w-full overflow-hidden rounded-none bg-surface-container-low">
+                  <div className="relative aspect-[4/3] w-full overflow-hidden rounded-none bg-surface-container-low">
                     <Image
                       src={prevProduct.image}
                       alt={prevProduct.imageAlt}
                       fill
                       quality={95}
-                      sizes="20vw"
+                      sizes="640px"
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                   </div>
@@ -157,17 +157,17 @@ export function HomeCatalogCarousel() {
 
             {/* Pieza central protagonista */}
             <div className="md:col-span-6 flex flex-col items-center text-center">
-              <article className="w-full max-w-[400px] flex flex-col items-center">
+              <article className="w-full max-w-[540px] flex flex-col items-center">
                 <Link
                   href={`/catalogo/${activeProduct.id}`}
-                  className="group relative block aspect-[4/5] w-full overflow-hidden rounded-none bg-surface-container-low shadow-[0_22px_44px_-14px_rgba(26,28,26,0.2)] hover:shadow-[0_26px_50px_-12px_rgba(107,29,34,0.28)] transition-all duration-500"
+                  className="group relative block aspect-[4/3] w-full overflow-hidden rounded-none bg-surface-container-low shadow-[0_22px_44px_-14px_rgba(26,28,26,0.2)] hover:shadow-[0_26px_50px_-12px_rgba(107,29,34,0.28)] transition-all duration-500"
                 >
                   <Image
                     src={activeProduct.image}
                     alt={activeProduct.imageAlt}
                     fill
                     quality={95}
-                    sizes="(max-width: 768px) 90vw, 35vw"
+                    sizes="(max-width: 768px) 100vw, 1080px"
                     className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
                   />
                   <span className="absolute top-3.5 right-3.5 bg-white/95 backdrop-blur-sm px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#6b1d22]">
@@ -219,15 +219,15 @@ export function HomeCatalogCarousel() {
                   type="button"
                   onClick={handleNext}
                   aria-label={`Ver ${nextProduct.name}`}
-                  className="group w-full max-w-[230px] text-center opacity-55 hover:opacity-90 scale-95 hover:scale-100 transition-all duration-300"
+                  className="group w-full max-w-[260px] text-center opacity-55 hover:opacity-90 scale-95 hover:scale-100 transition-all duration-300"
                 >
-                  <div className="relative aspect-[4/5] w-full overflow-hidden rounded-none bg-surface-container-low">
+                  <div className="relative aspect-[4/3] w-full overflow-hidden rounded-none bg-surface-container-low">
                     <Image
                       src={nextProduct.image}
                       alt={nextProduct.imageAlt}
                       fill
                       quality={95}
-                      sizes="20vw"
+                      sizes="640px"
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                   </div>

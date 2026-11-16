@@ -15,9 +15,9 @@ const EXPLORE_DUO = [
       "Losas rectificadas 60 × 120 cm y listones en acabado madera natural con baja absorción y reserva de lote único para proyectos.",
     ctaLabel: "Explorar pisos",
     href: "/catalogo?categoria=porcelanato",
-    image: "/images/categories/porcelanatos-calacatta.jpg",
+    image: "/images/banners/muro-marmol-relieve-tina.jpg",
     imageAlt:
-      "Sala residencial contemporánea con pisos de porcelanato blanco veteado tipo Calacatta",
+      "Baño arquitectónico revestido en porcelanato mármol Statuario de gran formato y relieve texturizado con tina exenta",
   },
   {
     id: "banos-griferia-pvd",
@@ -27,9 +27,9 @@ const EXPLORE_DUO = [
       "Tinas exentas Sottovento, lavamanos escultóricos y columnas termostáticas IMEX en latón macizo y acabado PVD resistente.",
     ctaLabel: "Explorar grifería",
     href: "/catalogo?categoria=griferia",
-    image: "/images/categories/griferia-vanguardia.jpg",
+    image: "/images/banners/ducha-cabina-panoramica.jpg",
     imageAlt:
-      "Exhibición de grifería arquitectónica de vanguardia en acabados PVD dorado cepillado y negro mate",
+      "Ducha de obra panorámica con grifería termostática negro mate y revestimiento arquitectónico tipo piedra",
   },
 ] as const;
 
@@ -69,14 +69,14 @@ export default function HomePage() {
               >
                 <Link
                   href={item.href}
-                  className="card-wine-glow relative block aspect-[4/5] w-full overflow-hidden rounded-none bg-inverse-surface"
+                  className="card-wine-glow relative block aspect-[4/3] w-full overflow-hidden rounded-none bg-inverse-surface"
                 >
                   <Image
                     src={item.image}
                     alt={item.imageAlt}
                     fill
                     quality={95}
-                    sizes="(max-width: 768px) 100vw, 50vw"
+                    sizes="(max-width: 768px) 100vw, 1080px"
                     className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
                   />
                   <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-transparent opacity-80 group-hover:opacity-95 transition-opacity duration-500" />

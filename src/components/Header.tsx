@@ -510,14 +510,14 @@ export function Header() {
                         key={space.slug}
                         href={space.catalogHref}
                         onClick={closeMegaMenuNow}
-                        className="group relative block aspect-[4/5] w-full overflow-hidden bg-surface-container-low"
+                        className="group relative block aspect-[4/3] w-full overflow-hidden bg-surface-container-low"
                       >
                         <Image
                           src={space.image}
                           alt={space.imageAlt}
                           fill
                           quality={95}
-                          sizes="20vw"
+                          sizes="640px"
                           className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                           style={
                             space.imagePosition

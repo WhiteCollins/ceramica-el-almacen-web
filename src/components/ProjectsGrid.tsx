@@ -57,7 +57,7 @@ function FeaturedProject({ project }: { project: ShowroomProject }) {
           fill
           quality={95}
           priority
-          sizes="(max-width: 1024px) 100vw, 58vw"
+          sizes="(max-width: 1024px) 100vw, 1080px"
           className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
         />
         {project.draft ? (
@@ -159,7 +159,7 @@ export function ProjectCard({ project }: { project: ShowroomProject }) {
           alt={project.alt}
           fill
           quality={95}
-          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          sizes="(max-width: 768px) 100vw, 828px"
           className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
         />
         {project.draft ? (

@@ -49,8 +49,8 @@ export function ProductSwatchCard({
             sizes={
               sizes ??
               (isGallery
-                ? "(max-width: 768px) 100vw, 50vw"
-                : "(max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw")
+                ? "(max-width: 768px) 100vw, 1080px"
+                : "(max-width: 640px) 100vw, 828px")
             }
             className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
           />

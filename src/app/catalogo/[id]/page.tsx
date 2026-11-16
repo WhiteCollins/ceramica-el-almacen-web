@@ -105,14 +105,14 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-start">
           {/* Columna Izquierda: Imagen del Producto tipo Galería */}
           <div className="lg:col-span-6 lg:sticky lg:top-24">
-            <div className="relative aspect-[4/5] w-full rounded-sm overflow-hidden bg-surface-container-low border border-outline/50">
+            <div className="relative aspect-[4/3] w-full rounded-none overflow-hidden bg-surface-container-low border border-outline/50">
               <Image
                 src={product.image}
                 alt={product.imageAlt}
                 fill
                 quality={95}
                 priority
-                sizes="(max-width: 1024px) 100vw, 50vw"
+                sizes="(max-width: 1024px) 100vw, 1080px"
                 className="object-cover"
               />
 
