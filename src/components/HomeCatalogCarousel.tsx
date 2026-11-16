@@ -82,14 +82,14 @@ export function HomeCatalogCarousel() {
           </p>
         </div>
 
-        {/* Pestañas editoriales por categoría */}
+        {/* Pestañas editoriales por categoría con ajuste automático según ancho/zoom */}
         <nav
           aria-label="Filtrar carrusel de catálogo"
-          className="overflow-x-auto no-scrollbar border-y border-outline/50 py-2.5"
+          className="border-y border-outline/50 py-2.5"
         >
           <ul
             role="list"
-            className="flex items-center justify-start lg:justify-center gap-2 sm:gap-5 min-w-max px-1"
+            className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1.5 sm:gap-x-4 px-1"
           >
             {CATEGORY_FILTERS.map((cat) => {
               const isSelected = selectedCategory === cat.id;

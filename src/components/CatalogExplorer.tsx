@@ -401,14 +401,14 @@ export function CatalogExplorer() {
         </div>
       </header>
 
-      {/* Selector de Categorías con líneas editoriales */}
+      {/* Selector de Categorías con ajuste automático multi-línea según zoom y ancho */}
       <nav
         aria-label="Categorías del catálogo"
-        className="overflow-x-auto no-scrollbar border-y border-outline/60 py-3"
+        className="border-y border-outline/60 py-3"
       >
         <ul
           role="list"
-          className="flex items-center justify-start lg:justify-center gap-2 sm:gap-4 min-w-max px-1"
+          className="flex flex-wrap items-center justify-center gap-x-2 gap-y-2 sm:gap-x-3 px-1"
         >
           {CATEGORY_FILTERS.map((cat) => {
             const isSelected = activeCategory === cat.id;
@@ -421,8 +421,8 @@ export function CatalogExplorer() {
                   aria-pressed={isSelected}
                   className={
                     isSelected
-                      ? "min-h-[38px] inline-flex items-center gap-2 px-4 py-1.5 bg-on-surface text-white text-[11px] uppercase tracking-[0.18em] font-semibold transition-colors"
-                      : "min-h-[38px] inline-flex items-center gap-2 px-4 py-1.5 bg-transparent hover:bg-surface-container-low text-on-surface text-[11px] uppercase tracking-[0.18em] font-medium transition-colors"
+                      ? "min-h-[38px] inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-on-surface text-white text-[11px] uppercase tracking-[0.16em] font-semibold transition-colors whitespace-nowrap"
+                      : "min-h-[38px] inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-transparent hover:bg-surface-container-low text-on-surface text-[11px] uppercase tracking-[0.16em] font-medium transition-colors whitespace-nowrap"
                   }
                 >
                   <span>{cat.label}</span>

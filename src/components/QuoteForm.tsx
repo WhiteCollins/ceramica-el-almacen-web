@@ -11,6 +11,12 @@ const PROJECT_TYPES = [
   "Obra nueva",
 ] as const;
 
+const BRANCH_OPTIONS = [
+  "San Pedro de Macorís",
+  "La Romana",
+  "Despacho a obra (Este / Sto. Dgo.)",
+] as const;
+
 const PRODUCT_INTERESTS = [
   "Porcelanatos",
   "Grifería y ducha",
@@ -20,9 +26,9 @@ const PRODUCT_INTERESTS = [
 ] as const;
 
 const PRIMARY_LINK =
-  "flex-1 min-h-[46px] inline-flex items-center justify-center gap-2 bg-on-surface hover:bg-[#6b1d22] text-white px-5 py-3 text-xs font-semibold uppercase tracking-[0.18em] transition-colors";
+  "flex-1 min-h-[46px] inline-flex items-center justify-center gap-2 rounded-none bg-on-surface hover:bg-[#6b1d22] text-white px-5 py-3 text-xs font-semibold uppercase tracking-[0.18em] transition-colors";
 const SECONDARY_LINK =
-  "flex-1 min-h-[46px] inline-flex items-center justify-center gap-2 border border-outline bg-white hover:border-on-surface text-on-surface px-5 py-3 text-xs font-semibold uppercase tracking-[0.18em] transition-colors";
+  "flex-1 min-h-[46px] inline-flex items-center justify-center gap-2 rounded-none border border-outline bg-white hover:border-on-surface text-on-surface px-5 py-3 text-xs font-semibold uppercase tracking-[0.18em] transition-colors";
 
 function syncAriaInvalid(el: EventTarget | null) {
   if (
@@ -52,6 +58,7 @@ export function QuoteForm() {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [sqm, setSqm] = useState("");
+  const [branch, setBranch] = useState<string>(BRANCH_OPTIONS[0]);
   const [projectType, setProjectType] = useState<string>("Residencial");
   const [selectedLines, setSelectedLines] = useState<string[]>([
     "Porcelanatos",
@@ -73,6 +80,7 @@ export function QuoteForm() {
       `Hola Cerámica El Almacén, solicito cotización para mi proyecto:`,
       `• Nombre: ${fullName}`,
       `• WhatsApp / Teléfono: ${phone}`,
+      `• Sede / Zona de atención: ${branch}`,
       email.trim() ? `• Correo: ${email.trim()}` : null,
       sqm.trim() ? `• Metraje estimado: ${sqm.trim()} m²` : null,
       `• Tipo de proyecto: ${projectType}`,
@@ -88,7 +96,7 @@ export function QuoteForm() {
   const whatsappQuoteHref = buildWhatsAppUrl(buildSummaryText());
 
   const mailQuoteHref = `mailto:${SITE_INFO.email}?subject=${encodeURIComponent(
-    `Solicitud de cotización (${projectType}) - ${fullName}`
+    `Solicitud de cotización (${projectType} - ${branch}) - ${fullName}`
   )}&body=${encodeURIComponent(buildSummaryText())}`;
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -134,7 +142,7 @@ export function QuoteForm() {
               if (submitted) setSubmitted(false);
             }}
             placeholder="Tu nombre o estudio"
-            className="atelier-input w-full min-h-[44px] bg-white text-sm text-on-surface px-3.5 py-2.5 rounded-sm border border-outline focus:outline-none focus:border-on-surface placeholder:text-secondary/70 transition-colors"
+            className="atelier-input w-full min-h-[44px] bg-white text-base lg:text-sm text-on-surface px-3.5 py-2.5 rounded-none border border-outline focus:outline-none focus:border-on-surface placeholder:text-secondary/70 transition-colors"
           />
           <p className="field-error hidden items-center gap-1 text-error text-xs">
             <span>Ingresa tu nombre.</span>
@@ -161,7 +169,7 @@ export function QuoteForm() {
               if (submitted) setSubmitted(false);
             }}
             placeholder="809-000-0000"
-            className="atelier-input w-full min-h-[44px] bg-white text-sm text-on-surface px-3.5 py-2.5 rounded-sm border border-outline focus:outline-none focus:border-on-surface placeholder:text-secondary/70 transition-colors"
+            className="atelier-input w-full min-h-[44px] bg-white text-base lg:text-sm text-on-surface px-3.5 py-2.5 rounded-none border border-outline focus:outline-none focus:border-on-surface placeholder:text-secondary/70 transition-colors"
           />
           <p className="field-error hidden items-center gap-1 text-error text-xs">
             <span>Ingresa un número de contacto.</span>
@@ -196,7 +204,7 @@ export function QuoteForm() {
               if (submitted) setSubmitted(false);
             }}
             placeholder="correo@ejemplo.com"
-            className="w-full min-h-[44px] bg-white text-sm text-on-surface px-3.5 py-2.5 rounded-sm border border-outline focus:outline-none focus:border-on-surface placeholder:text-secondary/70 transition-colors"
+            className="w-full min-h-[44px] bg-white text-base lg:text-sm text-on-surface px-3.5 py-2.5 rounded-none border border-outline focus:outline-none focus:border-on-surface placeholder:text-secondary/70 transition-colors"
           />
         </div>
 
@@ -221,12 +229,36 @@ export function QuoteForm() {
               if (submitted) setSubmitted(false);
             }}
             placeholder="Ej. 180 m²"
-            className="w-full min-h-[44px] bg-white text-sm text-on-surface px-3.5 py-2.5 rounded-sm border border-outline focus:outline-none focus:border-on-surface placeholder:text-secondary/70 transition-colors"
+            className="w-full min-h-[44px] bg-white text-base lg:text-sm text-on-surface px-3.5 py-2.5 rounded-none border border-outline focus:outline-none focus:border-on-surface placeholder:text-secondary/70 transition-colors"
           />
         </div>
       </div>
 
-      {/* Fila 3: Tipo de proyecto */}
+      {/* Fila 3: Sede o zona de atención */}
+      <fieldset className="space-y-2.5">
+        <legend className="text-[11px] font-semibold uppercase tracking-[0.18em] text-on-surface block">
+          Sede o zona de atención
+        </legend>
+        <div className="flex flex-wrap gap-2">
+          {BRANCH_OPTIONS.map((option) => (
+            <label key={option} className="cursor-pointer">
+              <input
+                type="radio"
+                name="preferred_branch"
+                value={option}
+                checked={branch === option}
+                onChange={() => setBranch(option)}
+                className="peer sr-only"
+              />
+              <span className="inline-flex items-center justify-center min-h-[38px] px-4 py-2 rounded-none border border-outline bg-white text-[11px] font-semibold uppercase tracking-[0.15em] text-on-surface peer-checked:bg-on-surface peer-checked:text-white peer-checked:border-on-surface peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-primary transition-colors">
+                {option}
+              </span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+
+      {/* Fila 4: Tipo de proyecto */}
       <fieldset className="space-y-2.5">
         <legend className="text-[11px] font-semibold uppercase tracking-[0.18em] text-on-surface block">
           Tipo de proyecto
@@ -242,7 +274,7 @@ export function QuoteForm() {
                 onChange={() => setProjectType(type)}
                 className="peer sr-only"
               />
-              <span className="inline-flex items-center justify-center min-h-[38px] px-4 py-2 border border-outline bg-white text-[11px] font-semibold uppercase tracking-[0.16em] text-on-surface peer-checked:bg-on-surface peer-checked:text-white peer-checked:border-on-surface peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-primary transition-colors">
+              <span className="inline-flex items-center justify-center min-h-[38px] px-4 py-2 rounded-none border border-outline bg-white text-[11px] font-semibold uppercase tracking-[0.15em] text-on-surface peer-checked:bg-on-surface peer-checked:text-white peer-checked:border-on-surface peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-primary transition-colors">
                 {type}
               </span>
             </label>
@@ -250,7 +282,7 @@ export function QuoteForm() {
         </div>
       </fieldset>
 
-      {/* Fila 4: Productos de interés */}
+      {/* Fila 5: Productos de interés */}
       <fieldset className="space-y-2.5">
         <legend className="text-[11px] font-semibold uppercase tracking-[0.18em] text-on-surface block">
           Productos de interés
@@ -268,7 +300,7 @@ export function QuoteForm() {
                   onChange={() => toggleLine(label)}
                   className="peer sr-only"
                 />
-                <span className="inline-flex items-center justify-center min-h-[38px] px-4 py-2 border border-outline bg-white text-[11px] font-semibold uppercase tracking-[0.16em] text-on-surface peer-checked:bg-[#6b1d22] peer-checked:text-white peer-checked:border-[#6b1d22] peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-primary transition-colors">
+                <span className="inline-flex items-center justify-center min-h-[38px] px-4 py-2 rounded-none border border-outline bg-white text-[11px] font-semibold uppercase tracking-[0.15em] text-on-surface peer-checked:bg-[#6b1d22] peer-checked:text-white peer-checked:border-[#6b1d22] peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-primary transition-colors">
                   {label}
                 </span>
               </label>
@@ -277,7 +309,7 @@ export function QuoteForm() {
         </div>
       </fieldset>
 
-      {/* Fila 5: Mensaje */}
+      {/* Fila 6: Mensaje */}
       <div className="space-y-1.5">
         <label
           htmlFor={detailsId}
@@ -295,15 +327,15 @@ export function QuoteForm() {
           value={details}
           onChange={(e) => setDetails(e.target.value)}
           placeholder="Cuéntanos medidas, acabados o ubicación de la obra..."
-          className="w-full bg-white text-sm text-on-surface p-3.5 rounded-sm border border-outline focus:outline-none focus:border-on-surface placeholder:text-secondary/70 transition-colors"
+          className="w-full bg-white text-base lg:text-sm text-on-surface p-3.5 rounded-none border border-outline focus:outline-none focus:border-on-surface placeholder:text-secondary/70 transition-colors"
         />
       </div>
 
-      {/* Fila 6: Envío por WhatsApp o por correo */}
+      {/* Fila 7: Envío por WhatsApp o por correo */}
       <div className="flex flex-col gap-3.5 pt-2">
         <p className="text-xs text-secondary">
-          ¿Tienes planos? Adjúntalos en el chat o en el correo que se abrirá
-          con tu solicitud.
+          ¿Tienes planos DWG o PDF? Adjúntalos directamente en el chat o en el
+          correo que se abrirá con tu solicitud.
         </p>
 
         <div className="flex flex-col sm:flex-row sm:justify-end gap-3">
@@ -311,7 +343,7 @@ export function QuoteForm() {
             type="submit"
             name="via"
             value="whatsapp"
-            className="w-full sm:w-auto min-h-[46px] inline-flex items-center justify-center gap-2 bg-on-surface hover:bg-[#6b1d22] text-white px-6 py-3 text-xs font-semibold uppercase tracking-[0.2em] transition-colors"
+            className="w-full sm:w-auto min-h-[46px] inline-flex items-center justify-center gap-2 rounded-none bg-on-surface hover:bg-[#6b1d22] text-white px-6 py-3 text-xs font-semibold uppercase tracking-[0.2em] transition-colors"
           >
             <Icon name="chat" className="text-[16px]" />
             <span>Enviar por WhatsApp</span>
@@ -320,7 +352,7 @@ export function QuoteForm() {
             type="submit"
             name="via"
             value="email"
-            className="w-full sm:w-auto min-h-[46px] inline-flex items-center justify-center gap-2 border border-outline bg-white hover:border-on-surface text-on-surface px-6 py-3 text-xs font-semibold uppercase tracking-[0.2em] transition-colors"
+            className="w-full sm:w-auto min-h-[46px] inline-flex items-center justify-center gap-2 rounded-none border border-outline bg-white hover:border-on-surface text-on-surface px-6 py-3 text-xs font-semibold uppercase tracking-[0.2em] transition-colors"
           >
             <Icon name="mail" className="text-[16px] text-[#6b1d22]" />
             <span>Enviar por correo</span>
@@ -331,7 +363,7 @@ export function QuoteForm() {
       {/* Confirmación sobria */}
       <div aria-live="polite">
         {submitted ? (
-          <div className="p-5 bg-surface-container-low rounded-sm border border-outline/60 space-y-4">
+          <div className="p-5 bg-surface-container-low rounded-none border border-outline/60 space-y-4">
             {channel === "whatsapp" ? (
               <p className="text-sm text-on-surface">
                 Abrimos WhatsApp con tu solicitud redactada. Pulsa{" "}

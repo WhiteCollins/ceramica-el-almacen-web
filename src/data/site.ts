@@ -36,13 +36,15 @@ export const SITE_INFO = {
   locations: [
     {
       id: "san-pedro",
-      name: "Ubicación 1 (San Pedro de Macorís)",
+      name: "Sede Principal · Showroom & Almacén",
       city: "San Pedro de Macorís",
       address: "Av. Rolando Martínez 33",
       phoneDisplay: "+1 809-246-2221",
       phoneHref: "tel:+18092462221",
       mapsUrl:
         "https://maps.google.com/?q=Av.+Rolando+Mart%C3%ADnez+33,+San+Pedro+de+Macor%C3%ADs",
+      wazeUrl:
+        "https://waze.com/ul?q=Ceramica+El+Almacen+Av+Rolando+Martinez+33",
       hours: {
         weekdays: "Lunes a viernes: 8:00 AM – 6:00 PM",
         saturday: "Sábados: 8:30 AM – 1:00 PM",
@@ -50,13 +52,15 @@ export const SITE_INFO = {
     },
     {
       id: "la-romana",
-      name: "Ubicación 2 (La Romana)",
+      name: "Sucursal Este · Showroom",
       city: "La Romana",
       address: "Av. Profesor Juan Bosch (antigua Av. Padre Abreu)",
       phoneDisplay: "+1 809-556-4116",
       phoneHref: "tel:+18095564116",
       mapsUrl:
         "https://maps.google.com/?q=Av.+Profesor+Juan+Bosch,+La+Romana,+Rep%C3%BAblica+Dominicana",
+      wazeUrl:
+        "https://waze.com/ul?q=Ceramica+El+Almacen+La+Romana+Av+Profesor+Juan+Bosch",
       hours: {
         weekdays: "Lunes a viernes: 8:00 AM – 6:00 PM",
         saturday: "Sábados: 8:30 AM – 1:00 PM",
