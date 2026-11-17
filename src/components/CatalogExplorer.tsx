@@ -215,6 +215,7 @@ export function CatalogExplorer() {
   const isTypingRef = useRef(false);
 
   const searchInputId = useId();
+  const desktopSearchInputId = useId();
   const finishSelectId = useId();
   const formatSelectId = useId();
   const sortSelectId = useId();
@@ -442,211 +443,58 @@ export function CatalogExplorer() {
         </ul>
       </nav>
 
-      {/* Barra Sticky de Filtros + Conmutador Vista Galería (2 cols) / Vista Grid (4 cols) estilo Manolo Blahnik */}
-      <search className="sticky top-[64px] lg:top-[74px] z-20 bg-surface/95 backdrop-blur-md py-3 border-b border-outline/70">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
-          {/* Izquierda: Buscador + Selectores de Formato y Acabado */}
-          <div className="flex items-center gap-2 lg:gap-2.5 lg:flex-wrap flex-1">
-            <div className="relative flex-1 min-w-0 lg:flex-none lg:w-[260px]">
-              <label htmlFor={searchInputId} className="sr-only">
-                Buscar por nombre, medida, acabado o código SKU
-              </label>
-              <Icon
-                name="search"
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary text-[17px]"
-              />
-              <input
-                id={searchInputId}
-                type="search"
-                value={searchQuery}
-                onChange={(e) => {
-                  isTypingRef.current = true;
-                  setSearchQuery(e.target.value);
-                }}
-                autoCorrect="off"
-                autoCapitalize="off"
-                spellCheck={false}
-                placeholder="Buscar piezas…"
-                className="w-full h-11 lg:h-10 bg-white text-base lg:text-xs tracking-wide lg:tracking-wider text-on-surface placeholder:text-secondary placeholder:text-sm lg:placeholder:text-xs pl-9 pr-9 border border-outline focus:border-on-surface focus:outline-none transition-colors"
-              />
-              {searchQuery ? (
-                <button
-                  type="button"
-                  onClick={() => updateDiscreteFilters({ q: "" })}
-                  aria-label="Limpiar búsqueda"
-                  className="absolute right-1 top-1/2 -translate-y-1/2 h-9 w-9 lg:h-7 lg:w-7 inline-flex items-center justify-center text-secondary hover:text-on-surface"
-                >
-                  <Icon name="close" className="text-[15px]" />
-                </button>
-              ) : null}
-            </div>
-
-            {/* Formato (en móvil está en el panel de filtros) */}
-            <div className="hidden lg:block">
-              <label htmlFor={formatSelectId} className="sr-only">
-                Filtrar por formato
-              </label>
-              <select
-                id={formatSelectId}
-                value={activeFormat ?? ""}
-                onChange={(e) =>
-                  updateDiscreteFilters({
-                    format: e.target.value ? e.target.value : null,
-                  })
-                }
-                className="h-10 bg-white text-xs uppercase tracking-[0.14em] text-on-surface px-3 border border-outline focus:border-on-surface focus:outline-none cursor-pointer"
-              >
-                <option value="">Formato: Todos</option>
-                {FORMAT_FILTERS.map((fmt) => (
-                  <option key={fmt.value} value={fmt.value}>
-                    {fmt.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Acabado (en móvil está en el panel de filtros) */}
-            <div className="hidden lg:block">
-              <label htmlFor={finishSelectId} className="sr-only">
-                Filtrar por acabado
-              </label>
-              <select
-                id={finishSelectId}
-                value={activeFinish ?? ""}
-                onChange={(e) =>
-                  updateDiscreteFilters({
-                    finish: e.target.value ? e.target.value : null,
-                  })
-                }
-                className="h-10 bg-white text-xs uppercase tracking-[0.14em] text-on-surface px-3 border border-outline focus:border-on-surface focus:outline-none cursor-pointer"
-              >
-                <option value="">Acabado: Todos</option>
-                {FINISH_FILTERS.map((finish) => (
-                  <option key={finish} value={finish}>
-                    {finish}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {hasActiveFilters ? (
+      {/* Móvil: Barra Sticky compacta (una fila) con búsqueda + panel inferior de filtros */}
+      <search className="lg:hidden sticky top-[64px] z-20 bg-surface/95 backdrop-blur-md py-3 border-b border-outline/70">
+        <div className="flex items-center gap-2">
+          <div className="relative flex-1 min-w-0">
+            <label htmlFor={searchInputId} className="sr-only">
+              Buscar por nombre, medida, acabado o código SKU
+            </label>
+            <Icon
+              name="search"
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary text-[17px]"
+            />
+            <input
+              id={searchInputId}
+              type="search"
+              value={searchQuery}
+              onChange={(e) => {
+                isTypingRef.current = true;
+                setSearchQuery(e.target.value);
+              }}
+              autoCorrect="off"
+              autoCapitalize="off"
+              spellCheck={false}
+              placeholder="Buscar piezas…"
+              className="w-full h-11 bg-white text-base tracking-wide text-on-surface placeholder:text-secondary placeholder:text-sm pl-9 pr-9 border border-outline focus:border-on-surface focus:outline-none transition-colors"
+            />
+            {searchQuery ? (
               <button
                 type="button"
-                onClick={resetFilters}
-                className="hidden lg:inline-flex h-10 px-3 items-center gap-1 text-[11px] uppercase tracking-[0.16em] font-semibold text-[#6b1d22] hover:underline"
+                onClick={() => updateDiscreteFilters({ q: "" })}
+                aria-label="Limpiar búsqueda"
+                className="absolute right-1 top-1/2 -translate-y-1/2 h-9 w-9 inline-flex items-center justify-center text-secondary hover:text-on-surface"
               >
-                <Icon name="close" className="text-[14px]" />
-                <span>Limpiar</span>
+                <Icon name="close" className="text-[15px]" />
               </button>
             ) : null}
-
-            {/* Móvil: un solo botón abre formato, acabado y orden en un panel inferior */}
-            <button
-              type="button"
-              onClick={() => setFiltersSheetOpen(true)}
-              aria-haspopup="dialog"
-              className="lg:hidden relative h-11 shrink-0 px-4 inline-flex items-center gap-2 border border-on-surface bg-white text-on-surface text-[11px] uppercase tracking-[0.16em] font-semibold"
-            >
-              <Icon name="tune" className="text-[18px]" />
-              <span>Filtros</span>
-              {sheetFilterCount > 0 ? (
-                <span className="inline-flex items-center justify-center min-w-[20px] h-5 px-1 rounded-full bg-[#6b1d22] text-white text-[11px] tracking-normal">
-                  {sheetFilterCount}
-                  <span className="sr-only"> activos</span>
-                </span>
-              ) : null}
-            </button>
           </div>
 
-          {/* Derecha: Contador + Orden + Conmutador Vista Galería (2 cols) / Grid (4 cols) + Muestrario */}
-          <div className="hidden lg:flex flex-wrap items-center justify-end gap-4">
-            <span className="text-[11px] uppercase tracking-[0.16em] text-secondary">
-              <strong className="text-on-surface font-semibold">
-                {filteredProducts.length}
-              </strong>{" "}
-              {filteredProducts.length === 1 ? "Resultado" : "Resultados"}
-            </span>
-
-            <div>
-              <label htmlFor={sortSelectId} className="sr-only">
-                Ordenar productos
-              </label>
-              <select
-                id={sortSelectId}
-                value={sortBy}
-                onChange={(e) =>
-                  updateDiscreteFilters({ sort: e.target.value as SortOption })
-                }
-                className="h-10 bg-white text-xs uppercase tracking-[0.14em] text-on-surface px-3 border border-outline focus:border-on-surface focus:outline-none cursor-pointer"
-              >
-                <option value="featured">Ordenar: Destacados</option>
-                <option value="stock">Ordenar: En stock</option>
-                <option value="alpha">Ordenar: Nombre (A–Z)</option>
-              </select>
-            </div>
-
-            {/* Conmutador Gallery (2 cols) vs Grid (4 cols) estilo Manolo Blahnik */}
-            <div
-              role="radiogroup"
-              aria-label="Cambiar modo de visualización"
-              className="hidden sm:flex items-center border border-outline bg-white"
-            >
-              <button
-                type="button"
-                role="radio"
-                aria-checked={viewMode === "gallery"}
-                onClick={() => setViewMode("gallery")}
-                className={`h-10 px-3 inline-flex items-center gap-1.5 text-[11px] uppercase tracking-[0.15em] transition-colors ${
-                  viewMode === "gallery"
-                    ? "bg-on-surface text-white font-semibold"
-                    : "text-secondary hover:text-on-surface"
-                }`}
-              >
-                <span
-                  aria-hidden="true"
-                  className="grid grid-cols-2 gap-0.5 w-3.5 h-3.5"
-                >
-                  <span className="bg-current" />
-                  <span className="bg-current" />
-                </span>
-                <span>Galería</span>
-              </button>
-              <button
-                type="button"
-                role="radio"
-                aria-checked={viewMode === "grid"}
-                onClick={() => setViewMode("grid")}
-                className={`h-10 px-3 inline-flex items-center gap-1.5 text-[11px] uppercase tracking-[0.15em] transition-colors ${
-                  viewMode === "grid"
-                    ? "bg-on-surface text-white font-semibold"
-                    : "text-secondary hover:text-on-surface"
-                }`}
-              >
-                <span
-                  aria-hidden="true"
-                  className="grid grid-cols-2 gap-0.5 w-3.5 h-3.5"
-                >
-                  <span className="bg-current" />
-                  <span className="bg-current" />
-                  <span className="bg-current" />
-                  <span className="bg-current" />
-                </span>
-                <span>Cuadrícula</span>
-              </button>
-            </div>
-
-            <button
-              type="button"
-              onClick={() => {
-                setSampleSubmitted(false);
-                setSampleModalOpen(true);
-              }}
-              className="h-10 px-3.5 inline-flex items-center gap-1.5 border border-on-surface bg-white hover:bg-on-surface text-on-surface hover:text-white text-[11px] uppercase tracking-[0.16em] font-medium transition-colors"
-            >
-              <Icon name="layers" className="text-[15px]" />
-              <span>Pedir muestrario</span>
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={() => setFiltersSheetOpen(true)}
+            aria-haspopup="dialog"
+            className="relative h-11 shrink-0 px-4 inline-flex items-center gap-2 border border-on-surface bg-white text-on-surface text-[11px] uppercase tracking-[0.16em] font-semibold"
+          >
+            <Icon name="tune" className="text-[18px]" />
+            <span>Filtros</span>
+            {sheetFilterCount > 0 ? (
+              <span className="inline-flex items-center justify-center min-w-[20px] h-5 px-1 rounded-full bg-[#6b1d22] text-white text-[11px] tracking-normal">
+                {sheetFilterCount}
+                <span className="sr-only"> activos</span>
+              </span>
+            ) : null}
+          </button>
         </div>
       </search>
 
@@ -719,50 +567,266 @@ export function CatalogExplorer() {
         ) : null}
       </div>
 
-      {/* Grilla de Productos: 2 columnas gigantes en modo Galería o 4 columnas en modo Cuadrícula */}
-      <section aria-label="Listado de piezas">
-        {filteredProducts.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-16 text-center bg-white p-8 border border-outline/70">
-            <Icon
-              name="search_off"
-              className="text-secondary text-[44px] mb-2"
-            />
-            <h2 className="font-serif text-2xl text-on-surface">
-              No encontramos piezas con esos criterios
-            </h2>
-            <p className="text-sm text-secondary max-w-md mt-1">
-              Prueba restableciendo los filtros seleccionados o escríbenos para
-              consultar referencias adicionales en almacén.
-            </p>
-            <button
-              type="button"
-              onClick={resetFilters}
-              className="mt-5 min-h-[44px] bg-on-surface hover:bg-[#6b1d22] text-white text-xs uppercase tracking-[0.2em] font-semibold px-6 py-3 transition-colors"
-            >
-              Restablecer filtros
-            </button>
-          </div>
-        ) : (
-          <ul
-            role="list"
-            className={
-              viewMode === "gallery"
-                ? "grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-12"
-                : "grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-3 sm:gap-x-5 gap-y-8 sm:gap-y-10"
-            }
-          >
-            {filteredProducts.map((product, index) => (
-              <li key={product.id}>
-                <ProductSwatchCard
-                  product={product}
-                  priority={index < 4}
-                  viewMode={viewMode}
+      {/* Escritorio (2 columnas): Card de filtros a la izquierda + Grilla de piezas a la derecha */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
+        {/* Card izquierda de filtros (solo escritorio >= lg) */}
+        <aside
+          aria-label="Filtros del catálogo"
+          className="hidden lg:block lg:col-span-3 lg:sticky lg:top-[92px]"
+        >
+          <search className="bg-white border border-outline/60 p-6 space-y-5">
+            <div className="flex items-center justify-between gap-2 pb-3 border-b border-outline/50">
+              <span className="text-xs font-semibold uppercase tracking-[0.2em] text-on-surface">
+                Filtros
+              </span>
+              {hasActiveFilters ? (
+                <button
+                  type="button"
+                  onClick={resetFilters}
+                  className="inline-flex items-center gap-1 text-[11px] uppercase tracking-[0.16em] font-semibold text-[#6b1d22] hover:underline"
+                >
+                  <Icon name="close" className="text-[13px]" />
+                  <span>Limpiar</span>
+                </button>
+              ) : null}
+            </div>
+
+            {/* Buscar piezas */}
+            <div className="space-y-1.5">
+              <label
+                htmlFor={desktopSearchInputId}
+                className="block text-[10px] font-semibold uppercase tracking-[0.2em] text-secondary"
+              >
+                Buscar
+              </label>
+              <div className="relative">
+                <Icon
+                  name="search"
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary text-[17px]"
                 />
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
+                <input
+                  id={desktopSearchInputId}
+                  type="search"
+                  value={searchQuery}
+                  onChange={(e) => {
+                    isTypingRef.current = true;
+                    setSearchQuery(e.target.value);
+                  }}
+                  autoCorrect="off"
+                  autoCapitalize="off"
+                  spellCheck={false}
+                  placeholder="Nombre, medida, SKU…"
+                  className="w-full h-10 bg-white text-xs tracking-wider text-on-surface placeholder:text-secondary pl-9 pr-8 border border-outline focus:border-on-surface focus:outline-none transition-colors"
+                />
+                {searchQuery ? (
+                  <button
+                    type="button"
+                    onClick={() => updateDiscreteFilters({ q: "" })}
+                    aria-label="Limpiar búsqueda"
+                    className="absolute right-1.5 top-1/2 -translate-y-1/2 h-7 w-7 inline-flex items-center justify-center text-secondary hover:text-on-surface"
+                  >
+                    <Icon name="close" className="text-[14px]" />
+                  </button>
+                ) : null}
+              </div>
+            </div>
+
+            {/* Formato */}
+            <div className="space-y-1.5">
+              <label
+                htmlFor={formatSelectId}
+                className="block text-[10px] font-semibold uppercase tracking-[0.2em] text-secondary"
+              >
+                Formato
+              </label>
+              <select
+                id={formatSelectId}
+                value={activeFormat ?? ""}
+                onChange={(e) =>
+                  updateDiscreteFilters({
+                    format: e.target.value ? e.target.value : null,
+                  })
+                }
+                className="w-full h-10 bg-white text-xs uppercase tracking-[0.12em] text-on-surface px-3 border border-outline focus:border-on-surface focus:outline-none cursor-pointer"
+              >
+                <option value="">Todos los formatos</option>
+                {FORMAT_FILTERS.map((fmt) => (
+                  <option key={fmt.value} value={fmt.value}>
+                    {fmt.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Acabado */}
+            <div className="space-y-1.5">
+              <label
+                htmlFor={finishSelectId}
+                className="block text-[10px] font-semibold uppercase tracking-[0.2em] text-secondary"
+              >
+                Acabado
+              </label>
+              <select
+                id={finishSelectId}
+                value={activeFinish ?? ""}
+                onChange={(e) =>
+                  updateDiscreteFilters({
+                    finish: e.target.value ? e.target.value : null,
+                  })
+                }
+                className="w-full h-10 bg-white text-xs uppercase tracking-[0.12em] text-on-surface px-3 border border-outline focus:border-on-surface focus:outline-none cursor-pointer"
+              >
+                <option value="">Todos los acabados</option>
+                {FINISH_FILTERS.map((finish) => (
+                  <option key={finish} value={finish}>
+                    {finish}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Ordenar */}
+            <div className="space-y-1.5">
+              <label
+                htmlFor={sortSelectId}
+                className="block text-[10px] font-semibold uppercase tracking-[0.2em] text-secondary"
+              >
+                Ordenar por
+              </label>
+              <select
+                id={sortSelectId}
+                value={sortBy}
+                onChange={(e) =>
+                  updateDiscreteFilters({ sort: e.target.value as SortOption })
+                }
+                className="w-full h-10 bg-white text-xs uppercase tracking-[0.12em] text-on-surface px-3 border border-outline focus:border-on-surface focus:outline-none cursor-pointer"
+              >
+                <option value="featured">Destacados</option>
+                <option value="stock">En stock</option>
+                <option value="alpha">Nombre (A–Z)</option>
+              </select>
+            </div>
+
+            {/* Pedir muestrario */}
+            <div className="pt-3 border-t border-outline/50">
+              <button
+                type="button"
+                onClick={() => {
+                  setSampleSubmitted(false);
+                  setSampleModalOpen(true);
+                }}
+                className="w-full min-h-[42px] px-4 inline-flex items-center justify-center gap-2 border border-on-surface bg-white hover:bg-on-surface text-on-surface hover:text-white text-[11px] uppercase tracking-[0.16em] font-semibold transition-colors"
+              >
+                <Icon name="layers" className="text-[15px]" />
+                <span>Pedir muestrario</span>
+              </button>
+            </div>
+          </search>
+        </aside>
+
+        {/* Columna derecha: Barra de resultados/vista (desktop) + Grilla de Productos */}
+        <section aria-label="Listado de piezas" className="lg:col-span-9 space-y-6">
+          <div className="hidden lg:flex items-center justify-between gap-4 border-b border-outline/50 pb-4">
+            <span className="text-[11px] uppercase tracking-[0.18em] text-secondary">
+              <strong className="text-on-surface font-semibold">
+                {filteredProducts.length}
+              </strong>{" "}
+              {filteredProducts.length === 1 ? "Resultado" : "Resultados"}
+            </span>
+
+            <div
+              role="radiogroup"
+              aria-label="Cambiar modo de visualización"
+              className="flex items-center border border-outline bg-white"
+            >
+              <button
+                type="button"
+                role="radio"
+                aria-checked={viewMode === "gallery"}
+                onClick={() => setViewMode("gallery")}
+                className={`h-9 px-3 inline-flex items-center gap-1.5 text-[11px] uppercase tracking-[0.15em] transition-colors ${
+                  viewMode === "gallery"
+                    ? "bg-on-surface text-white font-semibold"
+                    : "text-secondary hover:text-on-surface"
+                }`}
+              >
+                <span
+                  aria-hidden="true"
+                  className="grid grid-cols-2 gap-0.5 w-3.5 h-3.5"
+                >
+                  <span className="bg-current" />
+                  <span className="bg-current" />
+                </span>
+                <span>Galería</span>
+              </button>
+              <button
+                type="button"
+                role="radio"
+                aria-checked={viewMode === "grid"}
+                onClick={() => setViewMode("grid")}
+                className={`h-9 px-3 inline-flex items-center gap-1.5 text-[11px] uppercase tracking-[0.15em] transition-colors ${
+                  viewMode === "grid"
+                    ? "bg-on-surface text-white font-semibold"
+                    : "text-secondary hover:text-on-surface"
+                }`}
+              >
+                <span
+                  aria-hidden="true"
+                  className="grid grid-cols-2 gap-0.5 w-3.5 h-3.5"
+                >
+                  <span className="bg-current" />
+                  <span className="bg-current" />
+                  <span className="bg-current" />
+                  <span className="bg-current" />
+                </span>
+                <span>Cuadrícula</span>
+              </button>
+            </div>
+          </div>
+
+          {filteredProducts.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-16 text-center bg-white p-8 border border-outline/70">
+              <Icon
+                name="search_off"
+                className="text-secondary text-[44px] mb-2"
+              />
+              <h2 className="font-serif text-2xl text-on-surface">
+                No encontramos piezas con esos criterios
+              </h2>
+              <p className="text-sm text-secondary max-w-md mt-1">
+                Prueba restableciendo los filtros seleccionados o escríbenos para
+                consultar referencias adicionales en almacén.
+              </p>
+              <button
+                type="button"
+                onClick={resetFilters}
+                className="mt-5 min-h-[44px] bg-on-surface hover:bg-[#6b1d22] text-white text-xs uppercase tracking-[0.2em] font-semibold px-6 py-3 transition-colors"
+              >
+                Restablecer filtros
+              </button>
+            </div>
+          ) : (
+            <ul
+              role="list"
+              className={
+                viewMode === "gallery"
+                  ? "grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-12"
+                  : "grid grid-cols-2 lg:grid-cols-3 gap-x-3 sm:gap-x-6 gap-y-8 sm:gap-y-10"
+              }
+            >
+              {filteredProducts.map((product, index) => (
+                <li key={product.id}>
+                  <ProductSwatchCard
+                    product={product}
+                    priority={index < 4}
+                    viewMode={viewMode}
+                  />
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+      </div>
 
       {/* Panel inferior de filtros (solo móvil) */}
       <ModalDialog

@@ -22,7 +22,7 @@ export default function ContactoPage() {
       <section className="w-full bg-white border-b border-outline/60">
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 items-stretch">
           {/* Columna Izquierda: Título, resumen y accesos directos */}
-          <div className="lg:col-span-5 px-margin-mobile lg:px-14 py-12 lg:py-20 flex flex-col justify-center gap-6 bg-[#FAF6F2]">
+          <div className="lg:col-span-5 px-margin-mobile lg:px-14 py-12 lg:py-20 flex flex-col justify-center gap-6 bg-white">
             <div className="space-y-3">
               <span className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#6b1d22] block">
                 Atención Personalizada &amp; Proyectos
@@ -267,7 +267,7 @@ export default function ContactoPage() {
             </div>
 
             {/* Envío directo de Planos Técnicos para Arquitectos y Constructoras */}
-            <div className="rounded-none border border-[#6b1d22]/30 bg-[#FAF6F2] p-6 sm:p-8 space-y-4">
+            <div className="rounded-none border border-outline/60 bg-white p-6 sm:p-8 space-y-4">
               <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-[#6b1d22]">
                 <Icon name="architecture" className="text-[15px]" />
                 <span>Arquitectos &amp; Constructoras</span>

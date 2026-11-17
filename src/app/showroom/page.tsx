@@ -32,7 +32,7 @@ export default function ShowroomPage() {
       >
         <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 items-stretch">
           {/* Columna Izquierda (Editorial & Captación Técnica) */}
-          <div className="lg:col-span-6 px-margin-mobile lg:px-14 py-14 lg:py-20 flex flex-col justify-center gap-6 bg-[#FAF6F2]">
+          <div className="lg:col-span-6 px-margin-mobile lg:px-14 py-14 lg:py-20 flex flex-col justify-center gap-6 bg-white">
             <div className="space-y-3">
               <span className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#6b1d22] block">
                 Departamento Técnico &amp; Obras

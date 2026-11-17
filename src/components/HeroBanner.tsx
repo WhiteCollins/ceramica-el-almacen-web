@@ -126,12 +126,12 @@ export function HeroBanner() {
         })}
       </div>
 
-      {/* Flechas minimalistas con trazos finos estilo galería */}
+      {/* Flechas circulares minimalistas */}
       <button
         type="button"
         onClick={prevSlide}
         aria-label="Espacio anterior"
-        className="hidden sm:inline-flex absolute z-20 left-6 top-1/2 -translate-y-1/2 h-12 w-12 items-center justify-center border border-white/35 bg-black/25 text-white backdrop-blur-sm hover:bg-white hover:text-on-surface transition-colors"
+        className="hidden sm:inline-flex absolute z-20 left-6 top-1/2 -translate-y-1/2 h-12 w-12 rounded-full items-center justify-center border border-white/40 bg-black/25 text-white backdrop-blur-sm hover:bg-white hover:text-on-surface transition-colors"
       >
         <Icon name="chevron_left" className="text-[24px]" />
       </button>
@@ -139,47 +139,37 @@ export function HeroBanner() {
         type="button"
         onClick={nextSlide}
         aria-label="Espacio siguiente"
-        className="hidden sm:inline-flex absolute z-20 right-6 top-1/2 -translate-y-1/2 h-12 w-12 items-center justify-center border border-white/35 bg-black/25 text-white backdrop-blur-sm hover:bg-white hover:text-on-surface transition-colors"
+        className="hidden sm:inline-flex absolute z-20 right-6 top-1/2 -translate-y-1/2 h-12 w-12 rounded-full items-center justify-center border border-white/40 bg-black/25 text-white backdrop-blur-sm hover:bg-white hover:text-on-surface transition-colors"
       >
         <Icon name="chevron_right" className="text-[24px]" />
       </button>
 
-      {/* Indicadores tipo Barra de Progreso Lineal (h-0.5) estilo Manolo Blahnik */}
+      {/* Indicadores inferiores tipo puntos */}
       <div className="absolute bottom-5 inset-x-0 z-20 flex justify-center px-6">
         <ul
           role="tablist"
           aria-label="Seleccionar diapositiva del banner"
-          className="flex items-center gap-3 w-full max-w-md"
+          className="flex items-center justify-center gap-1"
         >
           {SLIDES.map((slide, idx) => {
             const isCurrent = idx === activeIndex;
             return (
-              <li key={slide.id} className="flex-1">
+              <li key={slide.id}>
                 <button
                   type="button"
                   role="tab"
                   aria-selected={isCurrent}
-                  aria-label={`Ver ${slide.eyebrow}`}
+                  aria-label={`Ver ${slide.eyebrow}: ${slide.title}`}
                   onClick={() => setActiveIndex(idx)}
-                  className="group w-full py-3 flex flex-col gap-1.5 text-left focus:outline-none"
+                  className="group min-h-[44px] min-w-[32px] inline-flex items-center justify-center px-1.5 focus:outline-none"
                 >
                   <span
-                    className={`block text-[10px] uppercase tracking-[0.22em] transition-colors truncate ${
+                    className={`block rounded-full transition-all duration-300 ${
                       isCurrent
-                        ? "text-white font-semibold"
-                        : "text-white/60 group-hover:text-white/90"
+                        ? "h-3 w-3 bg-white shadow-[0_0_0_2px_rgba(255,255,255,0.35)]"
+                        : "h-2.5 w-2.5 bg-white/45 group-hover:bg-white/85"
                     }`}
-                  >
-                    {slide.eyebrow}
-                  </span>
-                  <div className="w-full h-[2px] bg-white/35 overflow-hidden">
-                    <span
-                      key={isCurrent ? `active-${activeIndex}` : `idle-${idx}`}
-                      className={`block h-full bg-white ${
-                        isCurrent ? "hero-progress-bar-fill" : "w-0"
-                      }`}
-                    />
-                  </div>
+                  />
                 </button>
               </li>
             );
