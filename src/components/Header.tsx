@@ -39,6 +39,8 @@ export function Header() {
   const quickSearchInputId = useId();
   const megaMenuId = useId();
 
+  const searchPanelId = useId();
+
   const searchInputRef = useRef<HTMLInputElement>(null);
   const searchContainerRef = useRef<HTMLDivElement>(null);
   const closeMenuTimerRef = useRef<number | null>(null);
@@ -107,6 +109,7 @@ export function Header() {
       window.clearTimeout(closeMenuTimerRef.current);
       closeMenuTimerRef.current = null;
     }
+    setSearchOpen(false);
     setCatalogMenuOpen(true);
   };
 
@@ -151,16 +154,19 @@ export function Header() {
 
   return (
     <>
-      {/* Cortina oscura editorial (estilo Manolo Blahnik) cuando se despliega el megamenú */}
+      {/* Cortina oscura editorial (estilo Manolo Blahnik) cuando se despliega el megamenú o el buscador */}
       <div
         aria-hidden="true"
-        onClick={() => setCatalogMenuOpen(false)}
-        className={`hidden lg:block fixed inset-0 z-30 bg-black/25 ${
+        onClick={() => {
+          setCatalogMenuOpen(false);
+          setSearchOpen(false);
+        }}
+        className={`fixed inset-0 z-30 bg-black/25 ${
           closingInstantly
             ? ""
             : "transition-opacity duration-200 ease-out motion-reduce:transition-none"
         } ${
-          catalogMenuOpen
+          catalogMenuOpen || searchOpen
             ? "opacity-100 pointer-events-auto"
             : "opacity-0 pointer-events-none"
         }`}
@@ -176,12 +182,15 @@ export function Header() {
         }}
         className="site-sticky-header w-full"
       >
-        <div className="site-sticky-bar bg-white/95 backdrop-blur-md border-b border-outline/60">
+        <div
+          ref={searchContainerRef}
+          className="site-sticky-bar relative bg-white/95 backdrop-blur-md border-b border-outline/60"
+        >
           <div className="h-16 lg:h-[74px] w-full px-margin-mobile lg:px-margin-desktop max-w-7xl mx-auto flex items-center justify-between lg:grid lg:grid-cols-12 gap-2">
-            {/* Navegación Izquierda (Estilo Manolo Blahnik: uppercase tracking-widest text-xs) */}
+            {/* Navegación Izquierda (5 cols) */}
             <nav
               aria-label="Principal"
-              className="hidden lg:flex lg:col-span-5 items-center justify-start gap-7 xl:gap-9 h-full"
+              className="hidden lg:flex lg:col-span-5 items-center justify-start gap-6 xl:gap-8 h-full"
             >
               {NAV_ITEMS.map((item) => {
                 const isActive = item.hasMegaMenu
@@ -247,161 +256,44 @@ export function Header() {
               })}
             </nav>
 
-            {/* Logotipo Protagonista Centrado (En móvil a la izquierda, en escritorio centrado col-span-3) */}
-            <div className="flex items-center justify-start lg:justify-center lg:col-span-3">
+            {/* Logotipo Protagonista Centrado (En móvil a la izquierda, en escritorio centrado col-span-4) */}
+            <div className="flex items-center justify-start lg:justify-center lg:col-span-4">
               <Link
                 href="/"
-                className="inline-flex items-center min-h-[44px] py-1"
+                className="inline-flex items-center min-h-[44px] py-1 whitespace-nowrap"
               >
                 <BrandLogo />
               </Link>
             </div>
 
-            {/* Utilidades Derecha: Buscador desplegable hacia la izquierda + Acceso rápido */}
-            <div className="flex items-center justify-end gap-2 lg:col-span-4">
-              <div
-                ref={searchContainerRef}
-                className="relative flex items-center justify-end"
+            {/* Utilidades Derecha (3 cols): Botón de búsqueda + Cotizar + Menú móvil */}
+            <div className="flex items-center justify-end gap-2 lg:col-span-3">
+              <button
+                type="button"
+                onClick={() => {
+                  closeMegaMenuNow();
+                  setSearchOpen((prev) => !prev);
+                }}
+                aria-expanded={searchOpen}
+                aria-controls={searchPanelId}
+                aria-label={
+                  searchOpen ? "Cerrar búsqueda" : "Abrir barra de búsqueda"
+                }
+                className={`min-h-[42px] min-w-[42px] inline-flex items-center justify-center transition-colors ${
+                  searchOpen
+                    ? "bg-on-surface text-white"
+                    : "text-on-surface hover:text-[#6b1d22]"
+                }`}
               >
-                <search className="flex items-center">
-                  <form
-                    onSubmit={handleQuickSearchSubmit}
-                    className="flex items-center"
-                  >
-                    <div
-                      className={`overflow-hidden transition-all duration-300 ease-out flex items-center ${
-                        searchOpen
-                          ? "w-[200px] sm:w-[250px] lg:w-[260px] opacity-100 mr-1.5"
-                          : "w-0 opacity-0 mr-0 pointer-events-none"
-                      }`}
-                    >
-                      <label htmlFor={quickSearchInputId} className="sr-only">
-                        Buscar por nombre, formato, acabado o código SKU
-                      </label>
-                      <div className="relative w-full">
-                        <input
-                          ref={searchInputRef}
-                          id={quickSearchInputId}
-                          type="search"
-                          name="q"
-                          value={quickQuery}
-                          onChange={(e) => setQuickQuery(e.target.value)}
-                          autoCorrect="off"
-                          autoCapitalize="off"
-                          spellCheck={false}
-                          tabIndex={searchOpen ? 0 : -1}
-                          placeholder="Buscar acabado, medida, SKU..."
-                          className="w-full h-9 bg-surface text-xs tracking-wide text-on-surface pl-3 pr-8 border border-outline focus:border-on-surface focus:outline-none transition-colors"
-                        />
-                        {quickQuery ? (
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setQuickQuery("");
-                              searchInputRef.current?.focus();
-                            }}
-                            aria-label="Limpiar texto de búsqueda"
-                            tabIndex={searchOpen ? 0 : -1}
-                            className="absolute right-1.5 top-1/2 -translate-y-1/2 h-6 w-6 inline-flex items-center justify-center text-secondary hover:text-on-surface"
-                          >
-                            <Icon name="close" className="text-[15px]" />
-                          </button>
-                        ) : null}
-                      </div>
-                    </div>
-
-                    <button
-                      type="button"
-                      onClick={() => {
-                        if (searchOpen && quickQuery.trim()) {
-                          router.push(
-                            `/catalogo?q=${encodeURIComponent(
-                              quickQuery.trim()
-                            )}`
-                          );
-                          setSearchOpen(false);
-                        } else {
-                          setSearchOpen((prev) => !prev);
-                        }
-                      }}
-                      aria-expanded={searchOpen}
-                      aria-label={
-                        searchOpen
-                          ? "Ejecutar o cerrar búsqueda"
-                          : "Abrir barra de búsqueda"
-                      }
-                      className={`min-h-[42px] min-w-[42px] inline-flex items-center justify-center transition-colors ${
-                        searchOpen
-                          ? "bg-on-surface text-white"
-                          : "text-on-surface hover:text-[#6b1d22]"
-                      }`}
-                    >
-                      <Icon name="search" className="text-[20px]" />
-                    </button>
-                  </form>
-                </search>
-
-                {/* Sugerencias rápidas cuando el usuario escribe en el buscador */}
-                {searchOpen && quickQuery.trim().length > 0 ? (
-                  <div className="absolute right-0 top-full mt-2 w-[300px] sm:w-[350px] bg-white border border-outline shadow-xl p-3 z-50">
-                    <div className="flex items-center justify-between px-2 pb-2 border-b border-outline/60">
-                      <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-secondary">
-                        Resultados ({quickResults.length})
-                      </span>
-                      <Link
-                        href={`/catalogo?q=${encodeURIComponent(
-                          quickQuery.trim()
-                        )}`}
-                        onClick={() => setSearchOpen(false)}
-                        className="text-[11px] font-semibold uppercase tracking-[0.12em] text-[#6b1d22] hover:underline"
-                      >
-                        Ver todos →
-                      </Link>
-                    </div>
-                    {quickResults.length === 0 ? (
-                      <p className="text-xs text-secondary py-4 px-2 text-center">
-                        No encontramos piezas con ese término. Presiona Enter
-                        para explorar el catálogo completo.
-                      </p>
-                    ) : (
-                      <ul
-                        role="list"
-                        className="divide-y divide-outline/40 max-h-64 overflow-y-auto mt-1"
-                      >
-                        {quickResults.map((product) => (
-                          <li key={product.id}>
-                            <Link
-                              href={`/catalogo/${product.id}`}
-                              onClick={() => setSearchOpen(false)}
-                              className="flex items-center gap-3 py-2.5 px-2 hover:bg-surface-container-low transition-colors"
-                            >
-                              <Image
-                                src={product.image}
-                                alt={product.imageAlt}
-                                width={42}
-                                height={42}
-                                className="w-10 h-10 object-cover bg-surface-container shrink-0"
-                              />
-                              <div className="flex-1 min-w-0">
-                                <p className="text-xs font-semibold uppercase tracking-wider text-on-surface truncate">
-                                  {product.name}
-                                </p>
-                                <p className="text-[11px] text-secondary truncate">
-                                  {product.dimensionsLabel} · {product.finish}
-                                </p>
-                              </div>
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
-                ) : null}
-              </div>
+                <Icon
+                  name={searchOpen ? "close" : "search"}
+                  className="text-[20px]"
+                />
+              </button>
 
               <Link
                 href="/contacto"
-                className="hidden xl:inline-flex items-center justify-center min-h-[38px] px-4 border border-on-surface text-on-surface hover:bg-on-surface hover:text-white text-[11px] uppercase tracking-[0.2em] font-medium transition-colors"
+                className="hidden xl:inline-flex items-center justify-center min-h-[38px] px-4 border border-on-surface text-on-surface hover:bg-on-surface hover:text-white text-[11px] uppercase tracking-[0.2em] font-medium transition-colors whitespace-nowrap"
               >
                 Cotizar
               </Link>
@@ -414,6 +306,129 @@ export function Header() {
               >
                 <Icon name="menu" className="text-[24px]" />
               </button>
+            </div>
+          </div>
+
+          {/* Panel de Búsqueda Desplegable de Ancho Completo debajo del Header (sin tapar el logotipo) */}
+          <div
+            id={searchPanelId}
+            aria-hidden={!searchOpen}
+            inert={!searchOpen}
+            className={`absolute inset-x-0 top-full z-40 bg-white border-t border-outline/60 border-b border-outline/60 shadow-xl transition-[opacity,transform] duration-200 ease-out motion-reduce:transition-none ${
+              searchOpen
+                ? "opacity-100 translate-y-0 pointer-events-auto"
+                : "opacity-0 -translate-y-2 pointer-events-none"
+            }`}
+          >
+            <div className="max-w-3xl mx-auto px-margin-mobile lg:px-margin-desktop py-5 space-y-4">
+              <search>
+                <form
+                  onSubmit={handleQuickSearchSubmit}
+                  className="flex items-center gap-2.5"
+                >
+                  <label htmlFor={quickSearchInputId} className="sr-only">
+                    Buscar por nombre, formato, acabado o código SKU
+                  </label>
+                  <div className="relative flex-1 min-w-0">
+                    <Icon
+                      name="search"
+                      className="absolute left-3.5 top-1/2 -translate-y-1/2 text-secondary text-[18px]"
+                    />
+                    <input
+                      ref={searchInputRef}
+                      id={quickSearchInputId}
+                      type="search"
+                      name="q"
+                      value={quickQuery}
+                      onChange={(e) => setQuickQuery(e.target.value)}
+                      autoCorrect="off"
+                      autoCapitalize="off"
+                      spellCheck={false}
+                      tabIndex={searchOpen ? 0 : -1}
+                      placeholder="Buscar porcelanato, acabado, 60×120, SKU..."
+                      className="w-full h-11 bg-surface text-base lg:text-sm tracking-wide text-on-surface pl-10 pr-9 border border-outline focus:border-on-surface focus:outline-none transition-colors"
+                    />
+                    {quickQuery ? (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setQuickQuery("");
+                          searchInputRef.current?.focus();
+                        }}
+                        aria-label="Limpiar texto de búsqueda"
+                        tabIndex={searchOpen ? 0 : -1}
+                        className="absolute right-2 top-1/2 -translate-y-1/2 h-7 w-7 inline-flex items-center justify-center text-secondary hover:text-on-surface"
+                      >
+                        <Icon name="close" className="text-[16px]" />
+                      </button>
+                    ) : null}
+                  </div>
+                  <button
+                    type="submit"
+                    tabIndex={searchOpen ? 0 : -1}
+                    className="h-11 px-5 shrink-0 bg-on-surface hover:bg-[#6b1d22] text-white text-[11px] uppercase tracking-[0.2em] font-semibold transition-colors"
+                  >
+                    Buscar
+                  </button>
+                </form>
+              </search>
+
+              {quickQuery.trim().length > 0 ? (
+                <div className="border-t border-outline/50 pt-3">
+                  <div className="flex items-center justify-between pb-2">
+                    <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-secondary">
+                      Resultados ({quickResults.length})
+                    </span>
+                    <Link
+                      href={`/catalogo?q=${encodeURIComponent(
+                        quickQuery.trim()
+                      )}`}
+                      onClick={() => setSearchOpen(false)}
+                      className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#6b1d22] hover:underline"
+                    >
+                      Ver todos →
+                    </Link>
+                  </div>
+
+                  {quickResults.length === 0 ? (
+                    <p className="text-xs text-secondary py-4 text-center">
+                      No encontramos piezas con ese término. Presiona Buscar
+                      para explorar el catálogo completo.
+                    </p>
+                  ) : (
+                    <ul
+                      role="list"
+                      className="divide-y divide-outline/40 max-h-64 overflow-y-auto"
+                    >
+                      {quickResults.map((product) => (
+                        <li key={product.id}>
+                          <Link
+                            href={`/catalogo/${product.id}`}
+                            onClick={() => setSearchOpen(false)}
+                            className="flex items-center gap-3.5 py-2.5 px-2 hover:bg-surface-container-low transition-colors"
+                          >
+                            <Image
+                              src={product.image}
+                              alt={product.imageAlt}
+                              width={44}
+                              height={44}
+                              className="w-11 h-11 object-cover bg-surface-container shrink-0"
+                            />
+                            <div className="flex-1 min-w-0">
+                              <p className="text-xs font-semibold uppercase tracking-wider text-on-surface truncate">
+                                {product.name}
+                              </p>
+                              <p className="text-[11px] text-secondary truncate">
+                                {product.dimensionsLabel} · {product.finish}
+                              </p>
+                            </div>
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              ) : null}
             </div>
           </div>
 
